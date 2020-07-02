@@ -11,7 +11,7 @@ public class Comment implements Idable<Comment> {
     private Product product;
     private String commentTitle;
     private String commentBody;
-    private static ArrayList<Comment>allComments = new ArrayList<>();
+    private transient static ArrayList<Comment>allComments = new ArrayList<>();
 
     public static ArrayList<Comment> getAllComments() {
         return allComments;

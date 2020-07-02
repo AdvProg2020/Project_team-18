@@ -1,1 +1,54 @@
-[]
+[
+  {
+    "@type": "model.Request",
+    "@val": {
+      "requestId": 1,
+      "typeOfRequest": "REGISTER_SELLER",
+      "stateOfRequest": "ACCEPTED",
+      "information": {
+        "number": "1",
+        "password": "s1",
+        "role": "seller",
+        "familyName": "s1",
+        "name": "s1",
+        "company": "s1",
+        "email": "s@s",
+        "username": "s1"
+      }
+    }
+  },
+  {
+    "@type": "model.Request",
+    "@val": {
+      "requestId": 2,
+      "typeOfRequest": "ADD_PRODUCT",
+      "stateOfRequest": "PROCESSING",
+      "information": {
+        "seller": "s1",
+        "price": "10",
+        "name": "shoe1",
+        "explanation": "x",
+        "brand": "x",
+        "supply": "1",
+        "categoryName": "shoe"
+      }
+    }
+  },
+  {
+    "@type": "model.Request",
+    "@val": {
+      "requestId": 3,
+      "typeOfRequest": "ADD_PRODUCT",
+      "stateOfRequest": "PROCESSING",
+      "information": {
+        "seller": "s1",
+        "price": "20",
+        "name": "cloth1",
+        "explanation": "x",
+        "brand": "x",
+        "supply": "1",
+        "categoryName": "cloth"
+      }
+    }
+  }
+]

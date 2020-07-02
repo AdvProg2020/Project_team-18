@@ -10,10 +10,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Modifier;
 import java.util.*;
 
 public class FileSaver {
-    private YaGson gson = new YaGsonBuilder().setPrettyPrinting().create();
+    private YaGson gson = new YaGsonBuilder().setPrettyPrinting().excludeFieldsWithModifiers(Modifier.TRANSIENT).create();
     private Storage storage;
 
     public FileSaver(Storage storage) {

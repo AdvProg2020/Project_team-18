@@ -16,7 +16,7 @@ public class Discount implements Idable<Discount> {
     private double percentage;
     private double maxAmount;
     private HashMap<Customer, Integer> customersWithThisDiscount;
-    private static ArrayList<Discount> allDiscounts = new ArrayList<>();
+    private transient static ArrayList<Discount> allDiscounts = new ArrayList<>();
 
     public Discount() {
     }

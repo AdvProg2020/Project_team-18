@@ -12,7 +12,7 @@ public class Request implements Idable<Request> {
     private RequestType typeOfRequest;
     private StateType stateOfRequest;
     private HashMap<String, String> information;
-    private static ArrayList<Request>allRequests = new ArrayList<>();
+    private transient static ArrayList<Request>allRequests = new ArrayList<>();
 
     public static ArrayList<Request> getAllRequests() {
         return allRequests;

@@ -9,8 +9,8 @@ public class SellLog extends Log {
     private double receivedMoney;
     private double saleAmount;
     private Customer customer;
-    private static ArrayList<Integer> allSellCodes = new ArrayList<>();
-    private static ArrayList<Log>allSellLogs = new ArrayList<>();
+    private transient static ArrayList<Integer> allSellCodes = new ArrayList<>();
+    private transient static ArrayList<Log>allSellLogs = new ArrayList<>();
     private HashMap<Product,Integer> sellerProductsInCart = new HashMap<>();
 
     public static ArrayList<Log> getAllSellLogs() {

@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class Log implements Idable<Log> {
     protected LocalDateTime date;
     protected HashMap<Product, Integer> products;
-    private static ArrayList<Log>allLogs = new ArrayList<>();
+    private transient static ArrayList<Log>allLogs = new ArrayList<>();
     protected int id;
 
     public Log() {

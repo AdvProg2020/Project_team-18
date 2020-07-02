@@ -12,7 +12,7 @@ public class Category implements Idable<Category> {
     private String imagePath;
     private ArrayList<Product> thisCategoryProducts;
     private HashMap<String, String> properties;
-    private static ArrayList<Category> allCategories = new ArrayList<>();
+    private transient static ArrayList<Category> allCategories = new ArrayList<>();
 
     public Category() {
     }

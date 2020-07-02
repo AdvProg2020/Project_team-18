@@ -14,14 +14,30 @@
       "role": "ADMIN"
     }
   },
-  "@.0",
+  {
+    "@type": "model.Seller",
+    "@val": {
+      "company": "s1",
+      "productsToSell": [],
+      "saleList": [],
+      "id": 2,
+      "username": "s1",
+      "password": "s1",
+      "name": "s1",
+      "familyName": "s1",
+      "email": "s@s",
+      "number": "1",
+      "balance": 0.0,
+      "role": "SELLER"
+    }
+  },
   {
     "@type": "model.Customer",
     "@val": {
       "buyHistory": [],
       "allDiscounts": [],
       "amountOfAllPurchasing": 0.0,
-      "id": 2,
+      "id": 3,
       "username": "c1",
       "password": "c1",
       "name": "c1",
@@ -31,6 +47,5 @@
       "balance": 0.0,
       "role": "CUSTOMER"
     }
-  },
-  "@.2"
+  }
 ]

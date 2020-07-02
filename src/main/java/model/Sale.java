@@ -12,7 +12,7 @@ public class Sale implements Idable<Sale> {
     private LocalDateTime endDate;
     private double amountOfSale;
     private ArrayList<Product> productsWithThisSale;
-    private static ArrayList<Sale> allSales = new ArrayList<>();
+    private transient static ArrayList<Sale> allSales = new ArrayList<>();
 
     public Sale() {
     }
