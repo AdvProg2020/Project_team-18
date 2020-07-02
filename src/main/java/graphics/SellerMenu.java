@@ -14,6 +14,7 @@ import model.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class SellerMenu extends Menu implements Initializable {
@@ -60,106 +61,252 @@ public class SellerMenu extends Menu implements Initializable {
     }
 
     public void editPasswordField() {
-        String newPassword = editFieldsView("password");
-        try {
-            manager.editField("password", newPassword);
-            viewPersonalInfo();
-        } catch (Exception e) {
-            showError("Invalid password format!(Use figures or letters)", 100);
-        }
-    }
-
-    public void editNameField() {
-        String newName = editFieldsView("name");
-        try {
-            manager.editField("name", newName);
-            viewPersonalInfo();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void editFamilyNameField() {
-        String newFamilyName = editFieldsView("family name");
-        try {
-            manager.editField("familyName", newFamilyName);
-            viewPersonalInfo();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void editCompanyField() {
-        String newCompany = editFieldsView("company");
-        try {
-            ((Seller) person).setCompany(newCompany);
-            viewPersonalInfo();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void editBalanceField() {
-        String newBalance = editFieldsView("balance");
-        try {
-            sellerManager.addBalance(Double.parseDouble(newBalance));
-            viewPersonalInfo();
-        } catch (Exception e) {
-            showError("Invalid balance!", 100);
-        }
-    }
-
-    public void editEmailField() {
-        String newEmail = editFieldsView("email");
-        try {
-            manager.editField("email", newEmail);
-            viewPersonalInfo();
-        } catch (Exception e) {
-            showError("Invalid email address!", 100);
-        }
-    }
-
-    public void editNumberField() {
-        String newNumber = editFieldsView("phone number");
-        try {
-            manager.editField("number", newNumber);
-            viewPersonalInfo();
-        } catch (Exception e) {
-            showError("Invalid phone number!", 100);
-        }
-    }
-
-    public String editFieldsView(String field) {
-        Dialog<String> dialog = new Dialog<>();
+        Dialog<ButtonType> dialog = new Dialog<>();
         String updatedVersion;
         dialog.setTitle("Change Personal Information");
         dialog.setHeaderText(null);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-        if (field.equals("password")) {
             PasswordField passwordField = new PasswordField();
             HBox content = new HBox();
             content.setAlignment(Pos.CENTER_LEFT);
             content.setSpacing(10);
             content.getChildren().addAll(new Label("Enter your new password :"), passwordField);
             dialog.getDialogPane().setContent(content);
-            dialog.showAndWait();
-            updatedVersion = passwordField.getText();
-        } else {
-            TextField textField = new TextField();
-            HBox content = new HBox();
-            content.setAlignment(Pos.CENTER_LEFT);
-            content.setSpacing(10);
-            if (field.equals("balance")) {
-                content.getChildren().addAll(new Label("Enter amount of money you want to add to you account :"), textField);
-            } else {
-                content.getChildren().addAll(new Label("Enter your new " + field + " :"), textField);
+            Optional<ButtonType> result = dialog.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                updatedVersion = passwordField.getText();
+                try {
+                    manager.editField("password", updatedVersion);
+                    viewPersonalInfo();
+                } catch (Exception e) {
+                    showError("Invalid password format!(Use figures or letters)", 100);
+                }
             }
-            dialog.getDialogPane().setContent(content);
-            dialog.showAndWait();
-            updatedVersion = textField.getText();
-        }
-        return updatedVersion;
     }
+
+    public void editNameField() {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        String updatedVersion;
+        dialog.setTitle("Change Personal Information");
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        TextField textField = new TextField();
+        HBox content = new HBox();
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setSpacing(10);
+        content.getChildren().addAll(new Label("Enter your new name :"), textField);
+        dialog.getDialogPane().setContent(content);
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            updatedVersion = textField.getText();
+            try {
+                manager.editField("name", updatedVersion);
+                viewPersonalInfo();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void editFamilyNameField() {
+//        String newFamilyName = editFieldsView("family name");
+//        try {
+//            manager.editField("familyName", newFamilyName);
+//            viewPersonalInfo();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        Dialog<ButtonType> dialog = new Dialog<>();
+        String updatedVersion;
+        dialog.setTitle("Change Personal Information");
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        TextField textField = new TextField();
+        HBox content = new HBox();
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setSpacing(10);
+        content.getChildren().addAll(new Label("Enter your new family name :"), textField);
+        dialog.getDialogPane().setContent(content);
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            updatedVersion = textField.getText();
+            try {
+                manager.editField("familyName", updatedVersion);
+                viewPersonalInfo();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void editCompanyField() {
+//        String newCompany = editFieldsView("company");
+//        try {
+//            ((Seller) person).setCompany(newCompany);
+//            viewPersonalInfo();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        Dialog<ButtonType> dialog = new Dialog<>();
+        String updatedVersion;
+        dialog.setTitle("Change Personal Information");
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        TextField textField = new TextField();
+        HBox content = new HBox();
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setSpacing(10);
+        content.getChildren().addAll(new Label("Enter your new company name :"), textField);
+        dialog.getDialogPane().setContent(content);
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            updatedVersion = textField.getText();
+            try {
+                ((Seller) person).setCompany(updatedVersion);
+                viewPersonalInfo();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void editBalanceField() {
+//        String newBalance = editFieldsView("balance");
+//        try {
+//            sellerManager.addBalance(Double.parseDouble(newBalance));
+//            viewPersonalInfo();
+//        } catch (Exception e) {
+//            showError("Invalid balance!", 100);
+//        }
+        Dialog<ButtonType> dialog = new Dialog<>();
+        String updatedVersion;
+        dialog.setTitle("Change Personal Information");
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        TextField textField = new TextField();
+        HBox content = new HBox();
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setSpacing(10);
+        content.getChildren().addAll(new Label("Enter amount of money you want to add to you account :"), textField);
+        dialog.getDialogPane().setContent(content);
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            updatedVersion = textField.getText();
+            try {
+                sellerManager.addBalance(Double.parseDouble(updatedVersion));
+                viewPersonalInfo();
+            } catch (Exception e) {
+                showError("Invalid balance!", 100);
+            }
+        }
+    }
+
+    public void editEmailField() {
+//        String newEmail = editFieldsView("email");
+//        try {
+//            manager.editField("email", newEmail);
+//            viewPersonalInfo();
+//        } catch (Exception e) {
+//            showError("Invalid email address!", 100);
+//        }
+        Dialog<ButtonType> dialog = new Dialog<>();
+        String updatedVersion;
+        dialog.setTitle("Change Personal Information");
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        TextField textField = new TextField();
+        HBox content = new HBox();
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setSpacing(10);
+        content.getChildren().addAll(new Label("Enter your new e-mail address :"), textField);
+        dialog.getDialogPane().setContent(content);
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            updatedVersion = textField.getText();
+            try {
+                manager.editField("email", updatedVersion);
+                viewPersonalInfo();
+            } catch (Exception e) {
+                showError("Invalid email address!", 100);
+            }
+        }
+    }
+
+    public void editNumberField() {
+//        String newNumber = editFieldsView("phone number");
+//        try {
+//            manager.editField("number", newNumber);
+//            viewPersonalInfo();
+//        } catch (Exception e) {
+//            showError("Invalid phone number!", 100);
+//        }
+        Dialog<ButtonType> dialog = new Dialog<>();
+        String updatedVersion;
+        dialog.setTitle("Change Personal Information");
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        TextField textField = new TextField();
+        HBox content = new HBox();
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setSpacing(10);
+        content.getChildren().addAll(new Label("Enter your new number :"), textField);
+        dialog.getDialogPane().setContent(content);
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            updatedVersion = textField.getText();
+            try {
+                manager.editField("number", updatedVersion);
+                viewPersonalInfo();
+            } catch (Exception e) {
+                showError("Invalid email address!", 100);
+            }
+        }
+    }
+
+//    public String editFieldsView(String field) {
+//        Dialog<ButtonType> dialog = new Dialog<>();
+//        String updatedVersion = "";
+//        dialog.setTitle("Change Personal Information");
+//        dialog.setHeaderText(null);
+//        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+//        if (field.equals("password")) {
+//            PasswordField passwordField = new PasswordField();
+//            HBox content = new HBox();
+//            content.setAlignment(Pos.CENTER_LEFT);
+//            content.setSpacing(10);
+//            content.getChildren().addAll(new Label("Enter your new password :"), passwordField);
+//            dialog.getDialogPane().setContent(content);
+//            //dialog.showAndWait();
+//            Optional<ButtonType> result = dialog.showAndWait();
+//            if (result.isPresent() && result.get() == ButtonType.OK) {
+//                updatedVersion = passwordField.getText();
+//                try {
+//                    manager.editField("password", updatedVersion);
+//                    viewPersonalInfo();
+//                } catch (Exception e) {
+//                    showError("Invalid password format!(Use figures or letters)", 100);
+//                }
+//            }
+//            //updatedVersion = passwordField.getText();
+//        } else {
+//            TextField textField = new TextField();
+//            HBox content = new HBox();
+//            content.setAlignment(Pos.CENTER_LEFT);
+//            content.setSpacing(10);
+//            if (field.equals("balance")) {
+//                content.getChildren().addAll(new Label("Enter amount of money you want to add to you account :"), textField);
+//            } else {
+//                content.getChildren().addAll(new Label("Enter your new " + field + " :"), textField);
+//            }
+//            dialog.getDialogPane().setContent(content);
+//            Optional<ButtonType> result = dialog.showAndWait();
+//            if (result.isPresent() && result.get() == ButtonType.OK) {
+//                updatedVersion = textField.getText();
+//                return updatedVersion;
+//            }
+//        }
+//        return updatedVersion;
+//    }
 
     public void viewProducts() {
         SellerProductMenu sellerProductMenu = new SellerProductMenu(this, this.sellerManager);
@@ -208,183 +355,185 @@ public class SellerMenu extends Menu implements Initializable {
         dialog.showAndWait();
     }
 
-    public void checkValidityOfOffId() {
-        Dialog<String> dialog = new Dialog<>();
-        dialog.setTitle("Edit Off");
-        dialog.setHeaderText(null);
-        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-        TextField offId = new TextField();
-        HBox content = new HBox();
-        content.setAlignment(Pos.CENTER_LEFT);
-        content.setSpacing(10);
-        content.getChildren().addAll(new Label("Enter the id of the off you want to edit :"), offId);
-        dialog.getDialogPane().setContent(content);
-        dialog.showAndWait();
-        if (!offId.getText().matches("\\d+")) {
-            showError("Off Id is an integer!", 100);
-        } else {
-            if (sellerManager.doesSellerHaveThisOff(Integer.parseInt(offId.getText()))) {
-                editOff(Integer.parseInt(offId.getText()));
-            } else {
-                showError("Oops!You don't have off with this Id!", 100);
-            }
-        }
-    }
+//    public void checkValidityOfOffId() {
+//        Dialog<ButtonType> dialog = new Dialog<>();
+//        dialog.setTitle("Edit Off");
+//        dialog.setHeaderText(null);
+//        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+//        TextField offId = new TextField();
+//        HBox content = new HBox();
+//        content.setAlignment(Pos.CENTER_LEFT);
+//        content.setSpacing(10);
+//        content.getChildren().addAll(new Label("Enter the id of the off you want to edit :"), offId);
+//        dialog.getDialogPane().setContent(content);
+//        Optional<ButtonType> result = dialog.showAndWait();
+//        if (result.isPresent() && result.get() == ButtonType.OK) {
+//            if (!offId.getText().matches("\\d+")) {
+//                showError("Off Id is an integer!", 100);
+//            } else {
+//                if (sellerManager.doesSellerHaveThisOff(Integer.parseInt(offId.getText()))) {
+//                    editOff(Integer.parseInt(offId.getText()));
+//                } else {
+//                    showError("Oops!You don't have off with this Id!", 100);
+//                }
+//            }
+//        }
+//    }
 
-    public void editOff(int offId) {
-        Dialog<String> dialog = new Dialog<>();
-        dialog.setTitle("Edit Off");
-        dialog.setHeaderText(null);
-        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-        VBox content = new VBox();
-        content.setMinSize(500, 300);
-        content.setAlignment(Pos.CENTER);
-        content.setSpacing(10);
-        content.getChildren().addAll(new Label("Choose the field you want to edit"));
-        MenuItem beginDate = new MenuItem("Begin Date");
-        MenuItem endDate = new MenuItem("End Date");
-        MenuItem amountOfOff = new MenuItem("Amount Of Off");
-        MenuItem addProductToOff = new MenuItem("Add Product To Off");
-        MenuItem removeProductFromOff = new MenuItem("Remove Product From Off");
-        MenuButton fields = new MenuButton("Fields", null, beginDate, endDate, amountOfOff, addProductToOff,
-                removeProductFromOff);
-        content.getChildren().add(fields);
-        dialog.getDialogPane().setContent(content);
-        dialog.show();
-        beginDate.setOnAction(e -> editBeginDate(offId));
-
-        endDate.setOnAction(e -> editEndDate(offId));
-
-        amountOfOff.setOnAction(e -> editAmountOfOff(offId));
-
-        addProductToOff.setOnAction(e -> addProductToOff(offId));
-
-        removeProductFromOff.setOnAction(e -> removeProductFromOff(offId));
-    }
-
-    private void editBeginDate(int offId) {
-        Dialog<String> productDialog = new Dialog<>();
-        String updatedVersion;
-        TextField textField = new TextField();
-        productDialog.setTitle("Edit Begin Date");
-        productDialog.setHeaderText(null);
-        productDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-        HBox content = new HBox();
-        content.getChildren().addAll(new Label("Enter your new Begin Date :(in format yyyy,MM,dd,HH,mm)")
-                , textField);
-        productDialog.getDialogPane().setContent(content);
-        productDialog.showAndWait();
-        updatedVersion = textField.getText();
-        if (!updatedVersion.matches("\\d\\d\\d\\d,\\d\\d,\\d\\d,\\d\\d,\\d\\d")) {
-            showError("Invalid Format of date!", 100);
-        } else {
-            try {
-                sellerManager.editOff(offId, "beginDate", updatedVersion);
-                showMessage();
-            } catch (Exception ex) {
-                showError("Oops!Something went wrong!", 100);
-            }
-        }
-    }
-
-    private void editEndDate(int offId) {
-        Dialog<String> productDialog = new Dialog<>();
-        String updatedVersion;
-        TextField textField = new TextField();
-        productDialog.setTitle("Edit End Date");
-        productDialog.setHeaderText(null);
-        productDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-        HBox content = new HBox();
-        content.getChildren().addAll(new Label("Enter your new End Date :(in format yyyy,MM,dd,HH,mm)")
-                , textField);
-        productDialog.getDialogPane().setContent(content);
-        productDialog.showAndWait();
-        updatedVersion = textField.getText();
-        if (!updatedVersion.matches("\\d\\d\\d\\d,\\d\\d,\\d\\d,\\d\\d,\\d\\d")) {
-            showError("Invalid Format of date!", 100);
-        } else {
-            try {
-                sellerManager.editOff(offId, "endDate", updatedVersion);
-                showMessage();
-            } catch (Exception ex) {
-                showError("Oops!Something went wrong!", 100);
-            }
-        }
-    }
-
-    private void editAmountOfOff(int offId) {
-        Dialog<String> productDialog = new Dialog<>();
-        String updatedVersion;
-        TextField textField = new TextField();
-        productDialog.setTitle("Edit Amount Of Off");
-        productDialog.setHeaderText(null);
-        productDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-        HBox content = new HBox();
-        content.getChildren().addAll(new Label("Enter your new amount of off :")
-                , textField);
-        productDialog.getDialogPane().setContent(content);
-        productDialog.showAndWait();
-        updatedVersion = textField.getText();
-        if (!updatedVersion.matches("\\d+\\.?\\d+")) {
-            showError("Invalid amount!", 100);
-        } else {
-            try {
-                sellerManager.editOff(offId, "amountOfSale", updatedVersion);
-                showMessage();
-            } catch (Exception ex) {
-                showError("Oops!Something went wrong!", 100);
-            }
-        }
-    }
-
-    private void addProductToOff(int offId) {
-        Dialog<String> productDialog = new Dialog<>();
-        String updatedVersion;
-        TextField textField = new TextField();
-        productDialog.setTitle("Add product to off");
-        productDialog.setHeaderText(null);
-        productDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-        HBox content = new HBox();
-        content.getChildren().addAll(new Label("Enter productId you want to add to this off :")
-                , textField);
-        productDialog.getDialogPane().setContent(content);
-        productDialog.showAndWait();
-        updatedVersion = textField.getText();
-        try {
-            sellerManager.addProductToOff(offId, Integer.parseInt(updatedVersion));
-            showMessage();
-        } catch (Exception ex) {
-            showError("Oops!Something went wrong!One of the following errors has happened :\n -There is no product with this Id!\n" +
-                    " -This product is not belonged to you!\n -This product is already added in this sale!", 300);
-        }
-    }
-
-    private void removeProductFromOff(int offId) {
-        Dialog<String> productDialog = new Dialog<>();
-        String updatedVersion;
-        TextField textField = new TextField();
-        productDialog.setTitle("Remove product from off");
-        productDialog.setHeaderText(null);
-        productDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-        HBox content = new HBox();
-        content.getChildren().addAll(new Label("Enter productId you want to remove from this off :")
-                , textField);
-        productDialog.getDialogPane().setContent(content);
-        productDialog.showAndWait();
-        updatedVersion = textField.getText();
-        try {
-            sellerManager.removeProductFromOff(offId, Integer.parseInt(updatedVersion));
-            showMessage();
-        } catch (Exception ex) {
-            showError("Oops!Something went wrong!One of the following errors has happened :\n -There is no product with this Id!\n" +
-                    " -This product is not belonged to you!\n -This product is not assigned to this sale!", 300);
-        }
-    }
-
-    public void addOff() {
-        AddOffPage addOffPage = new AddOffPage(this, this.sellerManager);
-        addOffPage.run();
-    }
+//    public void editOff(int offId) {
+//        Dialog<String> dialog = new Dialog<>();
+//        dialog.setTitle("Edit Off");
+//        dialog.setHeaderText(null);
+//        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+//        VBox content = new VBox();
+//        content.setMinSize(500, 300);
+//        content.setAlignment(Pos.CENTER);
+//        content.setSpacing(10);
+//        content.getChildren().addAll(new Label("Choose the field you want to edit"));
+//        MenuItem beginDate = new MenuItem("Begin Date");
+//        MenuItem endDate = new MenuItem("End Date");
+//        MenuItem amountOfOff = new MenuItem("Amount Of Off");
+//        MenuItem addProductToOff = new MenuItem("Add Product To Off");
+//        MenuItem removeProductFromOff = new MenuItem("Remove Product From Off");
+//        MenuButton fields = new MenuButton("Fields", null, beginDate, endDate, amountOfOff, addProductToOff,
+//                removeProductFromOff);
+//        content.getChildren().add(fields);
+//        dialog.getDialogPane().setContent(content);
+//        dialog.show();
+//        beginDate.setOnAction(e -> editBeginDate(offId));
+//
+//        endDate.setOnAction(e -> editEndDate(offId));
+//
+//        amountOfOff.setOnAction(e -> editAmountOfOff(offId));
+//
+//        addProductToOff.setOnAction(e -> addProductToOff(offId));
+//
+//        removeProductFromOff.setOnAction(e -> removeProductFromOff(offId));
+//    }
+//
+//    private void editBeginDate(int offId) {
+//        Dialog<String> productDialog = new Dialog<>();
+//        String updatedVersion;
+//        TextField textField = new TextField();
+//        productDialog.setTitle("Edit Begin Date");
+//        productDialog.setHeaderText(null);
+//        productDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+//        HBox content = new HBox();
+//        content.getChildren().addAll(new Label("Enter your new Begin Date :(in format yyyy,MM,dd,HH,mm)")
+//                , textField);
+//        productDialog.getDialogPane().setContent(content);
+//        productDialog.showAndWait();
+//        updatedVersion = textField.getText();
+//        if (!updatedVersion.matches("\\d\\d\\d\\d,\\d\\d,\\d\\d,\\d\\d,\\d\\d")) {
+//            showError("Invalid Format of date!", 100);
+//        } else {
+//            try {
+//                sellerManager.editOff(offId, "beginDate", updatedVersion);
+//                showMessage();
+//            } catch (Exception ex) {
+//                showError("Oops!Something went wrong!", 100);
+//            }
+//        }
+//    }
+//
+//    private void editEndDate(int offId) {
+//        Dialog<String> productDialog = new Dialog<>();
+//        String updatedVersion;
+//        TextField textField = new TextField();
+//        productDialog.setTitle("Edit End Date");
+//        productDialog.setHeaderText(null);
+//        productDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+//        HBox content = new HBox();
+//        content.getChildren().addAll(new Label("Enter your new End Date :(in format yyyy,MM,dd,HH,mm)")
+//                , textField);
+//        productDialog.getDialogPane().setContent(content);
+//        productDialog.showAndWait();
+//        updatedVersion = textField.getText();
+//        if (!updatedVersion.matches("\\d\\d\\d\\d,\\d\\d,\\d\\d,\\d\\d,\\d\\d")) {
+//            showError("Invalid Format of date!", 100);
+//        } else {
+//            try {
+//                sellerManager.editOff(offId, "endDate", updatedVersion);
+//                showMessage();
+//            } catch (Exception ex) {
+//                showError("Oops!Something went wrong!", 100);
+//            }
+//        }
+//    }
+//
+//    private void editAmountOfOff(int offId) {
+//        Dialog<String> productDialog = new Dialog<>();
+//        String updatedVersion;
+//        TextField textField = new TextField();
+//        productDialog.setTitle("Edit Amount Of Off");
+//        productDialog.setHeaderText(null);
+//        productDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+//        HBox content = new HBox();
+//        content.getChildren().addAll(new Label("Enter your new amount of off :")
+//                , textField);
+//        productDialog.getDialogPane().setContent(content);
+//        productDialog.showAndWait();
+//        updatedVersion = textField.getText();
+//        if (!updatedVersion.matches("\\d+\\.?\\d+")) {
+//            showError("Invalid amount!", 100);
+//        } else {
+//            try {
+//                sellerManager.editOff(offId, "amountOfSale", updatedVersion);
+//                showMessage();
+//            } catch (Exception ex) {
+//                showError("Oops!Something went wrong!", 100);
+//            }
+//        }
+//    }
+//
+//    private void addProductToOff(int offId) {
+//        Dialog<String> productDialog = new Dialog<>();
+//        String updatedVersion;
+//        TextField textField = new TextField();
+//        productDialog.setTitle("Add product to off");
+//        productDialog.setHeaderText(null);
+//        productDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+//        HBox content = new HBox();
+//        content.getChildren().addAll(new Label("Enter productId you want to add to this off :")
+//                , textField);
+//        productDialog.getDialogPane().setContent(content);
+//        productDialog.showAndWait();
+//        updatedVersion = textField.getText();
+//        try {
+//            sellerManager.addProductToOff(offId, Integer.parseInt(updatedVersion));
+//            showMessage();
+//        } catch (Exception ex) {
+//            showError("Oops!Something went wrong!One of the following errors has happened :\n -There is no product with this Id!\n" +
+//                    " -This product is not belonged to you!\n -This product is already added in this sale!", 300);
+//        }
+//    }
+//
+//    private void removeProductFromOff(int offId) {
+//        Dialog<String> productDialog = new Dialog<>();
+//        String updatedVersion;
+//        TextField textField = new TextField();
+//        productDialog.setTitle("Remove product from off");
+//        productDialog.setHeaderText(null);
+//        productDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+//        HBox content = new HBox();
+//        content.getChildren().addAll(new Label("Enter productId you want to remove from this off :")
+//                , textField);
+//        productDialog.getDialogPane().setContent(content);
+//        productDialog.showAndWait();
+//        updatedVersion = textField.getText();
+//        try {
+//            sellerManager.removeProductFromOff(offId, Integer.parseInt(updatedVersion));
+//            showMessage();
+//        } catch (Exception ex) {
+//            showError("Oops!Something went wrong!One of the following errors has happened :\n -There is no product with this Id!\n" +
+//                    " -This product is not belonged to you!\n -This product is not assigned to this sale!", 300);
+//        }
+//    }
+//
+//    public void addOff() {
+//        AddOffPage addOffPage = new AddOffPage(this, this.sellerManager);
+//        addOffPage.run();
+//    }
 
     public void viewCategories() {
         Dialog<String> dialog = new Dialog<>();
@@ -435,11 +584,11 @@ public class SellerMenu extends Menu implements Initializable {
         sellerRequestMenu.run();
     }
 
-    public void showMessage() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Request Message");
-        alert.setContentText("Your Request has been Successfully sent to admin(s)!");
-        alert.setHeaderText(null);
-        alert.show();
-    }
+//    public void showMessage() {
+//        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//        alert.setTitle("Request Message");
+//        alert.setContentText("Your Request has been Successfully sent to admin(s)!");
+//        alert.setHeaderText(null);
+//        alert.show();
+//    }
 }

@@ -23,7 +23,7 @@ public class Log implements Idable<Log> {
     public Log(LocalDateTime date) {
         this.date = date;
         this.products = new HashMap<>();
-        this.id = idSetter();
+        //this.id = idSetter();
         allLogs.add(this);
     }
     private int idSetter() {

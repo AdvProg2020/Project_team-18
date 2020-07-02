@@ -12,6 +12,7 @@ import model.Product;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 
 public class AddOffPage extends Menu {
     private SellerManager sellerManager;
@@ -69,7 +70,7 @@ public class AddOffPage extends Menu {
     }
 
     public void addProductToSale() {
-        javafx.scene.control.Dialog<String> productDialog = new javafx.scene.control.Dialog<>();
+        javafx.scene.control.Dialog<ButtonType> productDialog = new javafx.scene.control.Dialog<>();
         String productId;
         TextField textField = new TextField();
         productDialog.setTitle("Add product to off");
@@ -78,17 +79,19 @@ public class AddOffPage extends Menu {
         HBox content = new HBox();
         content.getChildren().addAll(new Label("Enter productId you want to add to this off :"), textField);
         productDialog.getDialogPane().setContent(content);
-        productDialog.showAndWait();
-        productId = textField.getText();
-        if (!productId.matches("\\d+")) {
-            showError("ProductId is an integer!", 100);
-        } else {
-            if (storage.getProductById(Integer.parseInt(productId)) == null) {
-                showError("There's not such product!", 100);
-            } else if (!person.getUsername().equals(storage.getProductById(Integer.parseInt(productId)).getSeller().getUsername())) {
-                showError("You don't have this product!", 100);
+        Optional<ButtonType> result = productDialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            productId = textField.getText();
+            if (!productId.matches("\\d+")) {
+                showError("ProductId is an integer!", 100);
             } else {
-                productsInSale.add(storage.getProductById(Integer.parseInt(productId)));
+                if (storage.getProductById(Integer.parseInt(productId)) == null) {
+                    showError("There's not such product!", 100);
+                } else if (!person.getUsername().equals(storage.getProductById(Integer.parseInt(productId)).getSeller().getUsername())) {
+                    showError("You don't have this product!", 100);
+                } else {
+                    productsInSale.add(storage.getProductById(Integer.parseInt(productId)));
+                }
             }
         }
     }

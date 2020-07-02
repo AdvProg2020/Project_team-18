@@ -18,6 +18,7 @@ import model.RequestType;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class SellerRequestMenu extends Menu implements Initializable {
@@ -28,11 +29,14 @@ public class SellerRequestMenu extends Menu implements Initializable {
 
     @FXML
     TableView<Request> requestsTable = new TableView();
-    @FXML TableColumn<Request,Integer> idColumn = new TableColumn();
-    @FXML TableColumn<Request,String> statusColumn = new TableColumn();
-    @FXML TableColumn<Request,String> typeColumn = new TableColumn();
+    @FXML
+    TableColumn<Request, Integer> idColumn = new TableColumn<>();
+    @FXML
+    TableColumn<Request, String> statusColumn = new TableColumn<>();
+    @FXML
+    TableColumn<Request, String> typeColumn = new TableColumn<>();
 
-    private void updateShownRequests(ArrayList<Request> shownRequests){
+    private void updateShownRequests(ArrayList<Request> shownRequests) {
         final ObservableList<Request> data = FXCollections.observableArrayList(
                 shownRequests
         );
@@ -47,14 +51,14 @@ public class SellerRequestMenu extends Menu implements Initializable {
     }
 
     @FXML
-    private void addProduct(){
-        AddProductPage addProductPage = new AddProductPage(this,this.sellerManager);
+    private void addProduct() {
+        AddProductPage addProductPage = new AddProductPage(this, this.sellerManager);
         addProductPage.run();
     }
 
     @FXML
-    private void editProduct(){
-        Dialog<String> dialog = new Dialog<>();
+    private void editProduct() {
+        Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Edit Product");
         dialog.setHeaderText(null);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
@@ -64,19 +68,25 @@ public class SellerRequestMenu extends Menu implements Initializable {
         content.setSpacing(10);
         content.getChildren().addAll(new Label("Enter the id of the product you want to edit :"), productId);
         dialog.getDialogPane().setContent(content);
-        dialog.showAndWait();
-        if (!productId.getText().matches("\\d+")) {
-            showError("Off Id is an integer!", 100);
-        } else {
-            if (sellerManager.doesSellerHaveProduct(Integer.parseInt(productId.getText()))) {
-                editProductProcess(Integer.parseInt(productId.getText()));
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            if (!productId.getText().matches("\\d+")) {
+                showError("Off Id is an integer!", 100);
             } else {
-                showError("Oops!You don't have off with this Id!", 100);
+                if (storage.getProductById(Integer.parseInt(productId.getText())) == null) {
+                    showError("There's not such product!", 100);
+                } else {
+                    if (!sellerManager.doesSellerHaveProduct(Integer.parseInt(productId.getText()))) {
+                        showError("Oops!You don't have off with this Id!", 100);
+                    } else {
+                        editProductProcess(Integer.parseInt(productId.getText()));
+                    }
+                }
             }
         }
     }
 
-    private void editProductProcess(int productId){
+    private void editProductProcess(int productId) {
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Edit Product");
         dialog.setHeaderText(null);
@@ -107,34 +117,36 @@ public class SellerRequestMenu extends Menu implements Initializable {
     }
 
     private void editCategoryOfProduct(int productId) {
-        Dialog<String> dialog = new Dialog<>();
+        Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Edit category");
         dialog.setHeaderText(null);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
         ChoiceBox<String> content = new ChoiceBox<>();
         ArrayList<String> categoryNames = getCategoryNames();
-        if (categoryNames.isEmpty()){
+        if (categoryNames.isEmpty()) {
             content.getItems().add("No Categories yet!");
-        }else {
+        } else {
             content.getItems().addAll(categoryNames);
         }
         dialog.getDialogPane().setContent(content);
-        dialog.showAndWait();
-        String selectedCategory = content.getValue();
-        if (!categoryNames.isEmpty()){
-            try {
-                sellerManager.editProduct(productId, "category", selectedCategory);
-                showMessage();
-            }  catch (Exception e) {
-                showError("Oops!Something went wrong!", 100);
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            String selectedCategory = content.getValue();
+            if (!categoryNames.isEmpty()) {
+                try {
+                    sellerManager.editProduct(productId, "category", selectedCategory);
+                    showMessage();
+                } catch (Exception e) {
+                    showError("Oops!Something went wrong!", 100);
+                }
+            } else {
+                showError("There's no categories!", 100);
             }
-        } else {
-            showError("There's no categories!", 100);
         }
     }
 
     public void editUsualFields(int productId, String field) {
-        Dialog<String> productDialog = new Dialog<>();
+        Dialog<ButtonType> productDialog = new Dialog<>();
         String updatedVersion;
         TextField textField = new TextField();
         productDialog.setTitle("Edit " + field);
@@ -143,11 +155,20 @@ public class SellerRequestMenu extends Menu implements Initializable {
         HBox content = new HBox();
         content.getChildren().addAll(new Label("Enter new " + field + " for product :"), textField);
         productDialog.getDialogPane().setContent(content);
-        productDialog.showAndWait();
-        updatedVersion = textField.getText();
-        if (field.equals("price")) {
-            if (!updatedVersion.matches("\\d+\\.?\\d+")) {
-                showError("Invalid price!", 100);
+        Optional<ButtonType> result = productDialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            updatedVersion = textField.getText();
+            if (field.equals("price")) {
+                if (!updatedVersion.matches("\\d+\\.?\\d+")) {
+                    showError("Invalid price!", 100);
+                } else {
+                    try {
+                        sellerManager.editProduct(productId, field, updatedVersion);
+                    } catch (Exception ex) {
+                        showError("Oops!Something went wrong!", 100);
+                    }
+                    showMessage();
+                }
             } else {
                 try {
                     sellerManager.editProduct(productId, field, updatedVersion);
@@ -156,19 +177,12 @@ public class SellerRequestMenu extends Menu implements Initializable {
                 }
                 showMessage();
             }
-        } else {
-            try {
-                sellerManager.editProduct(productId, field, updatedVersion);
-            } catch (Exception ex) {
-                showError("Oops!Something went wrong!", 100);
-            }
-            showMessage();
         }
     }
 
     @FXML
-    private void removeProduct(){
-        Dialog<String> dialog = new Dialog<>();
+    private void removeProduct() {
+        Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Remove Product");
         dialog.setHeaderText(null);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
@@ -178,32 +192,38 @@ public class SellerRequestMenu extends Menu implements Initializable {
         content.setSpacing(10);
         content.getChildren().addAll(new Label("Enter the id of the product you want to remove :"), productId);
         dialog.getDialogPane().setContent(content);
-        dialog.showAndWait();
-        if (!productId.getText().matches("\\d+")) {
-            showError("Product Id is an integer!", 100);
-        } else {
-            if (sellerManager.doesSellerHaveProduct(Integer.parseInt(productId.getText()))) {
-                try {
-                    sellerManager.removeProduct(Integer.parseInt(productId.getText()));
-                    showMessage();
-                } catch (Exception e) {
-                    showError("Oops!Something went wrong!", 100);
-                }
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            if (!productId.getText().matches("\\d+")) {
+                showError("Product Id is an integer!", 100);
             } else {
-                showError("Oops!You don't have product with this Id!", 100);
+                if (storage.getProductById(Integer.parseInt(productId.getText())) == null) {
+                    showError("There's not such product!", 100);
+                } else {
+                    if (!sellerManager.doesSellerHaveProduct(Integer.parseInt(productId.getText()))) {
+                        showError("Oops!You don't have product with this Id!", 100);
+                    } else {
+                        try {
+                            sellerManager.removeProduct(Integer.parseInt(productId.getText()));
+                            showMessage();
+                        } catch (Exception e) {
+                            showError("Oops!Something went wrong!", 100);
+                        }
+                    }
+                }
             }
         }
     }
 
     @FXML
-    private void addOff(){
+    private void addOff() {
         AddOffPage addOffPage = new AddOffPage(this, this.sellerManager);
         addOffPage.run();
     }
 
     @FXML
-    private void editOff(){
-        Dialog<String> dialog = new Dialog<>();
+    private void editOff() {
+        Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Edit Off");
         dialog.setHeaderText(null);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
@@ -213,14 +233,16 @@ public class SellerRequestMenu extends Menu implements Initializable {
         content.setSpacing(10);
         content.getChildren().addAll(new Label("Enter the id of the off you want to edit :"), offId);
         dialog.getDialogPane().setContent(content);
-        dialog.showAndWait();
-        if (!offId.getText().matches("\\d+")) {
-            showError("Off Id is an integer!", 100);
-        } else {
-            if (sellerManager.doesSellerHaveThisOff(Integer.parseInt(offId.getText()))) {
-                editOffProcess(Integer.parseInt(offId.getText()));
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            if (!offId.getText().matches("\\d+")) {
+                showError("Off Id is an integer!", 100);
             } else {
-                showError("Oops!You don't have off with this Id!", 100);
+                if (sellerManager.doesSellerHaveThisOff(Integer.parseInt(offId.getText()))) {
+                    editOffProcess(Integer.parseInt(offId.getText()));
+                } else {
+                    showError("Oops!You don't have off with this Id!", 100);
+                }
             }
         }
     }
@@ -257,7 +279,7 @@ public class SellerRequestMenu extends Menu implements Initializable {
     }
 
     private void editBeginDate(int offId) {
-        Dialog<String> productDialog = new Dialog<>();
+        Dialog<ButtonType> productDialog = new Dialog<>();
         String updatedVersion;
         TextField textField = new TextField();
         productDialog.setTitle("Edit Begin Date");
@@ -267,22 +289,24 @@ public class SellerRequestMenu extends Menu implements Initializable {
         content.getChildren().addAll(new Label("Enter your new Begin Date :(in format yyyy,MM,dd,HH,mm)")
                 , textField);
         productDialog.getDialogPane().setContent(content);
-        productDialog.showAndWait();
-        updatedVersion = textField.getText();
-        if (!updatedVersion.matches("\\d\\d\\d\\d,\\d\\d,\\d\\d,\\d\\d,\\d\\d")) {
-            showError("Invalid Format of date!", 100);
-        } else {
-            try {
-                sellerManager.editOff(offId, "beginDate", updatedVersion);
-                showMessage();
-            } catch (Exception ex) {
-                showError("Oops!Something went wrong!", 100);
+        Optional<ButtonType> result = productDialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            updatedVersion = textField.getText();
+            if (!updatedVersion.matches("\\d\\d\\d\\d,\\d\\d,\\d\\d,\\d\\d,\\d\\d")) {
+                showError("Invalid Format of date!", 100);
+            } else {
+                try {
+                    sellerManager.editOff(offId, "beginDate", updatedVersion);
+                    showMessage();
+                } catch (Exception ex) {
+                    showError("Oops!Something went wrong!", 100);
+                }
             }
         }
     }
 
     private void editEndDate(int offId) {
-        Dialog<String> productDialog = new Dialog<>();
+        Dialog<ButtonType> productDialog = new Dialog<>();
         String updatedVersion;
         TextField textField = new TextField();
         productDialog.setTitle("Edit End Date");
@@ -292,22 +316,24 @@ public class SellerRequestMenu extends Menu implements Initializable {
         content.getChildren().addAll(new Label("Enter your new End Date :(in format yyyy,MM,dd,HH,mm)")
                 , textField);
         productDialog.getDialogPane().setContent(content);
-        productDialog.showAndWait();
-        updatedVersion = textField.getText();
-        if (!updatedVersion.matches("\\d\\d\\d\\d,\\d\\d,\\d\\d,\\d\\d,\\d\\d")) {
-            showError("Invalid Format of date!", 100);
-        } else {
-            try {
-                sellerManager.editOff(offId, "endDate", updatedVersion);
-                showMessage();
-            } catch (Exception ex) {
-                showError("Oops!Something went wrong!", 100);
+        Optional<ButtonType> result = productDialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            updatedVersion = textField.getText();
+            if (!updatedVersion.matches("\\d\\d\\d\\d,\\d\\d,\\d\\d,\\d\\d,\\d\\d")) {
+                showError("Invalid Format of date!", 100);
+            } else {
+                try {
+                    sellerManager.editOff(offId, "endDate", updatedVersion);
+                    showMessage();
+                } catch (Exception ex) {
+                    showError("Oops!Something went wrong!", 100);
+                }
             }
         }
     }
 
     private void editAmountOfOff(int offId) {
-        Dialog<String> productDialog = new Dialog<>();
+        Dialog<ButtonType> productDialog = new Dialog<>();
         String updatedVersion;
         TextField textField = new TextField();
         productDialog.setTitle("Edit Amount Of Off");
@@ -317,22 +343,24 @@ public class SellerRequestMenu extends Menu implements Initializable {
         content.getChildren().addAll(new Label("Enter your new amount of off :")
                 , textField);
         productDialog.getDialogPane().setContent(content);
-        productDialog.showAndWait();
-        updatedVersion = textField.getText();
-        if (!updatedVersion.matches("\\d+\\.?\\d+")) {
-            showError("Invalid amount!", 100);
-        } else {
-            try {
-                sellerManager.editOff(offId, "amountOfSale", updatedVersion);
-                showMessage();
-            } catch (Exception ex) {
-                showError("Oops!Something went wrong!", 100);
+        Optional<ButtonType> result = productDialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            updatedVersion = textField.getText();
+            if (!updatedVersion.matches("\\d+\\.?\\d+")) {
+                showError("Invalid amount!", 100);
+            } else {
+                try {
+                    sellerManager.editOff(offId, "amountOfSale", updatedVersion);
+                    showMessage();
+                } catch (Exception ex) {
+                    showError("Oops!Something went wrong!", 100);
+                }
             }
         }
     }
 
     private void addProductToOff(int offId) {
-        Dialog<String> productDialog = new Dialog<>();
+        Dialog<ButtonType> productDialog = new Dialog<>();
         String updatedVersion;
         TextField textField = new TextField();
         productDialog.setTitle("Add product to off");
@@ -342,19 +370,20 @@ public class SellerRequestMenu extends Menu implements Initializable {
         content.getChildren().addAll(new Label("Enter productId you want to add to this off :")
                 , textField);
         productDialog.getDialogPane().setContent(content);
-        productDialog.showAndWait();
-        updatedVersion = textField.getText();
-        try {
-            sellerManager.addProductToOff(offId, Integer.parseInt(updatedVersion));
-            showMessage();
-        } catch (Exception ex) {
-            showError("Oops!Something went wrong!One of the following errors has happened :\n -There is no product with this Id!\n" +
-                    " -This product is not belonged to you!\n -This product is already added in this sale!", 300);
+        Optional<ButtonType> result = productDialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            updatedVersion = textField.getText();
+            try {
+                sellerManager.addProductToOff(offId, Integer.parseInt(updatedVersion));
+                showMessage();
+            } catch (Exception ex) {
+                showError("Oops!Something went wrong!One of the following errors has happened :\n -There is no product with this Id!\n" +
+                        " -This product is not belonged to you!\n -This product is already added in this sale!", 300);
+            }
         }
     }
-
     private void removeProductFromOff(int offId) {
-        Dialog<String> productDialog = new Dialog<>();
+        Dialog<ButtonType> productDialog = new Dialog<>();
         String updatedVersion;
         TextField textField = new TextField();
         productDialog.setTitle("Remove product from off");
@@ -364,14 +393,16 @@ public class SellerRequestMenu extends Menu implements Initializable {
         content.getChildren().addAll(new Label("Enter productId you want to remove from this off :")
                 , textField);
         productDialog.getDialogPane().setContent(content);
-        productDialog.showAndWait();
-        updatedVersion = textField.getText();
-        try {
-            sellerManager.removeProductFromOff(offId, Integer.parseInt(updatedVersion));
-            showMessage();
-        } catch (Exception ex) {
-            showError("Oops!Something went wrong!One of the following errors has happened :\n -There is no product with this Id!\n" +
-                    " -This product is not belonged to you!\n -This product is not assigned to this sale!", 300);
+        Optional<ButtonType> result = productDialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            updatedVersion = textField.getText();
+            try {
+                sellerManager.removeProductFromOff(offId, Integer.parseInt(updatedVersion));
+                showMessage();
+            } catch (Exception ex) {
+                showError("Oops!Something went wrong!One of the following errors has happened :\n -There is no product with this Id!\n" +
+                        " -This product is not belonged to you!\n -This product is not assigned to this sale!", 300);
+            }
         }
     }
 
@@ -383,7 +414,7 @@ public class SellerRequestMenu extends Menu implements Initializable {
         alert.show();
     }
 
-    private ArrayList<String> getCategoryNames(){
+    private ArrayList<String> getCategoryNames() {
         ArrayList<String> categoryName = new ArrayList<>();
         if (!storage.getAllCategories().isEmpty()) {
             for (Category category : storage.getAllCategories()) {
@@ -397,8 +428,8 @@ public class SellerRequestMenu extends Menu implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ArrayList<Request> sellerReq = new ArrayList<>();
         for (Request request : adminManager.viewAllRequests()) {
-            if(!(request.getTypeOfRequest() == RequestType.ADD_COMMENT)){
-                if(request.getInformation().get("seller") != null && request.getInformation().get("seller").equals(person.getUsername()))
+            if (!(request.getTypeOfRequest() == RequestType.ADD_COMMENT)) {
+                if (request.getInformation().get("seller") != null && request.getInformation().get("seller").equals(person.getUsername()))
                     sellerReq.add(request);
                 else if (request.getInformation().get("username") != null && request.getInformation().get("username").equals(person.getUsername()))
                     sellerReq.add(request);

@@ -10,10 +10,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import model.Customer;
 import model.Discount;
+import model.Seller;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class CustomerMenu extends Menu implements Initializable {
@@ -56,97 +58,209 @@ public class CustomerMenu extends Menu implements Initializable {
     }
 
     public void editPasswordField() {
-        String newPassword = editFieldsView("password");
-        try {
-            manager.editField("password", newPassword);
-            viewPersonalInfo();
-        } catch (Exception e) {
-            showError("Invalid password format!(Use figures or letters)", 100);
+        Dialog<ButtonType> dialog = new Dialog<>();
+        String updatedVersion;
+        dialog.setTitle("Change Personal Information");
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        PasswordField passwordField = new PasswordField();
+        HBox content = new HBox();
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setSpacing(10);
+        content.getChildren().addAll(new Label("Enter your new password :"), passwordField);
+        dialog.getDialogPane().setContent(content);
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            updatedVersion = passwordField.getText();
+            try {
+                manager.editField("password", updatedVersion);
+                viewPersonalInfo();
+            } catch (Exception e) {
+                showError("Invalid password format!(Use figures or letters)", 100);
+            }
         }
     }
 
     public void editNameField() {
-        String newName = editFieldsView("name");
-        try {
-            manager.editField("name", newName);
-            viewPersonalInfo();
-        } catch (Exception e) {
-            e.printStackTrace();
+        Dialog<ButtonType> dialog = new Dialog<>();
+        String updatedVersion;
+        dialog.setTitle("Change Personal Information");
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        TextField textField = new TextField();
+        HBox content = new HBox();
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setSpacing(10);
+        content.getChildren().addAll(new Label("Enter your new name :"), textField);
+        dialog.getDialogPane().setContent(content);
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            updatedVersion = textField.getText();
+            try {
+                manager.editField("name", updatedVersion);
+                viewPersonalInfo();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public void editFamilyNameField() {
-        String newFamilyName = editFieldsView("family name");
-        try {
-            manager.editField("familyName", newFamilyName);
-            viewPersonalInfo();
-        } catch (Exception e) {
-            e.printStackTrace();
+//        String newFamilyName = editFieldsView("family name");
+//        try {
+//            manager.editField("familyName", newFamilyName);
+//            viewPersonalInfo();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        Dialog<ButtonType> dialog = new Dialog<>();
+        String updatedVersion;
+        dialog.setTitle("Change Personal Information");
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        TextField textField = new TextField();
+        HBox content = new HBox();
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setSpacing(10);
+        content.getChildren().addAll(new Label("Enter your new family name :"), textField);
+        dialog.getDialogPane().setContent(content);
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            updatedVersion = textField.getText();
+            try {
+                manager.editField("familyName", updatedVersion);
+                viewPersonalInfo();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public void editBalanceField() {
-        String newBalance = editFieldsView("balance");
-        try {
-            customerManager.addBalance(Double.parseDouble(newBalance));
-            viewPersonalInfo();
-        } catch (Exception e) {
-            showError("Invalid balance!", 100);
+//        String newBalance = editFieldsView("balance");
+//        try {
+//            sellerManager.addBalance(Double.parseDouble(newBalance));
+//            viewPersonalInfo();
+//        } catch (Exception e) {
+//            showError("Invalid balance!", 100);
+//        }
+        Dialog<ButtonType> dialog = new Dialog<>();
+        String updatedVersion;
+        dialog.setTitle("Change Personal Information");
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        TextField textField = new TextField();
+        HBox content = new HBox();
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setSpacing(10);
+        content.getChildren().addAll(new Label("Enter amount of money you want to add to you account :"), textField);
+        dialog.getDialogPane().setContent(content);
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            updatedVersion = textField.getText();
+            try {
+                customerManager.addBalance(Double.parseDouble(updatedVersion));
+                viewPersonalInfo();
+            } catch (Exception e) {
+                showError("Invalid balance!", 100);
+            }
         }
     }
 
     public void editEmailField() {
-        String newEmail = editFieldsView("email");
-        try {
-            manager.editField("email", newEmail);
-            viewPersonalInfo();
-        } catch (Exception e) {
-            showError("Invalid email address!", 100);
+//        String newEmail = editFieldsView("email");
+//        try {
+//            manager.editField("email", newEmail);
+//            viewPersonalInfo();
+//        } catch (Exception e) {
+//            showError("Invalid email address!", 100);
+//        }
+        Dialog<ButtonType> dialog = new Dialog<>();
+        String updatedVersion;
+        dialog.setTitle("Change Personal Information");
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        TextField textField = new TextField();
+        HBox content = new HBox();
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setSpacing(10);
+        content.getChildren().addAll(new Label("Enter your new e-mail address :"), textField);
+        dialog.getDialogPane().setContent(content);
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            updatedVersion = textField.getText();
+            try {
+                manager.editField("email", updatedVersion);
+                viewPersonalInfo();
+            } catch (Exception e) {
+                showError("Invalid email address!", 100);
+            }
         }
     }
 
     public void editNumberField() {
-        String newNumber = editFieldsView("phone number");
-        try {
-            manager.editField("number", newNumber);
-            viewPersonalInfo();
-        } catch (Exception e) {
-            showError("Invalid phone number!", 100);
-        }
-    }
-
-    public String editFieldsView(String field) {
-        Dialog<String> dialog = new Dialog<>();
-        String updatedVersion ;
+//        String newNumber = editFieldsView("phone number");
+//        try {
+//            manager.editField("number", newNumber);
+//            viewPersonalInfo();
+//        } catch (Exception e) {
+//            showError("Invalid phone number!", 100);
+//        }
+        Dialog<ButtonType> dialog = new Dialog<>();
+        String updatedVersion;
         dialog.setTitle("Change Personal Information");
         dialog.setHeaderText(null);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-        if (field.equals("password")) {
-            PasswordField passwordField = new PasswordField();
-            HBox content = new HBox();
-            content.setAlignment(Pos.CENTER_LEFT);
-            content.setSpacing(10);
-            content.getChildren().addAll(new Label("Enter your new password :"), passwordField);
-            dialog.getDialogPane().setContent(content);
-            dialog.showAndWait();
-            updatedVersion = passwordField.getText();
-
-        }else {
-            TextField textField = new TextField();
-            HBox content = new HBox();
-            content.setAlignment(Pos.CENTER_LEFT);
-            content.setSpacing(10);
-            if (field.equals("balance")) {
-                content.getChildren().addAll(new Label("Enter amount of money you want to add to you account :"), textField);
-            } else {
-                content.getChildren().addAll(new Label("Enter your new " + field + " :"), textField);
-            }
-            dialog.getDialogPane().setContent(content);
-            dialog.showAndWait();
+        TextField textField = new TextField();
+        HBox content = new HBox();
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setSpacing(10);
+        content.getChildren().addAll(new Label("Enter your new number :"), textField);
+        dialog.getDialogPane().setContent(content);
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
             updatedVersion = textField.getText();
+            try {
+                manager.editField("number", updatedVersion);
+                viewPersonalInfo();
+            } catch (Exception e) {
+                showError("Invalid number!", 100);
+            }
         }
-        return updatedVersion;
     }
+
+//    public String editFieldsView(String field) {
+//        Dialog<String> dialog = new Dialog<>();
+//        String updatedVersion;
+//        dialog.setTitle("Change Personal Information");
+//        dialog.setHeaderText(null);
+//        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+//        if (field.equals("password")) {
+//            PasswordField passwordField = new PasswordField();
+//            HBox content = new HBox();
+//            content.setAlignment(Pos.CENTER_LEFT);
+//            content.setSpacing(10);
+//            content.getChildren().addAll(new Label("Enter your new password :"), passwordField);
+//            dialog.getDialogPane().setContent(content);
+//            dialog.showAndWait();
+//            updatedVersion = passwordField.getText();
+//
+//        } else {
+//            TextField textField = new TextField();
+//            HBox content = new HBox();
+//            content.setAlignment(Pos.CENTER_LEFT);
+//            content.setSpacing(10);
+//            if (field.equals("balance")) {
+//                content.getChildren().addAll(new Label("Enter amount of money you want to add to you account :"), textField);
+//            } else {
+//                content.getChildren().addAll(new Label("Enter your new " + field + " :"), textField);
+//            }
+//            dialog.getDialogPane().setContent(content);
+//            dialog.showAndWait();
+//            updatedVersion = textField.getText();
+//        }
+//        return updatedVersion;
+//    }
 
     public void viewDiscounts() {
         Dialog<String> dialog = new Dialog<>();
@@ -171,12 +285,12 @@ public class CustomerMenu extends Menu implements Initializable {
                         + "-" + myDiscounts.get(i).getBeginDate().getMonth() + "-" +
                         myDiscounts.get(i).getBeginDate().getDayOfMonth() + ", Time : "
                         + myDiscounts.get(i).getBeginDate().getHour() + ":" + myDiscounts.get(i).getBeginDate().getMinute()
-                + ":" + + myDiscounts.get(i).getBeginDate().getSecond()));
-                content.getChildren().addAll(new Label("End Date : "+ myDiscounts.get(i).getEndDate().getYear()
+                        + ":" + +myDiscounts.get(i).getBeginDate().getSecond()));
+                content.getChildren().addAll(new Label("End Date : " + myDiscounts.get(i).getEndDate().getYear()
                         + "-" + myDiscounts.get(i).getEndDate().getMonth() + "-" +
                         myDiscounts.get(i).getEndDate().getDayOfMonth() + ", Time : "
                         + myDiscounts.get(i).getEndDate().getHour() + ":" + myDiscounts.get(i).getEndDate().getMinute()
-                        + ":" + + myDiscounts.get(i).getEndDate().getSecond()));
+                        + ":" + +myDiscounts.get(i).getEndDate().getSecond()));
             }
         }
         dialog.getDialogPane().setContent(content);
@@ -200,7 +314,7 @@ public class CustomerMenu extends Menu implements Initializable {
     }
 
     @FXML
-    private void customerRequestMenu(){
+    private void customerRequestMenu() {
         CustomerRequestsMenu customerRequestsMenu = new CustomerRequestsMenu(this);
         customerRequestsMenu.run();
     }
