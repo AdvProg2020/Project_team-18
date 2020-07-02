@@ -11,7 +11,7 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.image.*;
 
-public class Product implements Comparable<Product>,Idable<Product> {
+public class Product implements Comparable<Product>, Idable<Product> {
     private transient Storage storage = new Storage();
     private transient Image image;
     private transient String imagePath;
@@ -42,9 +42,10 @@ public class Product implements Comparable<Product>,Idable<Product> {
     public static ArrayList<Product> getAllProducts() {
         return allProducts;
     }
-    public static Product getProductById(int id){
-        for (Product product : allProducts){
-            if (product.productId == id){
+
+    public static Product getProductById(int id) {
+        for (Product product : allProducts) {
+            if (product.productId == id) {
                 return product;
             }
         }
@@ -84,7 +85,7 @@ public class Product implements Comparable<Product>,Idable<Product> {
         return new Image(this.imagePath);
     }
 
-    public Image getStatusImage(){
+    public Image getStatusImage() {
         return new Image(this.statusImagePath);
     }
 
@@ -327,7 +328,7 @@ public class Product implements Comparable<Product>,Idable<Product> {
 
     @Override
     public Product getById(int id) {
-        for (Product product : allProducts){
+        for (Product product : allProducts) {
             if (product.productId == id)
                 return product;
         }

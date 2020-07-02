@@ -28,7 +28,7 @@ public class SellerRequestMenu extends Menu implements Initializable {
     private Storage storage = new Storage();
 
     @FXML
-    TableView<Request> requestsTable = new TableView();
+    TableView<Request> requestsTable = new TableView<>();
     @FXML
     TableColumn<Request, Integer> idColumn = new TableColumn<>();
     @FXML
@@ -135,6 +135,16 @@ public class SellerRequestMenu extends Menu implements Initializable {
             if (!categoryNames.isEmpty()) {
                 try {
                     sellerManager.editProduct(productId, "category", selectedCategory);
+                    ArrayList<Request> sellerReq = new ArrayList<>();
+                    for (Request request : adminManager.viewAllRequests()) {
+                        if (!(request.getTypeOfRequest() == RequestType.ADD_COMMENT)) {
+                            if (request.getInformation().get("seller") != null && request.getInformation().get("seller").equals(person.getUsername()))
+                                sellerReq.add(request);
+                            else if (request.getInformation().get("username") != null && request.getInformation().get("username").equals(person.getUsername()))
+                                sellerReq.add(request);
+                        }
+                    }
+                    updateShownRequests(sellerReq);
                     showMessage();
                 } catch (Exception e) {
                     showError("Oops!Something went wrong!", 100);
@@ -164,6 +174,16 @@ public class SellerRequestMenu extends Menu implements Initializable {
                 } else {
                     try {
                         sellerManager.editProduct(productId, field, updatedVersion);
+                        ArrayList<Request> sellerReq = new ArrayList<>();
+                        for (Request request : adminManager.viewAllRequests()) {
+                            if (!(request.getTypeOfRequest() == RequestType.ADD_COMMENT)) {
+                                if (request.getInformation().get("seller") != null && request.getInformation().get("seller").equals(person.getUsername()))
+                                    sellerReq.add(request);
+                                else if (request.getInformation().get("username") != null && request.getInformation().get("username").equals(person.getUsername()))
+                                    sellerReq.add(request);
+                            }
+                        }
+                        updateShownRequests(sellerReq);
                     } catch (Exception ex) {
                         showError("Oops!Something went wrong!", 100);
                     }
@@ -172,6 +192,16 @@ public class SellerRequestMenu extends Menu implements Initializable {
             } else {
                 try {
                     sellerManager.editProduct(productId, field, updatedVersion);
+                    ArrayList<Request> sellerReq = new ArrayList<>();
+                    for (Request request : adminManager.viewAllRequests()) {
+                        if (!(request.getTypeOfRequest() == RequestType.ADD_COMMENT)) {
+                            if (request.getInformation().get("seller") != null && request.getInformation().get("seller").equals(person.getUsername()))
+                                sellerReq.add(request);
+                            else if (request.getInformation().get("username") != null && request.getInformation().get("username").equals(person.getUsername()))
+                                sellerReq.add(request);
+                        }
+                    }
+                    updateShownRequests(sellerReq);
                 } catch (Exception ex) {
                     showError("Oops!Something went wrong!", 100);
                 }
@@ -297,6 +327,16 @@ public class SellerRequestMenu extends Menu implements Initializable {
             } else {
                 try {
                     sellerManager.editOff(offId, "beginDate", updatedVersion);
+                    ArrayList<Request> sellerReq = new ArrayList<>();
+                    for (Request request : adminManager.viewAllRequests()) {
+                        if (!(request.getTypeOfRequest() == RequestType.ADD_COMMENT)) {
+                            if (request.getInformation().get("seller") != null && request.getInformation().get("seller").equals(person.getUsername()))
+                                sellerReq.add(request);
+                            else if (request.getInformation().get("username") != null && request.getInformation().get("username").equals(person.getUsername()))
+                                sellerReq.add(request);
+                        }
+                    }
+                    updateShownRequests(sellerReq);
                     showMessage();
                 } catch (Exception ex) {
                     showError("Oops!Something went wrong!", 100);
@@ -324,6 +364,16 @@ public class SellerRequestMenu extends Menu implements Initializable {
             } else {
                 try {
                     sellerManager.editOff(offId, "endDate", updatedVersion);
+                    ArrayList<Request> sellerReq = new ArrayList<>();
+                    for (Request request : adminManager.viewAllRequests()) {
+                        if (!(request.getTypeOfRequest() == RequestType.ADD_COMMENT)) {
+                            if (request.getInformation().get("seller") != null && request.getInformation().get("seller").equals(person.getUsername()))
+                                sellerReq.add(request);
+                            else if (request.getInformation().get("username") != null && request.getInformation().get("username").equals(person.getUsername()))
+                                sellerReq.add(request);
+                        }
+                    }
+                    updateShownRequests(sellerReq);
                     showMessage();
                 } catch (Exception ex) {
                     showError("Oops!Something went wrong!", 100);
@@ -351,6 +401,16 @@ public class SellerRequestMenu extends Menu implements Initializable {
             } else {
                 try {
                     sellerManager.editOff(offId, "amountOfSale", updatedVersion);
+                    ArrayList<Request> sellerReq = new ArrayList<>();
+                    for (Request request : adminManager.viewAllRequests()) {
+                        if (!(request.getTypeOfRequest() == RequestType.ADD_COMMENT)) {
+                            if (request.getInformation().get("seller") != null && request.getInformation().get("seller").equals(person.getUsername()))
+                                sellerReq.add(request);
+                            else if (request.getInformation().get("username") != null && request.getInformation().get("username").equals(person.getUsername()))
+                                sellerReq.add(request);
+                        }
+                    }
+                    updateShownRequests(sellerReq);
                     showMessage();
                 } catch (Exception ex) {
                     showError("Oops!Something went wrong!", 100);
@@ -375,6 +435,16 @@ public class SellerRequestMenu extends Menu implements Initializable {
             updatedVersion = textField.getText();
             try {
                 sellerManager.addProductToOff(offId, Integer.parseInt(updatedVersion));
+                ArrayList<Request> sellerReq = new ArrayList<>();
+                for (Request request : adminManager.viewAllRequests()) {
+                    if (!(request.getTypeOfRequest() == RequestType.ADD_COMMENT)) {
+                        if (request.getInformation().get("seller") != null && request.getInformation().get("seller").equals(person.getUsername()))
+                            sellerReq.add(request);
+                        else if (request.getInformation().get("username") != null && request.getInformation().get("username").equals(person.getUsername()))
+                            sellerReq.add(request);
+                    }
+                }
+                updateShownRequests(sellerReq);
                 showMessage();
             } catch (Exception ex) {
                 showError("Oops!Something went wrong!One of the following errors has happened :\n -There is no product with this Id!\n" +
@@ -382,6 +452,7 @@ public class SellerRequestMenu extends Menu implements Initializable {
             }
         }
     }
+
     private void removeProductFromOff(int offId) {
         Dialog<ButtonType> productDialog = new Dialog<>();
         String updatedVersion;
@@ -398,6 +469,16 @@ public class SellerRequestMenu extends Menu implements Initializable {
             updatedVersion = textField.getText();
             try {
                 sellerManager.removeProductFromOff(offId, Integer.parseInt(updatedVersion));
+                ArrayList<Request> sellerReq = new ArrayList<>();
+                for (Request request : adminManager.viewAllRequests()) {
+                    if (!(request.getTypeOfRequest() == RequestType.ADD_COMMENT)) {
+                        if (request.getInformation().get("seller") != null && request.getInformation().get("seller").equals(person.getUsername()))
+                            sellerReq.add(request);
+                        else if (request.getInformation().get("username") != null && request.getInformation().get("username").equals(person.getUsername()))
+                            sellerReq.add(request);
+                    }
+                }
+                updateShownRequests(sellerReq);
                 showMessage();
             } catch (Exception ex) {
                 showError("Oops!Something went wrong!One of the following errors has happened :\n -There is no product with this Id!\n" +

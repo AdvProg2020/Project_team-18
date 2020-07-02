@@ -261,18 +261,18 @@ public class AdminManager extends Manager {
 
     private void addProductToSAleRequest (Request request){
         int addedProductToSAle = Integer.parseInt(request.getInformation().get("productId"));
-        int saleIdToBeAdded = Integer.parseInt(request.getInformation().get("saleId"));
+        int saleIdToBeAdded = Integer.parseInt(request.getInformation().get("offId"));
         storage.getProductById(addedProductToSAle).setSale(storage.getSaleById(saleIdToBeAdded));
         storage.getSaleById(saleIdToBeAdded).addProductToThisSale(storage.getProductById(addedProductToSAle));
     }
 
-    private void removeProductFromSaleRequest(Request request){
-        int removedProductFromSAle = Integer.parseInt(request.getInformation().get("productId"));
+    private void removeProductFromSaleRequest(Request request) {
+        int removedProductFromSale = Integer.parseInt(request.getInformation().get("productId"));
         int saleIdToBeRemoved = Integer.parseInt(request.getInformation().get("offId"));
-        if (storage.getProductById(removedProductFromSAle).getSale() == storage.getSaleById(saleIdToBeRemoved)){
-            storage.getProductById(removedProductFromSAle).setSale(null);
+        if (storage.getProductById(removedProductFromSale).getSale() == storage.getSaleById(saleIdToBeRemoved)) {
+            storage.getProductById(removedProductFromSale).setSale(null);
         }
-        storage.getSaleById(removedProductFromSAle).removeProductFromThisSale(storage.getProductById(saleIdToBeRemoved));
+        storage.getSaleById(removedProductFromSale).removeProductFromThisSale(storage.getProductById(saleIdToBeRemoved));
     }
 
     public void addCommentRequest (Request request){

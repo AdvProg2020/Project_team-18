@@ -24,7 +24,7 @@ public class AdminManageRequestsMenu extends Menu implements Initializable {
     AdminManager adminManager = new AdminManager();
 
     @FXML
-    TableView requestsTable = new TableView();
+    TableView<Request> requestsTable = new TableView<>();
     @FXML TableColumn<Request, Integer> idColumn = new TableColumn<>();
     @FXML TableColumn<Request, String> statusColumn = new TableColumn<>();
     @FXML TableColumn<Request, String> typeColumn = new TableColumn<>();
