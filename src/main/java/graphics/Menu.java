@@ -58,11 +58,11 @@ public abstract class Menu {
 
     public void buttonSound() {
 
-        MediaPlayer mediaPlayer;
+        /*MediaPlayer mediaPlayer;
         String path = "src/main/java/graphics/fxml/images/buttonClicked.mp3";
         Media media = new Media(Paths.get(path).toUri().toString());
         mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.play();
+        mediaPlayer.play();*/
     }
     public void run(){
         FXMLLoader loader = null;
