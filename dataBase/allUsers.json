@@ -18,6 +18,7 @@
     "@type": "model.Seller",
     "@val": {
       "company": "s1",
+      "sellHistory": [],
       "productsToSell": [],
       "saleList": [],
       "id": 2,
