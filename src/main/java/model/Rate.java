@@ -9,7 +9,7 @@ public class Rate implements Idable<Rate> {
     private String user;
     private Product product;
     private double rate;
-    private static ArrayList<Rate>allRates = new ArrayList<>();
+    private transient static ArrayList<Rate>allRates = new ArrayList<>();
 
     public Rate() {
     }

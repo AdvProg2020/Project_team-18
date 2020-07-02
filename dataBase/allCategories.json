@@ -1,0 +1,22 @@
+[
+  {
+    "@type": "model.Category",
+    "@val": {
+      "id": 0,
+      "categoryName": "cloth",
+      "imagePath": "file:src/main/java/graphics/fxml/images/clothing.jpg",
+      "thisCategoryProducts": [],
+      "properties": {}
+    }
+  },
+  {
+    "@type": "model.Category",
+    "@val": {
+      "id": 1,
+      "categoryName": "shoe",
+      "imagePath": "file:src/main/java/graphics/fxml/images/shoes.jpg",
+      "thisCategoryProducts": [],
+      "properties": {}
+    }
+  }
+]

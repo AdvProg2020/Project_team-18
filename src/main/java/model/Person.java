@@ -15,7 +15,7 @@ public class Person implements Idable<Person> {
     private String number;
     private double balance;
     private Role role;
-    private static ArrayList<Person>allPeople = new ArrayList<>();
+    private transient static ArrayList<Person>allPeople = new ArrayList<>();
 
     public static ArrayList<Person> getAllPeople() {
         return allPeople;

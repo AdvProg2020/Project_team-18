@@ -10,7 +10,7 @@ public class Customer extends Person {
     private ArrayList<BuyLog> buyHistory;
     private ArrayList<Discount> allDiscounts;
     private double amountOfAllPurchasing;
-    private static ArrayList<Person> allCustomers = new ArrayList<>();
+    private transient static ArrayList<Person> allCustomers = new ArrayList<>();
 
     public static ArrayList<Person> getAllCustomers() {
         return allCustomers;

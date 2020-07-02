@@ -1,5 +1,6 @@
 package model;
 
+import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -11,10 +12,10 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.image.*;
 
 public class Product implements Comparable<Product>,Idable<Product> {
-    private Storage storage = new Storage();
+    private transient Storage storage = new Storage();
     private transient Image image;
-    private String imagePath;
-    private String statusImagePath;
+    private transient String imagePath;
+    private transient String statusImagePath;
     private int productId;
     private String name;
     private String brand;
@@ -36,7 +37,7 @@ public class Product implements Comparable<Product>,Idable<Product> {
     private double salePercent;
     private String saleTimeLeft;
     private int numberOfSeen;
-    private static ArrayList<Product> allProducts = new ArrayList<>();
+    private transient static ArrayList<Product> allProducts = new ArrayList<>();
 
     public static ArrayList<Product> getAllProducts() {
         return allProducts;

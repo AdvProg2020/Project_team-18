@@ -74,7 +74,9 @@ public class AdminManager extends Manager {
         return storage.getAllRequests();
     }
 
-    public Discount viewDiscountCode (String code) {
+    public Discount viewDiscountCode (String code) throws Exception{
+        if (storage.getDiscountByCode(code) == null)
+            throw new Exception("There is no such discount");
         return storage.getDiscountByCode(code);
     }
 

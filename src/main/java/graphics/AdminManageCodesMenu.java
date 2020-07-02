@@ -187,7 +187,11 @@ public class AdminManageCodesMenu extends Menu implements Initializable {
         String day = String.format("%02d",datePicker.getValue().getDayOfMonth());
         String year = Integer.toString(datePicker.getValue().getYear());
         String updatedDate = year +"," + month +","+ day + ",00,00";
-        adminManager.editDiscountField(adminManager.viewDiscountCode(discountCode.getText()),"beginDate",updatedDate);
+        try {
+            adminManager.editDiscountField(adminManager.viewDiscountCode(discountCode.getText()),"beginDate",updatedDate);
+        } catch (Exception e) {
+            showError(e.getMessage(),20);
+        }
         updateShownDiscounts(adminManager.viewAllDiscountCodes());
     }
 
@@ -209,7 +213,11 @@ public class AdminManageCodesMenu extends Menu implements Initializable {
         String day = String.format("%02d",datePicker.getValue().getDayOfMonth());
         String year = Integer.toString(datePicker.getValue().getYear());
         String updatedDate = year +"," + month +","+ day + ",00,00";
-        adminManager.editDiscountField(adminManager.viewDiscountCode(discountCode.getText()),"endDate",updatedDate);
+        try {
+            adminManager.editDiscountField(adminManager.viewDiscountCode(discountCode.getText()),"endDate",updatedDate);
+        } catch (Exception e) {
+            showError(e.getMessage(),20);
+        }
         updateShownDiscounts(adminManager.viewAllDiscountCodes());
     }
 
@@ -227,7 +235,11 @@ public class AdminManageCodesMenu extends Menu implements Initializable {
         content.getChildren().addAll(new Label("Enter updated percentage:"),percentage);
         dialog.getDialogPane().setContent(content);
         dialog.showAndWait();
-        adminManager.editDiscountField(adminManager.viewDiscountCode(discountCode.getText()),"percentage",percentage.getText());
+        try {
+            adminManager.editDiscountField(adminManager.viewDiscountCode(discountCode.getText()),"percentage",percentage.getText());
+        } catch (Exception e) {
+            showError(e.getMessage(),20);
+        }
         updateShownDiscounts(adminManager.viewAllDiscountCodes());
     }
 
@@ -245,7 +257,11 @@ public class AdminManageCodesMenu extends Menu implements Initializable {
         content.getChildren().addAll(new Label("Enter updated max amount:"),maxAmount);
         dialog.getDialogPane().setContent(content);
         dialog.showAndWait();
-        adminManager.editDiscountField(adminManager.viewDiscountCode(discountCode.getText()),"maxAmount",maxAmount.getText());
+        try {
+            adminManager.editDiscountField(adminManager.viewDiscountCode(discountCode.getText()),"maxAmount",maxAmount.getText());
+        } catch (Exception e) {
+            showError(e.getMessage(),20);
+        }
         updateShownDiscounts(adminManager.viewAllDiscountCodes());
     }
 
@@ -263,7 +279,11 @@ public class AdminManageCodesMenu extends Menu implements Initializable {
         content.getChildren().addAll(new Label("Enter updated max usage:"),maxUsage);
         dialog.getDialogPane().setContent(content);
         dialog.showAndWait();
-        adminManager.editDiscountField(adminManager.viewDiscountCode(discountCode.getText()),"usagePerCustomer",maxUsage.getText());
+        try {
+            adminManager.editDiscountField(adminManager.viewDiscountCode(discountCode.getText()),"usagePerCustomer",maxUsage.getText());
+        } catch (Exception e) {
+            showError(e.getMessage(),20);
+        }
         updateShownDiscounts(adminManager.viewAllDiscountCodes());
     }
 

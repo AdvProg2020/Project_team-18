@@ -190,7 +190,7 @@ public class Storage {
     }
 
     public void addUser(Person user) {
-        allUsers.add(user);
+        //allUsers.add(user);
         switch (user.getRole()) {
             case CUSTOMER:
                 allCustomers.add(user);

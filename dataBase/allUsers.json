@@ -1,0 +1,51 @@
+[
+  {
+    "@type": "model.Admin",
+    "@val": {
+      "allRequests": [],
+      "id": 1,
+      "username": "a1",
+      "password": "a1",
+      "name": "a1",
+      "familyName": "a1",
+      "email": "a@a",
+      "number": "1",
+      "balance": 0.0,
+      "role": "ADMIN"
+    }
+  },
+  {
+    "@type": "model.Seller",
+    "@val": {
+      "company": "s1",
+      "productsToSell": [],
+      "saleList": [],
+      "id": 2,
+      "username": "s1",
+      "password": "s1",
+      "name": "s1",
+      "familyName": "s1",
+      "email": "s@s",
+      "number": "1",
+      "balance": 0.0,
+      "role": "SELLER"
+    }
+  },
+  {
+    "@type": "model.Customer",
+    "@val": {
+      "buyHistory": [],
+      "allDiscounts": [],
+      "amountOfAllPurchasing": 0.0,
+      "id": 3,
+      "username": "c1",
+      "password": "c1",
+      "name": "c1",
+      "familyName": "c1",
+      "email": "c@c",
+      "number": "1",
+      "balance": 0.0,
+      "role": "CUSTOMER"
+    }
+  }
+]

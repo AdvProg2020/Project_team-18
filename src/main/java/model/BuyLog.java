@@ -15,8 +15,8 @@ public class BuyLog extends Log {
     private double discountAmount;
     private ArrayList<Seller> seller;
     private HashMap<String, String> customerInfo;
-    private static ArrayList<Integer> allBuyCodes = new ArrayList<>();
-    private static ArrayList<Log>allBuyLogs = new ArrayList<>();
+    private transient static ArrayList<Integer> allBuyCodes = new ArrayList<>();
+    private transient static ArrayList<Log>allBuyLogs = new ArrayList<>();
     private String discountUsed;
     public static ArrayList<Log> getAllBuyLogs() {
         return allBuyLogs;
