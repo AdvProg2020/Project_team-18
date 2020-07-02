@@ -271,9 +271,7 @@ public class ProductMenu extends Menu implements Initializable {
         setStatusImageView();
         choiceBox.getItems().addAll("Compare", "Attributes" , "Comments" , "Rate" , "More Options");
         choiceBox.setValue("More Options");
-        ArrayList<Product> temp = product.getCategory().getThisCategoryProducts();
-        temp.remove(product);
-        updateShownProducts(temp);
+        updateShownProducts(product.getCategory().getThisCategoryProducts());
         zoomProperty.addListener(new InvalidationListener() {
             @Override
             public void invalidated(Observable arg0) {
