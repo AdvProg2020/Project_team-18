@@ -14,8 +14,8 @@ import javafx.scene.image.*;
 public class Product implements Comparable<Product>, Idable<Product> {
     private transient Storage storage = new Storage();
     private transient Image image;
-    private transient String imagePath;
-    private transient String statusImagePath;
+    private  String imagePath;
+    private  String statusImagePath;
     private int productId;
     private String name;
     private String brand;
