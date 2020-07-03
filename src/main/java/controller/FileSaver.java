@@ -377,7 +377,7 @@ public class FileSaver {
     }*/
 }
 class LocalDateTimeSerializer implements JsonSerializer<LocalDateTime> {
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd::MM::yyyy HH::mm");
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy,MM,dd,HH,mm");
 
     @Override
     public JsonElement serialize(LocalDateTime localDateTime, Type srcType, JsonSerializationContext context) {
@@ -393,8 +393,13 @@ class LocalDateTimeDeserializer implements JsonDeserializer< LocalDateTime > {
     @Override
     public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
-        return LocalDateTime.parse(json.getAsString(),
-                DateTimeFormatter.ofPattern("dd::MM::yyyy HH::mm").withLocale(Locale.ENGLISH));
+        System.out.println(json.getAsString());
+        String[] dateTime = json.getAsString().split(",");
+        LocalDateTime localDateTime = LocalDateTime.of(Integer.parseInt(dateTime[0]), Integer.parseInt(dateTime[1])
+                , Integer.parseInt(dateTime[2]), Integer.parseInt(dateTime[3]), Integer.parseInt(dateTime[4]));
+//        return LocalDateTime.parse(json.getAsString(),
+//                DateTimeFormatter.ofPattern("yyyy,MM,dd,HH,mm").withLocale(Locale.ENGLISH));
+        return localDateTime;
     }
 
     @Override
