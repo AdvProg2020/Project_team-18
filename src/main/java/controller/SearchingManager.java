@@ -33,24 +33,39 @@ public class SearchingManager extends Manager {
         return sortProducts(filterProducts(selectedProducts));
     }
 
-    private ArrayList<Product> filterProducts(ArrayList<Product> products) {
-        if (currentFilters.isEmpty()) {
+    private ArrayList<Product> filterProducts(ArrayList<Product> products){
+        if (currentFilters.isEmpty()){
             return products;
         }
+        else {
             ArrayList<Product> temp = new ArrayList<>();
+            ArrayList<Product> tempContainer;
+            tempContainer = products;
             for (Filter filter : currentFilters) {
                 if (filter.getFilterName().equals("category")) {
-                    if (storage.getCategoryByName(filter.getFilterInfo()) == null) {
-                        continue;
+                    tempContainer = filter.filterByCategory(storage.getCategoryByName(filter.getFilterInfo()), tempContainer);
+                    for (Product product : tempContainer) {
+                        if(!temp.contains(product))
+                            temp.add(product);
                     }
-                    temp.addAll(filter.filterByCategory(storage.getCategoryByName(filter.getFilterInfo()), products));
                 }
-                if (filter.getFilterName().equals("name"))
-                    temp.addAll(filter.filterByName(filter.getFilterInfo(), products));
-                if (filter.getFilterName().equals("price"))
-                    temp.addAll(filter.filterByPrice(Double.parseDouble(filter.getFilterInfo()), products));
+                if (filter.getFilterName().equals("name")) {
+                    tempContainer = filter.filterByName(filter.getFilterInfo(), tempContainer);
+                    for (Product product : tempContainer) {
+                        if(!temp.contains(product))
+                            temp.add(product);
+                    }
+                }
+                if (filter.getFilterName().equals("price")) {
+                    tempContainer = filter.filterByPrice(Double.parseDouble(filter.getFilterInfo()), tempContainer);
+                    for (Product product : tempContainer) {
+                        if(!temp.contains(product))
+                            temp.add(product);
+                    }
+                }
             }
-            return temp;
+            return tempContainer;
+        }
     }
 
     private ArrayList<Product> sortProducts (ArrayList<Product> products){

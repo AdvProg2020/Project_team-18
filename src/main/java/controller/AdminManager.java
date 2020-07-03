@@ -272,7 +272,7 @@ public class AdminManager extends Manager {
         if (storage.getProductById(removedProductFromSale).getSale() == storage.getSaleById(saleIdToBeRemoved)) {
             storage.getProductById(removedProductFromSale).setSale(null);
         }
-        storage.getSaleById(removedProductFromSale).removeProductFromThisSale(storage.getProductById(saleIdToBeRemoved));
+        storage.getSaleById(saleIdToBeRemoved).removeProductFromThisSale(storage.getProductById(removedProductFromSale));
     }
 
     public void addCommentRequest (Request request){
