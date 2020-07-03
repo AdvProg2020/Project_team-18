@@ -1,8 +1,5 @@
 package model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -109,3 +106,4 @@ public class Sale implements Idable<Sale> {
         return null;
     }
 }
+

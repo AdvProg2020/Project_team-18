@@ -9,7 +9,7 @@ public class Cart {
     private Customer customer;
     private boolean isPurchased = false;
 
-    public Cart(Customer customer) {
+    private Cart(Customer customer) {
         this.productsInCart = new HashMap<>();
         this.customer = customer;
         this.totalPrice = 0;

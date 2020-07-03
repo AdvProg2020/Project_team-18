@@ -5,18 +5,76 @@
       "id": 0,
       "categoryName": "cloth",
       "imagePath": "file:src/main/java/graphics/fxml/images/clothing.jpg",
-      "thisCategoryProducts": [],
+      "thisCategoryProducts": [
+        {
+          "imagePath": "file:src/main/java/graphics/fxml/images/clothing.jpg",
+          "statusImagePath": "file:src/main/java/graphics/fxml/images/available.png",
+          "productId": 2,
+          "name": "cloth1",
+          "brand": "x",
+          "price": 20.0,
+          "numberInCart": 0,
+          "seller": {
+            "company": "s1",
+            "sellHistory": [],
+            "productsToSell": [
+              {
+                "imagePath": "file:src/main/java/graphics/fxml/images/shoes.jpg",
+                "statusImagePath": "file:src/main/java/graphics/fxml/images/available.png",
+                "productId": 1,
+                "name": "shoe1",
+                "brand": "x",
+                "price": 10.0,
+                "numberInCart": 0,
+                "seller": "@root.0.thisCategoryProducts.0.seller",
+                "supply": 1,
+                "category": {
+                  "id": 1,
+                  "categoryName": "shoe",
+                  "imagePath": "file:src/main/java/graphics/fxml/images/shoes.jpg",
+                  "thisCategoryProducts": [
+                    "@root.0.thisCategoryProducts.0.seller.productsToSell.0"
+                  ],
+                  "properties": {}
+                },
+                "categoryName": "shoe",
+                "sellerName": "s1",
+                "explanation": "x",
+                "averageRate": 0.0,
+                "comments": [],
+                "rates": [],
+                "thisProductsBuyers": [],
+                "salePercent": 0.0,
+                "numberOfSeen": 0
+              },
+              "@root.0.thisCategoryProducts.0"
+            ],
+            "saleList": [],
+            "id": 2,
+            "username": "s1",
+            "password": "s1",
+            "name": "s1",
+            "familyName": "s1",
+            "email": "s@s",
+            "number": "1",
+            "balance": 0.0,
+            "role": "SELLER"
+          },
+          "supply": 1,
+          "category": "@root.0",
+          "categoryName": "cloth",
+          "sellerName": "s1",
+          "explanation": "x",
+          "averageRate": 0.0,
+          "comments": [],
+          "rates": [],
+          "thisProductsBuyers": [],
+          "salePercent": 0.0,
+          "numberOfSeen": 0
+        }
+      ],
       "properties": {}
     }
   },
-  {
-    "@type": "model.Category",
-    "@val": {
-      "id": 1,
-      "categoryName": "shoe",
-      "imagePath": "file:src/main/java/graphics/fxml/images/shoes.jpg",
-      "thisCategoryProducts": [],
-      "properties": {}
-    }
-  }
+  "@root.0.thisCategoryProducts.0.seller.productsToSell.0.category"
 ]

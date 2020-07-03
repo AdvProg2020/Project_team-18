@@ -3,6 +3,7 @@ package controller;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.gilecode.yagson.YaGson;
 import com.gilecode.yagson.YaGsonBuilder;
+import com.gilecode.yagson.com.google.gson.*;
 import model.*;
 
 import javax.security.auth.login.AccountExpiredException;
@@ -11,10 +12,13 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class FileSaver {
-    private YaGson gson = new YaGsonBuilder().setPrettyPrinting().excludeFieldsWithModifiers(Modifier.TRANSIENT).create();
+    private YaGson gson = new YaGsonBuilder().setPrettyPrinting().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeSerializer()).registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer()).excludeFieldsWithModifiers(Modifier.TRANSIENT).create();
     private Storage storage;
 
     public FileSaver(Storage storage) {
@@ -371,4 +375,30 @@ public class FileSaver {
             System.out.println(e.getMessage());
         }
     }*/
+}
+class LocalDateTimeSerializer implements JsonSerializer<LocalDateTime> {
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd::MM::yyyy HH::mm");
+
+    @Override
+    public JsonElement serialize(LocalDateTime localDateTime, Type srcType, JsonSerializationContext context) {
+        return new JsonPrimitive(formatter.format(localDateTime));
+    }
+
+    @Override
+    public boolean isSimple() {
+        return false;
+    }
+}
+class LocalDateTimeDeserializer implements JsonDeserializer< LocalDateTime > {
+    @Override
+    public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+            throws JsonParseException {
+        return LocalDateTime.parse(json.getAsString(),
+                DateTimeFormatter.ofPattern("dd::MM::yyyy HH::mm").withLocale(Locale.ENGLISH));
+    }
+
+    @Override
+    public boolean isSimple() {
+        return false;
+    }
 }

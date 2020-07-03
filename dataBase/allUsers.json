@@ -19,7 +19,66 @@
     "@val": {
       "company": "s1",
       "sellHistory": [],
-      "productsToSell": [],
+      "productsToSell": [
+        {
+          "imagePath": "file:src/main/java/graphics/fxml/images/shoes.jpg",
+          "statusImagePath": "file:src/main/java/graphics/fxml/images/available.png",
+          "productId": 1,
+          "name": "shoe1",
+          "brand": "x",
+          "price": 10.0,
+          "numberInCart": 0,
+          "seller": "@root.1",
+          "supply": 1,
+          "category": {
+            "id": 1,
+            "categoryName": "shoe",
+            "imagePath": "file:src/main/java/graphics/fxml/images/shoes.jpg",
+            "thisCategoryProducts": [
+              "@root.1.productsToSell.0"
+            ],
+            "properties": {}
+          },
+          "categoryName": "shoe",
+          "sellerName": "s1",
+          "explanation": "x",
+          "averageRate": 0.0,
+          "comments": [],
+          "rates": [],
+          "thisProductsBuyers": [],
+          "salePercent": 0.0,
+          "numberOfSeen": 0
+        },
+        {
+          "imagePath": "file:src/main/java/graphics/fxml/images/clothing.jpg",
+          "statusImagePath": "file:src/main/java/graphics/fxml/images/available.png",
+          "productId": 2,
+          "name": "cloth1",
+          "brand": "x",
+          "price": 20.0,
+          "numberInCart": 0,
+          "seller": "@root.1",
+          "supply": 1,
+          "category": {
+            "id": 0,
+            "categoryName": "cloth",
+            "imagePath": "file:src/main/java/graphics/fxml/images/clothing.jpg",
+            "thisCategoryProducts": [
+              "@root.1.productsToSell.1"
+            ],
+            "properties": {}
+          },
+          "categoryName": "cloth",
+          "sellerName": "s1",
+          "explanation": "x",
+          "averageRate": 0.0,
+          "comments": [],
+          "rates": [],
+          "thisProductsBuyers": [],
+          "salePercent": 0.0,
+          "numberOfSeen": 0
+        }
+      ],
       "saleList": [],
       "id": 2,
       "username": "s1",

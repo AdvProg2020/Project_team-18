@@ -22,7 +22,7 @@
     "@val": {
       "requestId": 2,
       "typeOfRequest": "ADD_PRODUCT",
-      "stateOfRequest": "PROCESSING",
+      "stateOfRequest": "ACCEPTED",
       "information": {
         "seller": "s1",
         "price": "10",
@@ -39,7 +39,7 @@
     "@val": {
       "requestId": 3,
       "typeOfRequest": "ADD_PRODUCT",
-      "stateOfRequest": "PROCESSING",
+      "stateOfRequest": "ACCEPTED",
       "information": {
         "seller": "s1",
         "price": "20",
@@ -48,6 +48,21 @@
         "brand": "x",
         "supply": "1",
         "categoryName": "cloth"
+      }
+    }
+  },
+  {
+    "@type": "model.Request",
+    "@val": {
+      "requestId": 4,
+      "typeOfRequest": "ADD_SALE",
+      "stateOfRequest": "PROCESSING",
+      "information": {
+        "amountOfSale": "20",
+        "seller": "s1",
+        "beginDate": "2020,12,01,01,01",
+        "endDate": "2020,12,01,02,01",
+        "offId": "1"
       }
     }
   }
