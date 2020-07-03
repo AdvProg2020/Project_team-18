@@ -2,6 +2,7 @@ package graphics;
 
 import controller.AdminManager;
 import controller.ProductManager;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -46,7 +47,8 @@ public class AdminMangeProducts extends Menu implements Initializable {
         );
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-        categoryColumn.setCellValueFactory(new PropertyValueFactory<>("CategoryName"));
+        categoryColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getCategory().getCategoryName()));
         imageColumn.setCellFactory(param -> {
             //Set up the ImageView
             final ImageView imageview = new ImageView();

@@ -251,4 +251,8 @@ public class AdminMenu extends Menu implements Initializable {
         person = null;
         mainMenu.run();
     }
+    public void goToMainMenu() {
+        MainMenu mainMenu = new MainMenu(this);
+        mainMenu.run();
+    }
 }
