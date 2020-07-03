@@ -67,61 +67,24 @@ public class AllProductsMenu extends Menu implements Initializable {
         ArrayList<Product> updatedProducts = new ArrayList<>();
         if (!priceTextField.getText().equals("")) {
             try {
-                updatedProducts.addAll(searchingManager.performFilter("price", priceTextField.getText()));
-                updateShownProducts(updatedProducts);
+                updateShownProducts(searchingManager.performFilter("price", priceTextField.getText()));
             } catch (Exception e) {
                 showError(e.getMessage(), 20);
             }
         }
         if (!nameTextField.getText().equals("")) {
             try {
-                if (!priceTextField.getText().equals("")) {
-                    for (Product product : updatedProducts) {
-                        if (!searchingManager.performFilter("name", nameTextField.getText()).contains(product))
-                            updatedProducts.remove(product);
-                    }
-                    updateShownProducts(updatedProducts);
-                }
-            } catch (Exception e) {
-                showError(e.getMessage(), 20);
-            } if (priceTextField.getText().equals("")) {
-            try {
-                for (Product product : searchingManager.performFilter("name", nameTextField.getText())) {
-                    if (!updatedProducts.contains(product))
-                        updatedProducts.add(product);
-                    updateShownProducts(updatedProducts);
-                }
+                updateShownProducts(searchingManager.performFilter("name", nameTextField.getText()));
             } catch (Exception e) {
                 showError(e.getMessage(), 20);
             }
-        }
     }
         if(!categoryChoiceBox.getValue().equals("Choose Category")){
-            int status = recognizeTwoFieldStatus();
-            switch (status){
-                case 0 :
-                    try {
-                        for (Product product : searchingManager.performFilter("category", categoryChoiceBox.getValue().toString())) {
-                            if(!updatedProducts.contains(product))
-                                updatedProducts.add(product);
-                        }
-                        updateShownProducts(updatedProducts);
-                    } catch (Exception e) {
-                        showError(e.getMessage(),20);
-                    }
-                    return;
-                default :
-                    try {
-                        for (Product product : updatedProducts) {
-                                if (!searchingManager.performFilter("category",categoryChoiceBox.getValue().toString()).contains(product))
-                                    updatedProducts.remove(product);
-                            }
-                        updateShownProducts(updatedProducts);
-                        } catch (Exception e) {
-                        showError(e.getMessage(), 20);
-                    }
-
-            }
+                try {
+                    updateShownProducts(searchingManager.performFilter("category", categoryChoiceBox.getValue().toString()));
+                } catch (Exception e) {
+                    showError(e.getMessage(), 20);
+                }
         }
 
     }
