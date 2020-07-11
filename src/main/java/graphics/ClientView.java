@@ -2,6 +2,7 @@ package graphics;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,7 +12,8 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 
-public class View extends Application {
+public class ClientView extends Application {
+    protected static Socket socket;
 
     public static Stage mainStage;
 
@@ -19,8 +21,17 @@ public class View extends Application {
         return mainStage;
     }
 
+    public static Socket getSocket() {
+        return socket;
+    }
+
     public static void main(String[] args) {
         launch(args);
+        try {
+             socket = new Socket("localhost",9090);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

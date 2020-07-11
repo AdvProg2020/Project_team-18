@@ -4,19 +4,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import model.Person;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.nio.file.Paths;
 
 
 public abstract class Menu {
-    protected static Stage stage = View.getStage();
+
+    protected static Stage stage = ClientView.getStage();
     protected static Person person;
     protected static Manager manager = new Manager();
     protected Parent root;

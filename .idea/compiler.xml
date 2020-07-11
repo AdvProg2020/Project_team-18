@@ -6,12 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="Project_team-18-Graphics" />
         <module name="Project_team-183" />
         <module name="Project_team-181" />
         <module name="Project_team-18-graphics" />
-        <module name="Project_team-18" />
         <module name="Project_Team_18" />
-        <module name="Project_team-18-Graphics" />
+        <module name="Project_team-18" />
         <module name="Project_team-18_Graphic" />
         <module name="Project_team-18new" />
       </profile>
