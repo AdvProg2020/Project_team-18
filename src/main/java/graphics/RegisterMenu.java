@@ -37,6 +37,8 @@ public class RegisterMenu extends Menu implements Initializable {
     public CheckBox sellerRole;
     @FXML
     public CheckBox customerRole;
+    @FXML
+    public CheckBox supporterRole;
     private Menu previousMenu;
 
     public RegisterMenu(Menu previousMenu) {
@@ -58,12 +60,15 @@ public class RegisterMenu extends Menu implements Initializable {
         String familyName = this.familyName.getText();
         String email = this.email.getText();
         String number = this.number.getText();
-        if (!adminRole.isSelected() && !sellerRole.isSelected() && !customerRole.isSelected()) {
+        if (!adminRole.isSelected() && !sellerRole.isSelected() && !customerRole.isSelected() && !supporterRole.isSelected()) {
             message.setText("please choose your role!");
             return;
         }
         if (adminRole.isSelected() && manager.doesAnyAdminExist() && !(previousMenu instanceof AdminManageUsersMenu)) {
             message.setText("Only admins can add admins!");
+            return;
+        } if (supporterRole.isSelected() && !(previousMenu instanceof AdminManageUsersMenu)){
+            message.setText("Only admins can add supporters!");
             return;
         }
         if (manager.doesUsernameExist(username)) {
@@ -96,6 +101,8 @@ public class RegisterMenu extends Menu implements Initializable {
             return "seller";
         } else if (customerRole.isSelected()) {
             return "customer";
+        } else if (supporterRole.isSelected()){
+            return "supporter";
         }
         return "admin";
     }

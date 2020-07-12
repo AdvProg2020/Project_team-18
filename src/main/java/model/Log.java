@@ -1,8 +1,6 @@
 package model;
 
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;

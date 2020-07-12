@@ -23,6 +23,7 @@ public class Storage {
     private ArrayList<Filter> allFilters;
     private ArrayList<Sort> allSorts;
     private ArrayList<Cart> allCarts;
+    private ArrayList<Person> allSupporters;
 
     public Storage() {
         newArrayLists();
@@ -54,6 +55,7 @@ public class Storage {
         allRequests = Request.getAllRequests();
         allFilters = Filter.getAllFilters();
         allSorts = Sort.getAllSorts();
+        allSupporters = Supporter.getAllSupporters();
         allCarts = new ArrayList<>();
     }
 
@@ -201,6 +203,8 @@ public class Storage {
             case ADMIN:
                 allAdmins.add(user);
                 return;
+            case SUPPORTER:
+                allSupporters.add(user);
         }
     }
 

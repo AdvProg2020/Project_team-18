@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 import model.Admin;
 import model.Person;
 import model.Seller;
+import model.Supporter;
 
 public class LoginMenu extends Menu {
     public LoginMenu(Menu previousMenu) {
@@ -49,7 +50,11 @@ public class LoginMenu extends Menu {
         } else if (person instanceof Seller) {
             SellerMenu sellerMenu = new SellerMenu(this.getPreviousMenu());
             sellerMenu.run();
-        } else {
+        } else if (person instanceof Supporter){
+            SupporterMenu supporterMenu = new SupporterMenu(this.getPreviousMenu());
+            supporterMenu.run();
+        }
+        else {
             CustomerMenu customerMenu = new CustomerMenu(this.getPreviousMenu());
             customerMenu.run();
         }

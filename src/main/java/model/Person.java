@@ -1,6 +1,5 @@
 package model;
 
-import com.fasterxml.jackson.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -111,6 +110,8 @@ public class Person implements Idable<Person> {
             return Role.SELLER;
         } else if ("admin".equals(roleName)) {
             return Role.ADMIN;
+        } else if("supporter".equals(roleName)){
+            return Role.SUPPORTER;
         }
         return null;
     }

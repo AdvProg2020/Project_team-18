@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphics.SupporterMenu">
+    <stylesheets>
+        <URL value="@cssSheets/BasicStyle.css" />
+    </stylesheets>
+    <stylesheets>
+        <URL value="@cssSheets/CustomerSellerAdminMenu.css" />
+    </stylesheets>
+    <children>
+        <VBox layoutX="10.0" layoutY="113.0" prefHeight="246.0" prefWidth="171.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+            <children>
+                <MenuButton mnemonicParsing="false" prefHeight="63.0" prefWidth="171.0" text="Edit Personal Info">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#editPasswordField" text="Password" />
+                        <MenuItem mnemonicParsing="false" onAction="#editNameField" text="Name" />
+                        <MenuItem mnemonicParsing="false" onAction="#editFamilyNameField" text="Family Name" />
+                        <MenuItem mnemonicParsing="false" onAction="#editEmailField" text="E-mail" />
+                        <MenuItem mnemonicParsing="false" onAction="#editNumberField" text="Number" />
+                    </items>
+                </MenuButton>
+                <Button layoutX="10.0" layoutY="143.0" mnemonicParsing="false" onAction="#back" onMousePressed="#buttonSound" prefHeight="67.0" prefWidth="171.0" text="Chats" />
+                <Button mnemonicParsing="false" onAction="#goToMainMenu" prefHeight="65.0" prefWidth="171.0" text="Go To Main Menu" />
+                <Button layoutX="10.0" layoutY="174.0" mnemonicParsing="false" onAction="#logout" onMousePressed="#buttonSound" prefHeight="56.0" prefWidth="171.0" text="logout" />
+            </children>
+        </VBox>
+        <Label alignment="CENTER" contentDisplay="CENTER" ellipsisString="" layoutX="149.0" layoutY="29.0" prefHeight="54.0" prefWidth="316.0" text="WELCOME  SUPPORTER!" textAlignment="CENTER">
+            <font>
+                <Font name="Andalus" size="28.0" />
+            </font>
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </padding>
+        </Label>
+        <GridPane layoutX="194.0" layoutY="78.0" prefHeight="280.0" prefWidth="304.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="147.0" minWidth="10.0" prefWidth="132.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="172.0" minWidth="10.0" prefWidth="172.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <Label alignment="CENTER" prefHeight="27.0" prefWidth="144.0" text="Personal Information">
+                    <font>
+                        <Font name="Andalus" size="15.0" />
+                    </font>
+                </Label>
+                <Label alignment="CENTER" prefHeight="18.0" prefWidth="72.0" text="username" GridPane.rowIndex="1">
+                    <font>
+                        <Font name="Andalus" size="14.0" />
+                    </font></Label>
+                <Label alignment="CENTER" prefHeight="18.0" prefWidth="70.0" text="password" GridPane.rowIndex="2">
+                    <font>
+                        <Font name="Andalus" size="14.0" />
+                    </font></Label>
+                <Label alignment="CENTER" prefHeight="18.0" prefWidth="41.0" text="role" GridPane.rowIndex="3">
+                    <font>
+                        <Font name="Andalus" size="14.0" />
+                    </font></Label>
+                <Label alignment="CENTER" prefHeight="18.0" prefWidth="51.0" text="name" GridPane.rowIndex="4">
+                    <font>
+                        <Font name="Andalus" size="14.0" />
+                    </font></Label>
+                <Label alignment="CENTER" prefHeight="18.0" prefWidth="85.0" text="family name" GridPane.rowIndex="5">
+                    <font>
+                        <Font name="Andalus" size="14.0" />
+                    </font></Label>
+                <Label alignment="CENTER" prefHeight="18.0" prefWidth="57.0" text="e-mail" GridPane.rowIndex="6">
+                    <font>
+                        <Font name="Andalus" size="14.0" />
+                    </font></Label>
+                <Label alignment="CENTER" prefHeight="18.0" prefWidth="66.0" text="number" GridPane.rowIndex="7">
+                    <font>
+                        <Font name="Andalus" size="14.0" />
+                    </font></Label>
+                <Label fx:id="usernameLabel" prefHeight="18.0" prefWidth="171.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Label fx:id="passwordLabel" prefHeight="18.0" prefWidth="196.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <Label fx:id="roleLabel" prefHeight="18.0" prefWidth="215.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <Label fx:id="balanceLabel" prefHeight="18.0" prefWidth="236.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                <Label fx:id="nameLabel" prefHeight="18.0" prefWidth="372.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                <Label fx:id="familyNameLabel" prefHeight="18.0" prefWidth="281.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                <Label fx:id="emailLabel" prefHeight="18.0" prefWidth="352.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                <Label fx:id="numberLabel" prefHeight="18.0" prefWidth="234.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            </children>
+        </GridPane>
+        <Separator layoutX="179.0" layoutY="112.0" orientation="VERTICAL" prefHeight="246.0" prefWidth="6.0" />
+        <Separator orientation="VERTICAL" prefHeight="200.0" />
+        <Separator layoutX="200.0" layoutY="139.0" prefHeight="11.0" prefWidth="350.0" />
+        <Separator layoutX="200.0" layoutY="164.0" prefHeight="20.0" prefWidth="350.0" />
+        <Separator layoutX="202.0" layoutY="192.0" prefHeight="18.0" prefWidth="350.0" />
+        <Separator layoutX="202.0" layoutY="227.0" prefHeight="18.0" prefWidth="350.0" />
+        <Separator layoutX="204.0" layoutY="261.0" prefHeight="11.0" prefWidth="350.0" />
+        <Separator layoutX="203.0" layoutY="292.0" prefHeight="20.0" prefWidth="350.0" />
+        <Separator layoutX="202.0" layoutY="326.0" prefHeight="11.0" prefWidth="350.0" />
+        <Separator layoutX="300.0" layoutY="121.0" orientation="VERTICAL" prefHeight="210.0" prefWidth="18.0" />
+        <Label alignment="CENTER" layoutX="27.0" layoutY="86.0" prefHeight="27.0" prefWidth="139.0" text="Account Access" textAlignment="CENTER">
+            <font>
+                <Font name="Andalus" size="20.0" />
+            </font>
+        </Label>
+        <Separator layoutX="23.0" layoutY="104.0" prefHeight="18.0" prefWidth="146.0" />
+        <Button layoutX="14.0" layoutY="17.0" mnemonicParsing="false" onAction="#back" onMousePressed="#buttonSound" text="back" />
+    </children>
+
+</AnchorPane>
