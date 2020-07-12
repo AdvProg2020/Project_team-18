@@ -113,11 +113,10 @@ public class ClientManager {
         ArrayList<Object> params = new ArrayList<>();
         params.add(username);
         ClientMessage clientMessage = new ClientMessage(MessageType.DOES_USERNAME_EXIST,params);
-        System.out.println(clientMessage);
         try {
             return (boolean)clientMessage.sendAndReceive();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println(e.getMessage()+"error");
             return false;
         }
     }

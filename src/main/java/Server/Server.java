@@ -61,10 +61,8 @@ public class Server {
             try {
                 while (true) {
                     ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-                    System.out.println("waiting 2");
                     clientMessage = (ClientMessage) objectInputStream.readObject();
                     System.out.println("message received");
-                    System.out.println(clientMessage.toString());
                     ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
                     objectOutputStream.writeObject(interpret(clientMessage));
                 }
