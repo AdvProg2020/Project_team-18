@@ -1,10 +1,12 @@
 package Server;
 
 import com.gilecode.yagson.YaGson;
+import controller.CustomerManager;
 import controller.FileSaver;
 import controller.Manager;
 import controller.SellerManager;
 import controller.Storage;
+import model.Customer;
 import model.Person;
 
 import java.io.*;
@@ -57,6 +59,8 @@ public class Server {
         ServerImpl server;
         Manager manager = new Manager();
         SellerManager sellerManager = new SellerManager();
+        CustomerManager customerManager = new CustomerManager();
+        Storage storage = new Storage();
 
         public ClientHandler( OutputStream objectOutputStream, InputStream objectInputStream, ServerImpl server) {
             this.inputStream = objectInputStream;
@@ -192,6 +196,12 @@ public class Server {
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR,e);
                     }
+                case ADD_BALANCE:
+                    System.out.println("I'm here!");
+                    Double money = (Double) clientMessage.getParameters().get(0);
+                    customerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(1)));
+                    customerManager.addBalance(money);
+                    System.out.println("Done!");
             }
             return null;
         }
