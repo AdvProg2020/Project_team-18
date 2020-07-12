@@ -47,7 +47,6 @@ public class Server {
 
 
     private static class ClientHandler extends Thread{
-        private Socket clientSocket;
         private InputStream inputStream;
         private OutputStream outputStream;
         private ClientMessage clientMessage;

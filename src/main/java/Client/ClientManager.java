@@ -35,8 +35,9 @@ public class ClientManager {
         params.add(password);
         ClientMessage clientMessage = new ClientMessage(MessageType.LOGIN,params);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
-        if (serverMessage.getMessageType().equals("ERROR"))
-            throw (Exception)serverMessage.getResult();
+        if (serverMessage.getMessageType()==MessageType.ERROR){
+           throw  (Exception)serverMessage.getResult();
+        }
         return (Person)serverMessage.getResult();
     }
 
