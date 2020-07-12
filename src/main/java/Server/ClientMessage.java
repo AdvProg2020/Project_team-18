@@ -25,12 +25,12 @@ public class ClientMessage implements Serializable {
         }*/
     }
 
-    public synchronized Object sendAndReceive() throws Exception {
+    public synchronized ServerMessage sendAndReceive() {
         Formatter formatter = new Formatter(ClientView.getOutputStream());
         formatter.format(yaGson.toJson(this)+"\n");
         formatter.flush();
         Scanner scanner = new Scanner(ClientView.getInputStream());
-        return yaGson.fromJson(scanner.nextLine(),ServerMessage.class).getResult();
+        return yaGson.fromJson(scanner.nextLine(),ServerMessage.class);
     }
 
     public MessageType getMessageType() {

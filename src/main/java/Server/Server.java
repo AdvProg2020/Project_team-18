@@ -81,6 +81,14 @@ public class Server {
                 case DOES_USERNAME_EXIST :
                     String username = (String) clientMessage.getParameters().get(0);
                         return new ServerMessage(MessageType.DOES_USERNAME_EXIST, manager.doesUsernameExist(username));
+                case LOGIN:
+                    username = (String) clientMessage.getParameters().get(0);
+                    String password = (String) clientMessage.getParameters().get(1);
+                    try {
+                        return new ServerMessage(MessageType.LOGIN,manager.login(username,password));
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR,e);
+                    }
             }
             return null;
         }
