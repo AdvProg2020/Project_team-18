@@ -1,4 +1,6 @@
 package graphics;
+import Client.ClientManager;
+import Server.ClientView;
 import controller.Manager;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,7 +18,7 @@ public abstract class Menu {
 
     protected static Stage stage = ClientView.getStage();
     protected static Person person;
-    protected static Manager manager = new Manager();
+    protected static ClientManager manager = new ClientManager();
     protected Parent root;
     private Menu previousMenu;
     protected String fxmlPath;
