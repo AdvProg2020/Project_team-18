@@ -23,10 +23,6 @@ public class ClientView extends Application {
         return mainStage;
     }
 
-    public static Socket getSocket() {
-        return socket;
-    }
-
     public static OutputStream getOutputStream() {
         return outputStream;
     }

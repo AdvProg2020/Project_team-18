@@ -1,5 +1,6 @@
 package Server;
 
+import com.gilecode.yagson.YaGson;
 import controller.FileSaver;
 import controller.Manager;
 import controller.Storage;
@@ -8,6 +9,8 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Formatter;
+import java.util.Scanner;
 
 public class Server {
 
@@ -48,6 +51,7 @@ public class Server {
         private InputStream inputStream;
         private OutputStream outputStream;
         private ClientMessage clientMessage;
+        private YaGson yaGson = new YaGson();
         ServerImpl server;
         Manager manager = new Manager();
 
@@ -60,11 +64,12 @@ public class Server {
         private void handleClient(){
             try {
                 while (true) {
-                    ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-                    clientMessage = (ClientMessage) objectInputStream.readObject();
+                    Scanner scanner = new Scanner(inputStream);
+                    clientMessage = yaGson.fromJson(scanner.nextLine(),ClientMessage.class);
                     System.out.println("message received");
-                    ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-                    objectOutputStream.writeObject(interpret(clientMessage));
+                    Formatter formatter = new Formatter(outputStream);
+                    formatter.format(yaGson.toJson(interpret(clientMessage))+"\n");
+                    formatter.flush();
                 }
             } catch (Exception e) {
                 System.err.println(e.getMessage());
