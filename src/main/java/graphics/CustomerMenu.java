@@ -1,6 +1,7 @@
 package graphics;
 
 import controller.CustomerManager;
+import controller.Storage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -8,9 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import model.Customer;
-import model.Discount;
-import model.Seller;
+import model.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -20,6 +19,7 @@ import java.util.ResourceBundle;
 
 public class CustomerMenu extends Menu implements Initializable {
     private CustomerManager customerManager = new CustomerManager();
+    private Storage storage = new Storage();
     @FXML
     private Label usernameLabel;
     @FXML
@@ -76,7 +76,7 @@ public class CustomerMenu extends Menu implements Initializable {
                 manager.editField("password", updatedVersion);
                 viewPersonalInfo();
             } catch (Exception e) {
-                showError("Invalid password format!(Use figures or letters)", 100);
+                showError(e.getMessage(), 100);
             }
         }
     }
@@ -162,7 +162,7 @@ public class CustomerMenu extends Menu implements Initializable {
                 customerManager.addBalance(Double.parseDouble(updatedVersion));
                 viewPersonalInfo();
             } catch (Exception e) {
-                showError("Invalid balance!", 100);
+                showError(e.getMessage(), 100);
             }
         }
     }
@@ -193,7 +193,7 @@ public class CustomerMenu extends Menu implements Initializable {
                 manager.editField("email", updatedVersion);
                 viewPersonalInfo();
             } catch (Exception e) {
-                showError("Invalid email address!", 100);
+                showError(e.getMessage(), 100);
             }
         }
     }
@@ -224,7 +224,7 @@ public class CustomerMenu extends Menu implements Initializable {
                 manager.editField("number", updatedVersion);
                 viewPersonalInfo();
             } catch (Exception e) {
-                showError("Invalid number!", 100);
+                showError(e.getMessage(), 100);
             }
         }
     }
@@ -311,6 +311,43 @@ public class CustomerMenu extends Menu implements Initializable {
     public void goToBuyLogPage() {
         ThisPersonBuyLogs thisPersonBuyLogs = new ThisPersonBuyLogs(this);
         thisPersonBuyLogs.run();
+    }
+
+    public void goToSupportMenu(){
+        /*Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Online Supporters");
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.FINISH);
+        VBox content = new VBox();
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setMinSize(300, 100);
+        ArrayList<Person> onlineSupporters;
+
+        onlineSupporters = ((Customer) person).getAllDiscounts();
+        if (onlineSupporters.isEmpty()) {
+            content.getChildren().addAll(new Label("There's not any discounts for you yet!"));
+        } else {
+            for (int i = 0; i < onlineSupporters.size(); i++) {
+                content.getChildren().addAll(new Label("YOUR DISCOUNT NUMBER " + (i + 1)));
+                content.getChildren().addAll(new Label(onlineSupporters.get(i).getDiscountCode()));
+                content.getChildren().addAll(new Label("This discount's features are as followed :"));
+                content.getChildren().addAll(new Label("Percentage : " + onlineSupporters.get(i).getPercentage()));
+                content.getChildren().addAll(new Label("Max Amount" + onlineSupporters.get(i).getMaxAmount()));
+                content.getChildren().addAll(new Label("Begin Date : " + onlineSupporters.get(i).getBeginDate().getYear()
+                        + "-" + onlineSupporters.get(i).getBeginDate().getMonth() + "-" +
+                        onlineSupporters.get(i).getBeginDate().getDayOfMonth() + ", Time : "
+                        + onlineSupporters.get(i).getBeginDate().getHour() + ":" + onlineSupporters.get(i).getBeginDate().getMinute()
+                        + ":" + +onlineSupporters.get(i).getBeginDate().getSecond()));
+                content.getChildren().addAll(new Label("End Date : " + onlineSupporters.get(i).getEndDate().getYear()
+                        + "-" + onlineSupporters.get(i).getEndDate().getMonth() + "-" +
+                        onlineSupporters.get(i).getEndDate().getDayOfMonth() + ", Time : "
+                        + onlineSupporters.get(i).getEndDate().getHour() + ":" + onlineSupporters.get(i).getEndDate().getMinute()
+                        + ":" + +onlineSupporters.get(i).getEndDate().getSecond()));
+            }
+        }
+        dialog.getDialogPane().setContent(content);
+        dialog.showAndWait();*/
+
     }
 
     @FXML

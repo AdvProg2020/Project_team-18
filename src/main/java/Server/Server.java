@@ -4,6 +4,7 @@ import com.gilecode.yagson.YaGson;
 import controller.FileSaver;
 import controller.Manager;
 import controller.Storage;
+import model.Person;
 
 import java.io.*;
 import java.net.ServerSocket;

@@ -14,7 +14,7 @@
         <URL value="@cssSheets/CustomerSellerAdminMenu.css" />
     </stylesheets>
     <children>
-        <VBox layoutX="16.0" layoutY="101.0" prefHeight="280.0" prefWidth="154.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+        <VBox layoutX="16.0" layoutY="108.0" prefHeight="273.0" prefWidth="154.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
             <children>
                 <MenuButton alignment="CENTER" mnemonicParsing="false" prefHeight="54.0" prefWidth="160.0" text="Edit Personal Info" textAlignment="CENTER">
                     <items>
@@ -29,6 +29,7 @@
                 <Button mnemonicParsing="false" onAction="#goToCartMenu" onMousePressed="#buttonSound" prefHeight="53.0" prefWidth="154.0" text="View Cart" />
                 <Button fx:id="goToBuyLogPage" mnemonicParsing="false" onAction="#goToBuyLogPage" onMousePressed="#buttonSound" prefHeight="54.0" prefWidth="154.0" text="My Buy History" />
                 <Button mnemonicParsing="false" onAction="#viewDiscounts" onMousePressed="#buttonSound" prefHeight="53.0" prefWidth="154.0" text="My Discount Codes" />
+            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="154.0" text="Support" />
                 <Button mnemonicParsing="false" onAction="#goToMainMenu" onMousePressed="#buttonSound" prefHeight="54.0" prefWidth="154.0" text="Go To Main Menu" />
                 <Button mnemonicParsing="false" onAction="#customerRequestMenu" onMousePressed="#buttonSound" prefHeight="54.0" prefWidth="154.0" text=" Request Menu" />
                 <Button layoutX="10.0" layoutY="243.0" mnemonicParsing="false" onAction="#logout" onMouseReleased="#buttonSound" prefHeight="54.0" prefWidth="154.0" text="logout" />

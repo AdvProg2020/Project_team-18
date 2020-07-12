@@ -77,7 +77,7 @@ public class Manager {
     public void editField(String field, String updatedVersion) throws Exception {
         if (field.equals("password")) {
             if (!checkValidity(updatedVersion))
-                throw new Exception("Password is not valid");
+                throw new Exception("Password is not valid(Use figures or letters!)");
             else
                 person.setPassword(updatedVersion);
         } else if (field.equals("name"))

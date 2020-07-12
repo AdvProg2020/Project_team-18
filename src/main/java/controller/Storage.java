@@ -75,6 +75,10 @@ public class Storage {
         return allAdmins;
     }
 
+    public ArrayList<Person> getAllSupporters(){
+        return allSupporters;
+    }
+
     public ArrayList<Product> getAllProducts() {
         return allProducts;
     }
