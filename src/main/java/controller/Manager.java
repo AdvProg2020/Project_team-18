@@ -45,6 +45,8 @@ public class Manager {
             storage.addUser(new Customer(information));
         else if (information.get("role").equalsIgnoreCase("admin"))
             storage.addUser(new Admin(information));
+        else if (information.get("role").equalsIgnoreCase("supporter"))
+            storage.addUser(new Supporter(information));
     }
 
     public Person login(String username, String password) throws Exception {

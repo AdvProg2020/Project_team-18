@@ -3,6 +3,7 @@ package graphics;
 import javafx.event.ActionEvent;
 import model.Admin;
 import model.Seller;
+import model.Supporter;
 
 
 public class MainMenu extends Menu {
@@ -30,7 +31,11 @@ public class MainMenu extends Menu {
         } else if (person instanceof Seller) {
             SellerMenu sellerMenu = new SellerMenu(this);
             sellerMenu.run();
-        } else {
+        } else if (person instanceof Supporter){
+            SupporterMenu supporterMenu = new SupporterMenu(this);
+            supporterMenu.run();
+        }
+        else {
             CustomerMenu customerMenu = new CustomerMenu(this);
             customerMenu.run();
         }

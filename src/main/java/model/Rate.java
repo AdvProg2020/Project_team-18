@@ -1,7 +1,5 @@
 package model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-
 import java.util.ArrayList;
 
 public class Rate implements Idable<Rate> {

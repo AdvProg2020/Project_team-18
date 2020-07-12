@@ -80,17 +80,22 @@
       <Button layoutX="279.0" layoutY="367.0" mnemonicParsing="false" onAction="#register" onMousePressed="#buttonSound" text="SIGN UP" />
       <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" onMousePressed="#buttonSound" text="back" />
       <Label fx:id="message" contentDisplay="CENTER" layoutX="205.0" layoutY="399.0" prefHeight="17.0" prefWidth="237.0" textAlignment="CENTER" />
-      <CheckBox fx:id="adminRole" layoutX="149.0" layoutY="127.0" mnemonicParsing="false" onMousePressed="#buttonSound" text="Admin">
+      <CheckBox fx:id="adminRole" layoutX="101.0" layoutY="127.0" mnemonicParsing="false" onMousePressed="#buttonSound" text="Admin">
          <font>
             <Font name="Andalus" size="18.0" />
          </font></CheckBox>
-      <CheckBox fx:id="sellerRole" layoutX="265.0" layoutY="127.0" mnemonicParsing="false" onMousePressed="#buttonSound" text="Seller">
+      <CheckBox fx:id="sellerRole" layoutX="195.0" layoutY="127.0" mnemonicParsing="false" onMousePressed="#buttonSound" text="Seller">
          <font>
             <Font name="Andalus" size="18.0" />
          </font></CheckBox>
-      <CheckBox fx:id="customerRole" layoutX="366.0" layoutY="127.0" mnemonicParsing="false" onMousePressed="#buttonSound" text="customer">
+      <CheckBox fx:id="customerRole" layoutX="293.0" layoutY="126.0" mnemonicParsing="false" onMousePressed="#buttonSound" text="customer">
          <font>
             <Font name="Andalus" size="18.0" />
          </font></CheckBox>
+      <CheckBox fx:id="supporterRole" layoutX="406.0" layoutY="124.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="107.0" text="Supporter">
+         <font>
+            <Font name="Andalus" size="18.0" />
+         </font>
+      </CheckBox>
    </children>
 </AnchorPane>
