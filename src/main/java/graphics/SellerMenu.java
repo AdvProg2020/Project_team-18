@@ -79,7 +79,7 @@ public class SellerMenu extends Menu implements Initializable {
                     manager.editField("password", updatedVersion);
                     viewPersonalInfo();
                 } catch (Exception e) {
-                    showError("Invalid password format!(Use figures or letters)", 100);
+                    showError(e.getMessage(), 100);
                 }
             }
     }
@@ -196,7 +196,7 @@ public class SellerMenu extends Menu implements Initializable {
                 sellerManager.addBalance(Double.parseDouble(updatedVersion));
                 viewPersonalInfo();
             } catch (Exception e) {
-                showError("Invalid balance!", 100);
+                showError(e.getMessage(), 100);
             }
         }
     }
@@ -227,7 +227,7 @@ public class SellerMenu extends Menu implements Initializable {
                 manager.editField("email", updatedVersion);
                 viewPersonalInfo();
             } catch (Exception e) {
-                showError("Invalid email address!", 100);
+                showError(e.getMessage(), 100);
             }
         }
     }

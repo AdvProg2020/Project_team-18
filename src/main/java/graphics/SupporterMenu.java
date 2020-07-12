@@ -65,7 +65,7 @@ public class SupporterMenu extends Menu implements Initializable {
                 manager.editField("password", updatedVersion);
                 viewPersonalInfo();
             } catch (Exception e) {
-                showError("Invalid password format!(Use figures or letters)", 100);
+                showError(e.getMessage(), 100);
             }
         }
     }
@@ -151,7 +151,7 @@ public class SupporterMenu extends Menu implements Initializable {
                 manager.editField("email", updatedVersion);
                 viewPersonalInfo();
             } catch (Exception e) {
-                showError("Invalid email address!", 100);
+                showError(e.getMessage(), 100);
             }
         }
     }
@@ -223,6 +223,7 @@ public class SupporterMenu extends Menu implements Initializable {
         person = null;
         mainMenu.run();
     }
+
     public void goToMainMenu() {
         MainMenu mainMenu = new MainMenu(this);
         mainMenu.run();
