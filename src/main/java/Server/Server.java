@@ -17,7 +17,7 @@ public class Server {
     private static class ServerImpl {
         private void run(){
             try {
-                ServerSocket serverSocket = new ServerSocket(0);
+                ServerSocket serverSocket = new ServerSocket(9090);
                 while (true) {
                     Socket clientSocket;
                     try {
