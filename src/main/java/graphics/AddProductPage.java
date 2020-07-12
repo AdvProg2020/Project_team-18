@@ -1,5 +1,6 @@
 package graphics;
 
+import Client.ClientSellerManager;
 import controller.SellerManager;
 import controller.Storage;
 import javafx.fxml.FXML;
@@ -14,10 +15,10 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class AddProductPage extends Menu implements Initializable {
-    SellerManager sellerManager;
+    ClientSellerManager sellerManager;
     Storage storage = new Storage();
 
-    public AddProductPage(Menu previousMenu, SellerManager sellerManager) {
+    public AddProductPage(Menu previousMenu, ClientSellerManager sellerManager) {
         super(previousMenu, "src/main/java/graphics/fxml/AddProductPage.fxml");
         this.sellerManager = sellerManager;
     }
@@ -68,7 +69,11 @@ public class AddProductPage extends Menu implements Initializable {
             productInformation.put("supply",supply.getText());
             productInformation.put("explanation", productExplanation);
             productInformation.put("categoryName", productCategory);
-            sellerManager.addProduct(productInformation);
+            try {
+                sellerManager.addProduct(productInformation);
+            } catch (Exception e) {
+                showError(e.getMessage(),20);
+            }
             showMessage();
             back();
         }

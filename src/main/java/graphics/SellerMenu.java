@@ -1,5 +1,6 @@
 package graphics;
 
+import Client.ClientSellerManager;
 import controller.SellerManager;
 import controller.Storage;
 import javafx.event.ActionEvent;
@@ -18,7 +19,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class SellerMenu extends Menu implements Initializable {
-    SellerManager sellerManager = new SellerManager();
+    ClientSellerManager sellerManager = new ClientSellerManager();
     Storage storage = new Storage();
     @FXML
     private Label usernameLabel;

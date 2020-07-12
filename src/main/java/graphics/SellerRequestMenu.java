@@ -1,5 +1,7 @@
 package graphics;
 
+import Client.ClientSellerManager;
+import Server.ClientMessage;
 import controller.AdminManager;
 import controller.SellerManager;
 import controller.Storage;
@@ -24,7 +26,7 @@ import java.util.ResourceBundle;
 public class SellerRequestMenu extends Menu implements Initializable {
 
     AdminManager adminManager = new AdminManager();
-    SellerManager sellerManager = new SellerManager();
+    ClientSellerManager sellerManager = new ClientSellerManager();
     private Storage storage = new Storage();
 
     @FXML
@@ -76,10 +78,14 @@ public class SellerRequestMenu extends Menu implements Initializable {
                 if (storage.getProductById(Integer.parseInt(productId.getText())) == null) {
                     showError("There's not such product!", 100);
                 } else {
-                    if (!sellerManager.doesSellerHaveProduct(Integer.parseInt(productId.getText()))) {
-                        showError("Oops!You don't have off with this Id!", 100);
-                    } else {
-                        editProductProcess(Integer.parseInt(productId.getText()));
+                    try {
+                        if (!sellerManager.doesSellerHaveProduct(Integer.parseInt(productId.getText()))) {
+                            showError("Oops!You don't have off with this Id!", 100);
+                        } else {
+                            editProductProcess(Integer.parseInt(productId.getText()));
+                        }
+                    } catch (Exception e) {
+                        showError(e.getMessage(),20);
                     }
                 }
             }
@@ -230,15 +236,19 @@ public class SellerRequestMenu extends Menu implements Initializable {
                 if (storage.getProductById(Integer.parseInt(productId.getText())) == null) {
                     showError("There's not such product!", 100);
                 } else {
-                    if (!sellerManager.doesSellerHaveProduct(Integer.parseInt(productId.getText()))) {
-                        showError("Oops!You don't have product with this Id!", 100);
-                    } else {
-                        try {
-                            sellerManager.removeProduct(Integer.parseInt(productId.getText()));
-                            showMessage();
-                        } catch (Exception e) {
-                            showError("Oops!Something went wrong!", 100);
+                    try {
+                        if (!sellerManager.doesSellerHaveProduct(Integer.parseInt(productId.getText()))) {
+                            showError("Oops!You don't have product with this Id!", 100);
+                        } else {
+                            try {
+                                sellerManager.removeProduct(Integer.parseInt(productId.getText()));
+                                showMessage();
+                            } catch (Exception e) {
+                                showError("Oops!Something went wrong!", 100);
+                            }
                         }
+                    } catch (Exception e) {
+                        showError(e.getMessage(),20);
                     }
                 }
             }
@@ -268,10 +278,14 @@ public class SellerRequestMenu extends Menu implements Initializable {
             if (!offId.getText().matches("\\d+")) {
                 showError("Off Id is an integer!", 100);
             } else {
-                if (sellerManager.doesSellerHaveThisOff(Integer.parseInt(offId.getText()))) {
-                    editOffProcess(Integer.parseInt(offId.getText()));
-                } else {
-                    showError("Oops!You don't have off with this Id!", 100);
+                try {
+                    if (sellerManager.doesSellerHaveThisOff(Integer.parseInt(offId.getText()))) {
+                        editOffProcess(Integer.parseInt(offId.getText()));
+                    } else {
+                        showError("Oops!You don't have off with this Id!", 100);
+                    }
+                } catch (Exception e) {
+                    showError(e.getMessage(),20);
                 }
             }
         }

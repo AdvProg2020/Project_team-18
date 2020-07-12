@@ -1,5 +1,6 @@
 package graphics;
 
+import Client.ClientSellerManager;
 import controller.SellerManager;
 import controller.Storage;
 import javafx.collections.FXCollections;
@@ -25,10 +26,10 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class SellerProductMenu extends Menu implements Initializable {
-    private SellerManager sellerManager;
+    private ClientSellerManager sellerManager;
     private Storage storage = new Storage();
 
-    public SellerProductMenu(Menu previousMenu, SellerManager sellerManager) {
+    public SellerProductMenu(Menu previousMenu, ClientSellerManager sellerManager) {
         super(previousMenu, "src/main/java/graphics/fxml/SellerProductMenu.fxml");
         this.sellerManager = sellerManager;
     }
@@ -143,15 +144,19 @@ public class SellerProductMenu extends Menu implements Initializable {
         if (!productId.getText().matches("\\d+")) {
             showError("Product Id is an integer!", 100);
         } else {
-            if (sellerManager.doesSellerHaveProduct(Integer.parseInt(productId.getText()))) {
-                try {
-                    sellerManager.removeProduct(Integer.parseInt(productId.getText()));
-                    showMessage();
-                } catch (Exception e) {
-                    showError("Oops!Something went wrong!", 100);
+            try {
+                if (sellerManager.doesSellerHaveProduct(Integer.parseInt(productId.getText()))) {
+                    try {
+                        sellerManager.removeProduct(Integer.parseInt(productId.getText()));
+                        showMessage();
+                    } catch (Exception e) {
+                        showError("Oops!Something went wrong!", 100);
+                    }
+                } else {
+                    showError("Oops!You don't have product with this Id!", 100);
                 }
-            } else {
-                showError("Oops!You don't have product with this Id!", 100);
+            } catch (Exception e) {
+                showError(e.getMessage(),20);
             }
         }
     }

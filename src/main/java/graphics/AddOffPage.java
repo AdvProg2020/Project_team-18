@@ -1,5 +1,6 @@
 package graphics;
 
+import Client.ClientSellerManager;
 import controller.SellerManager;
 import controller.Storage;
 import javafx.fxml.FXML;
@@ -15,10 +16,10 @@ import java.util.HashMap;
 import java.util.Optional;
 
 public class AddOffPage extends Menu {
-    private SellerManager sellerManager;
+    private ClientSellerManager sellerManager;
     private Storage storage = new Storage();
 
-    public AddOffPage(Menu previousMenu, SellerManager sellerManager) {
+    public AddOffPage(Menu previousMenu, ClientSellerManager sellerManager) {
         super(previousMenu, "src/main/java/graphics/fxml/AddOffPage.fxml");
         this.sellerManager = sellerManager;
     }
