@@ -7,6 +7,7 @@ import controller.Storage;
 import graphics.Menu;
 import model.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Matcher;
@@ -112,7 +113,12 @@ public class ClientManager {
         ArrayList<Object> params = new ArrayList<>();
         params.add(username);
         ClientMessage clientMessage = new ClientMessage(MessageType.DOES_USERNAME_EXIST,params);
-        clientMessage.send();
+        try {
+            return (boolean)clientMessage.sendAndReceive();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 
     public boolean doesDiscountExist(String code) {

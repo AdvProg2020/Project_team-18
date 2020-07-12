@@ -8,4 +8,8 @@ public class ServerMessage {
         this.messageType = messageType;
         this.result = result;
     }
+
+    public Object getResult() {
+        return result;
+    }
 }
