@@ -1,6 +1,8 @@
 package Server;
 
+import controller.FileSaver;
 import controller.Manager;
+import controller.Storage;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -18,15 +20,19 @@ public class Server {
         private void run(){
             try {
                 ServerSocket serverSocket = new ServerSocket(9090);
+
                 while (true) {
                     Socket clientSocket;
                     try {
                         clientSocket = serverSocket.accept();
-                        ObjectOutputStream clientDataOutputStream = new ObjectOutputStream(new BufferedOutputStream(clientSocket.getOutputStream()));
-                        ObjectInputStream clientDataInputStream = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
-                        new ClientHandler(clientSocket, clientDataOutputStream, clientDataInputStream, this).start();
+                        System.out.println("client accepted");
+                        OutputStream outputStream = clientSocket.getOutputStream();
+                        InputStream inputStream = clientSocket.getInputStream();
+                        new ClientHandler( outputStream, inputStream, this).start();
                     } catch (Exception e) {
                         System.err.println("Error in accepting client!");
+                      /*  FileSaver fileSaver = new FileSaver(Storage.getStorage());
+                        fileSaver.dataSaver();*/
                         break;
                     }
                 }
@@ -39,24 +45,25 @@ public class Server {
 
     private static class ClientHandler extends Thread{
         private Socket clientSocket;
-        private ObjectInputStream objectInputStream;
-        private ObjectOutputStream objectOutputStream;
+        private InputStream inputStream;
+        private OutputStream outputStream;
         private ClientMessage clientMessage;
         ServerImpl server;
         Manager manager = new Manager();
 
-        public ClientHandler(Socket clientSocket, ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream, ServerImpl server) {
-            this.clientSocket = clientSocket;
-            this.objectInputStream = objectInputStream;
-            this.objectOutputStream = objectOutputStream;
+        public ClientHandler( OutputStream objectOutputStream, InputStream objectInputStream, ServerImpl server) {
+            this.inputStream = objectInputStream;
+            this.outputStream = objectOutputStream;
             this.server = server;
         }
 
         private void handleClient(){
             try {
                 while (true) {
+                    ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
                     clientMessage = (ClientMessage) objectInputStream.readObject();
-                    System.out.println(clientMessage.toString());
+                    System.out.println("message received");
+                    ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
                     objectOutputStream.writeObject(interpret(clientMessage));
                 }
             } catch (Exception e) {

@@ -1,6 +1,8 @@
 package Server;
 
-public class ServerMessage {
+import java.io.Serializable;
+
+public class ServerMessage implements Serializable {
     private MessageType messageType;
     private Object result;
 

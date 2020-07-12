@@ -116,7 +116,7 @@ public class ClientManager {
         try {
             return (boolean)clientMessage.sendAndReceive();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println(e.getMessage()+"error");
             return false;
         }
     }
