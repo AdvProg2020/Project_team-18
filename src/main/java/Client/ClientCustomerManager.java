@@ -4,6 +4,7 @@ import Server.ClientMessage;
 import Server.MessageType;
 import Server.ServerMessage;
 import controller.AdminManager;
+import javafx.fxml.Initializable;
 import model.*;
 
 import java.util.ArrayList;
@@ -26,8 +27,7 @@ public class ClientCustomerManager extends ClientManager{
     public HashMap<Product, Integer> getProductsInCart() {
         ArrayList<Object> params = new ArrayList<>();
         ClientMessage clientMessage = new ClientMessage(MessageType.GET_CART, params);
-        clientMessage.sendAndReceive();
-        return null;
+        return (HashMap<Product, Integer>) clientMessage.sendAndReceive().getResult();
     }
 
     public Product getProductInCart(int productId) throws Exception {
@@ -68,7 +68,9 @@ public class ClientCustomerManager extends ClientManager{
     }
 
     public double getCartTotalPrice() {
-        return cart.getTotalPrice();
+        ArrayList<Object> params = new ArrayList<>();
+        ClientMessage clientMessage = new ClientMessage(MessageType.GET_CART_PRICE, params);
+        return (Double) clientMessage.sendAndReceive().getResult();
     }
 
     public double getCartTotalPriceWithSale() {
