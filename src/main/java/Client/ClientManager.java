@@ -114,7 +114,7 @@ public class ClientManager {
         params.add(username);
         ClientMessage clientMessage = new ClientMessage(MessageType.DOES_USERNAME_EXIST,params);
         try {
-            return (boolean)clientMessage.sendAndReceive();
+             return (boolean)clientMessage.sendAndReceive();
         } catch (Exception e) {
             System.out.println(e.getMessage()+"error");
             return false;
