@@ -169,5 +169,14 @@ public class ClientSellerManager extends ClientManager {
         return (ArrayList<Category>) serverMessage.getResult();
     }
 
-
+    public SellLog getSellLogByCode (String code) throws Exception{
+        ArrayList <Object> params = new ArrayList<>();
+        params.add(code);
+        ClientMessage clientMessage = new ClientMessage(MessageType.GET_SELL_LOG_BY_CODE,params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage.getMessageType()==MessageType.ERROR){
+            throw  (Exception)serverMessage.getResult();
+        }
+        return (SellLog) serverMessage.getResult();
+    }
 }

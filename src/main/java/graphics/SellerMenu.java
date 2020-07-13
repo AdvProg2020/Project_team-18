@@ -20,7 +20,7 @@ import java.util.ResourceBundle;
 
 public class SellerMenu extends Menu implements Initializable {
     ClientSellerManager sellerManager = new ClientSellerManager();
-    Storage storage = new Storage();
+    //Storage storage = new Storage();
     @FXML
     private Label usernameLabel;
     @FXML
@@ -545,7 +545,8 @@ public class SellerMenu extends Menu implements Initializable {
         content.setAlignment(Pos.CENTER_LEFT);
         content.setMinSize(300, 100);
         ArrayList<Category> categories;
-        categories = storage.getAllCategories();
+        try {
+            categories = sellerManager.viewAllCategories();
         if (categories.isEmpty()) {
             content.getChildren().addAll(new Label("There's not any categories yet!"));
         } else {
@@ -557,6 +558,9 @@ public class SellerMenu extends Menu implements Initializable {
                     content.getChildren().add(new Label(property + " : " + categories.get(i).getProperties().get(property)));
                 }
             }
+        }
+        } catch (Exception e) {
+            showError(e.getMessage() , 20);
         }
         dialog.getDialogPane().setContent(content);
         dialog.showAndWait();

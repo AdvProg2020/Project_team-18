@@ -106,4 +106,15 @@ public class ClientCustomerManager extends ClientManager {
         return (boolean) clientMessage.sendAndReceive().getResult();
     }
 
+    public BuyLog getBuyLogByCode (String code) throws Exception{
+        ArrayList <Object> params = new ArrayList<>();
+        params.add(code);
+        ClientMessage clientMessage = new ClientMessage(MessageType.GET_BUY_LOG_BY_CODE,params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage.getMessageType()==MessageType.ERROR){
+            throw  (Exception)serverMessage.getResult();
+        }
+        return (BuyLog) serverMessage.getResult();
+    }
+
 }
