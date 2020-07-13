@@ -20,7 +20,7 @@ public class ClientManager {
     protected static ArrayList<Filter> currentFilters = new ArrayList<>();
     protected static ArrayList<Sort> currentSorts = new ArrayList<>();
 
-    public boolean doesAnyAdminExist(){
+    public boolean doesAnyAdminExist() {
         if (storage.getAllAdmins().isEmpty())
             return false;
         return true;
@@ -51,7 +51,7 @@ public class ClientManager {
         else if (!storage.getUserByUsername(username).getPassword().equals(password))
             throw new Exception("Your password is wrong");
         else {
-            if (person != null){
+            if (person != null) {
                 person = storage.getUserByUsername(username);
                 cart.emptyCart();
                 return person;
@@ -112,11 +112,11 @@ public class ClientManager {
     public boolean doesUsernameExist(String username) {
         ArrayList<Object> params = new ArrayList<>();
         params.add(username);
-        ClientMessage clientMessage = new ClientMessage(MessageType.DOES_USERNAME_EXIST,params);
+        ClientMessage clientMessage = new ClientMessage(MessageType.DOES_USERNAME_EXIST, params);
         try {
-             return (boolean)clientMessage.sendAndReceive();
+            return (boolean) clientMessage.sendAndReceive();
         } catch (Exception e) {
-            System.out.println(e.getMessage()+"error");
+            System.out.println(e.getMessage() + "error");
             return false;
         }
     }
@@ -155,7 +155,8 @@ public class ClientManager {
             return false;
         else return true;
     }
-    public void setPerson(Person person1){
+
+    public void setPerson(Person person1) {
         person = person1;
     }
 }

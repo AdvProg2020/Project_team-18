@@ -1,5 +1,6 @@
 package graphics;
 
+import Client.ClientCustomerManager;
 import controller.CustomerManager;
 import controller.Storage;
 import javafx.event.ActionEvent;
@@ -18,7 +19,8 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class CustomerMenu extends Menu implements Initializable {
-    private CustomerManager customerManager = new CustomerManager();
+    private ClientCustomerManager customerManager = new ClientCustomerManager();
+    //private CustomerManager customerManager = new CustomerManager();
     private Storage storage = new Storage();
     @FXML
     private Label usernameLabel;

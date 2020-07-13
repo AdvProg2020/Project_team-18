@@ -1,5 +1,7 @@
 package Client;
 
+import Server.ClientMessage;
+import Server.MessageType;
 import controller.AdminManager;
 import model.*;
 
@@ -37,8 +39,17 @@ public class ClientCustomerManager extends ClientManager{
         else return true;
     }
 
-    public void addBalance(double money) {
-        person.setBalance(person.getBalance() + money);
+    public boolean addBalance(double money) {
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(money);
+        ClientMessage clientMessage = new ClientMessage(MessageType.ADD_BALANCE, params);
+        try {
+            return (boolean) clientMessage.sendAndReceive();
+        } catch (Exception e) {
+            System.out.println(e.getMessage() + "error");
+            return false;
+        }
+        //person.setBalance(person.getBalance() + money);
     }
 
     public void increaseProduct(String productId) throws Exception {

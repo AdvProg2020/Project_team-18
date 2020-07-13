@@ -1,9 +1,11 @@
 package Server;
 
 import com.gilecode.yagson.YaGson;
+import controller.CustomerManager;
 import controller.FileSaver;
 import controller.Manager;
 import controller.Storage;
+import model.Customer;
 import model.Person;
 
 import java.io.*;
@@ -55,6 +57,7 @@ public class Server {
         private YaGson yaGson = new YaGson();
         ServerImpl server;
         Manager manager = new Manager();
+        CustomerManager customerManager = new CustomerManager();
 
         public ClientHandler( OutputStream objectOutputStream, InputStream objectInputStream, ServerImpl server) {
             this.inputStream = objectInputStream;
@@ -82,6 +85,9 @@ public class Server {
                 case DOES_USERNAME_EXIST :
                     String username = (String) clientMessage.getParameters().get(0);
                         return new ServerMessage(MessageType.DOES_USERNAME_EXIST, manager.doesUsernameExist(username));
+                case ADD_BALANCE:
+                    Double money = (Double) clientMessage.getParameters().get(0);
+                    customerManager.addBalance(money);
             }
             return null;
         }
