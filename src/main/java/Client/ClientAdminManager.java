@@ -36,16 +36,7 @@ public class ClientAdminManager extends ClientManager{
     }
 
     public void createManager (HashMap<String,String> information) throws Exception {
-        if (!checkValidity(information.get("username")))
-            throw new Exception("Username is not valid!!");
-        else if (!checkValidity(information.get("password")))
-            throw new Exception("Password is not valid!!");
-        else if (!checkEmailValidity(information.get("email")))
-            throw new Exception("Email is not valid");
-        else if (!checkPhoneNumberValidity(information.get("number")))
-            throw new Exception("Phone Number is not valid");
-        else
-            storage.addUser(new Admin(information));
+
     }
 
     public void removeProduct (String productId) throws Exception {

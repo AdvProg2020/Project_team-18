@@ -14,4 +14,8 @@ public class ServerMessage implements Serializable {
     public Object getResult() {
         return result;
     }
+
+    public MessageType getMessageType() {
+        return messageType;
+    }
 }
