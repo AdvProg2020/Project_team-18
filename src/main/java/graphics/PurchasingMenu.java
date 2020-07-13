@@ -1,6 +1,7 @@
 package graphics;
 
 
+import Client.ClientPurchasingManager;
 import controller.PurchasingManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import model.Admin;
+import model.Cart;
 import model.Customer;
 import model.Seller;
 
@@ -17,7 +19,7 @@ import java.util.HashMap;
 
 public class PurchasingMenu extends Menu {
 
-    private PurchasingManager purchasingManager = new PurchasingManager();
+    private ClientPurchasingManager purchasingManager = new ClientPurchasingManager();
     private HashMap<String, String> receivedInfo = new HashMap<>();
     private double finalPrice;
     @FXML
@@ -63,14 +65,18 @@ public class PurchasingMenu extends Menu {
     private boolean checkValidityOfDiscountCode() {
         String discountCode = discountCodeField.getText();
         if (!discountCode.equals("")) {
-            if (!purchasingManager.doesCustomerHaveDiscountCode(discountCode)) {
-                System.out.println(discountCode);
-                showError("Sorry!You don't have this discount!", 100);
-                return false;
+            try {
+                if (!purchasingManager.doesCustomerHaveDiscountCode(discountCode,person.getUsername())) {
+                    System.out.println(discountCode);
+                    showError("Sorry!You don't have this discount!", 100);
+                    return false;
+                }
+            } catch (Exception e) {
+                showError(e.getMessage() , 20);
             }
             try {
                 purchasingManager.checkDiscountValidity(discountCode);
-                finalPrice = purchasingManager.calculateTotalPriceWithDiscount(discountCode);
+                finalPrice = purchasingManager.calculateTotalPriceWithDiscount(discountCode,Cart.getCart());
                 return true;
             } catch (Exception e) {
                 showError("You can't use this discount for one of following reasons:\n -This discount is expired!\n" +
@@ -78,7 +84,11 @@ public class PurchasingMenu extends Menu {
                 return false;
             }
         } else {
-            finalPrice = purchasingManager.getTotalPriceWithoutDiscount();
+            try {
+                finalPrice = purchasingManager.getTotalPriceWithoutDiscount(Cart.getCart());
+            } catch (Exception e) {
+                showError(e.getMessage() , 20);
+            }
             return true;
         }
     }
@@ -98,15 +108,17 @@ public class PurchasingMenu extends Menu {
         boolean numberValidity = checkNumber();
         boolean discountCodeValidity = checkValidityOfDiscountCode();
         if (nameValidity && addressValidity && numberValidity && discountCodeValidity) {
-            if (!purchasingManager.doesCustomerHaveEnoughMoney(finalPrice)) {
+            if (!purchasingManager.doesCustomerHaveEnoughMoney(finalPrice,person.getUsername())) {
                 showError("Oops!You don't have enough money in your account!", 100);
             } else {
                 receivedInfo.put("receiverName", name.getText());
                 receivedInfo.put("address", address.getText());
                 receivedInfo.put("phoneNumber", name.getText());
-                purchasingManager.performPayment(receivedInfo, finalPrice, purchasingManager.getDiscountPercentage(discountCodeField.getText()), discountCodeField.getText());
+                purchasingManager.performPayment(receivedInfo, finalPrice,
+                        purchasingManager.getDiscountPercentage(discountCodeField.getText()), discountCodeField.getText(),
+                        person.getUsername() , Cart.getCart());
                 if (!discountCodeField.getText().equals("")) {
-                    purchasingManager.updateDiscountUsagePerPerson(discountCodeField.getText());
+                    purchasingManager.updateDiscountUsagePerPerson(discountCodeField.getText() , person.getUsername());
                 }
                 showMessage();
                 back();

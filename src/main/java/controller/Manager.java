@@ -30,6 +30,10 @@ public class Manager {
         return true;
     }
 
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
+
     public void register(HashMap<String, String> information) throws Exception {
         if (!checkValidity(information.get("username")))
             throw new Exception("Username is not valid");

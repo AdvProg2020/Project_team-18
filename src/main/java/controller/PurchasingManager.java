@@ -60,10 +60,6 @@ public class PurchasingManager extends Manager {
         this.buyLogCode = buyLog.getBuyCode();
     }
 
-    public int getBuyLogCode() {
-        return buyLogCode;
-    }
-
     public void createSellLog(Seller seller, double totalPrice, double saleAmount) {
         SellLog sellLog = new SellLog(LocalDateTime.now(), totalPrice, saleAmount, (Customer) person , sellerProductsInCart(super.cart,seller));
         storage.addSellLog(sellLog);
@@ -111,18 +107,6 @@ public class PurchasingManager extends Manager {
             return 0.0;
         }
         return storage.getDiscountByCode(discountCode).getPercentage();
-    }
-
-    public ArrayList<Product> getProductsInCart() {
-        ArrayList<Product> productsInCart = new ArrayList<>();
-        productsInCart.addAll(super.cart.getProductsInCart().keySet());
-        return productsInCart;
-    }
-
-    public String displayDetailsOfProduct(Product product) {
-        String details = product.getName() + " -- " + product.getPrice() + " -- " + product.getAmountOfSale()
-                + " -- " + product.getPriceWithSale() + " -- " + cart.getProductsInCart().get(product);
-        return details;
     }
 
     public double getTotalPriceWithoutDiscount() {

@@ -1,16 +1,9 @@
 package Server;
 
 import com.gilecode.yagson.YaGson;
-import controller.CustomerManager;
-import controller.FileSaver;
-import controller.Manager;
-import controller.SellerManager;
-import controller.Storage;
+import controller.*;
 import javafx.scene.media.MediaPlayer;
-import model.BuyLog;
-import model.Customer;
-import model.Person;
-import model.Product;
+import model.*;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -63,6 +56,7 @@ public class Server {
         Manager manager = new Manager();
         SellerManager sellerManager = new SellerManager();
         CustomerManager customerManager = new CustomerManager();
+        PurchasingManager purchasingManager = new PurchasingManager();
         Storage storage = new Storage();
 
         public ClientHandler(OutputStream objectOutputStream, InputStream objectInputStream, ServerImpl server) {
@@ -244,6 +238,71 @@ public class Server {
                     return new ServerMessage(MessageType.DOES_CUSTOMER_HAVE_BUY_LOG,
                             customerManager.doesCustomerHasThisBuyLog((String) clientMessage.getParameters().get(1),
                                     (Integer) clientMessage.getParameters().get(0)));
+                case DOES_CUSTOMER_HAVE_DISCOUNT:
+                    String discountCode = (String) clientMessage.getParameters().get(0);
+                    try {
+                        purchasingManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(1)));
+                        return new ServerMessage(MessageType.DOES_CUSTOMER_HAVE_DISCOUNT, purchasingManager.doesCustomerHaveDiscountCode(discountCode));
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case UPDATE_DISCOUNT_USAGE:
+                    discountCode = (String) clientMessage.getParameters().get(0);
+                    try {
+                        purchasingManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(1)));
+                        purchasingManager.updateDiscountUsagePerPerson(discountCode);
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case GET_DISCOUNT_PERCENTAGE:
+                     discountCode = (String) clientMessage.getParameters().get(0);
+                    try {
+                        return new ServerMessage(MessageType.GET_DISCOUNT_PERCENTAGE, purchasingManager.getDiscountPercentage(discountCode));
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case DOES_CUSTOMER_HAVE_MONEY:
+                    double price = (double) clientMessage.getParameters().get(0);
+                    try {
+                        purchasingManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(1)));
+                        return new ServerMessage(MessageType.DOES_CUSTOMER_HAVE_MONEY, purchasingManager.doesCustomerHaveEnoughMoney(price));
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case CHECK_DISCOUNT_VALIDITY:
+                    discountCode = (String) clientMessage.getParameters().get(0);
+                    try {
+                       purchasingManager.checkDiscountValidity(discountCode);
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case PERFORM_PAYMENT:
+                    HashMap<String, String> receiverInformation = (HashMap<String, String>) clientMessage.getParameters().get(2);
+                    double totalPrice = (double) clientMessage.getParameters().get(3);
+                    double percentage = (double) clientMessage.getParameters().get(4);
+                    String discountUsed = (String) clientMessage.getParameters().get(5);
+                    try {
+                        purchasingManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(0)));
+                        purchasingManager.setCart((Cart) clientMessage.getParameters().get(1));
+                        purchasingManager.performPayment(receiverInformation,totalPrice,percentage,discountUsed);
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case CALCULATE_TOTAL_PRICE_WITH_DISCOUNT:
+                    discountCode = (String) clientMessage.getParameters().get(0);
+                    try {
+                        purchasingManager.setCart((Cart) clientMessage.getParameters().get(1));
+                        return new ServerMessage(MessageType.CALCULATE_TOTAL_PRICE_WITH_DISCOUNT, purchasingManager.calculateTotalPriceWithDiscount(discountCode));
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case CALCULATE_TOTAL_PRICE_WITHOUT_DISCOUNT:
+                    try {
+                        purchasingManager.setCart((Cart) clientMessage.getParameters().get(0));
+                        return new ServerMessage(MessageType.CALCULATE_TOTAL_PRICE_WITHOUT_DISCOUNT, purchasingManager.getTotalPriceWithoutDiscount());
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
             }
             return null;
         }
