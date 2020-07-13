@@ -81,28 +81,28 @@ public class ClientCustomerManager extends ClientManager{
         return storage.getBuyLogByCode(orderId);
     }
 
-    public void rateProduct(int productId, double rate) throws Exception {
-        if (!storage.getProductById(productId).getThisProductsBuyers().contains(person))
-            throw new Exception("You can't rate a product which you didn't buy it!!");
-        else {
-            Rate rateOfThisProduct = new Rate(person.getUsername(), storage.getProductById(productId), rate);
-            storage.addRate(rateOfThisProduct);
-            storage.getProductById(productId).addRate(rateOfThisProduct);
-            storage.getProductById(productId).calculateAverageRate();
-        }
+    public void rateProduct(int productId, double rate, String username) throws Exception {
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(productId);
+        params.add(rate);
+        params.add(username);
+        ClientMessage clientMessage = new ClientMessage(MessageType.ADD_RATE, params);
+        clientMessage.sendAndReceive();
     }
 
-    public ArrayList<BuyLog> getCustomerBuyLogs() {
-        return ((Customer) person).getBuyHistory();
+    public ArrayList<BuyLog> getCustomerBuyLogs(String username) {
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(username);
+        ClientMessage clientMessage = new ClientMessage(MessageType.GET_ALL_BUY_LOGS, params);
+        return (ArrayList<BuyLog>) clientMessage.sendAndReceive().getResult();
     }
 
-    public boolean doesCustomerHasThisBuyLog(int logCode) {
-        for (BuyLog buyLog : ((Customer) person).getBuyHistory()) {
-            if (logCode == buyLog.getBuyCode()) {
-                return true;
-            }
-        }
-        return false;
+    public boolean doesCustomerHasThisBuyLog(String username,int logCode) {
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(logCode);
+        params.add(username);
+        ClientMessage clientMessage = new ClientMessage(MessageType.DOES_CUSTOMER_HAVE_BUY_LOG, params);
+        return (boolean) clientMessage.sendAndReceive().getResult();
     }
 
 }

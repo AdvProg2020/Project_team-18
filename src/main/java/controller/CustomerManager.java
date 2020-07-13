@@ -77,23 +77,23 @@ public class CustomerManager extends Manager {
         return storage.getBuyLogByCode(orderId);
     }
 
-    public void rateProduct(int productId, double rate) throws Exception {
+    public void rateProduct(int productId, double rate, String username) throws Exception {
         if (!storage.getProductById(productId).getThisProductsBuyers().contains(person))
             throw new Exception("You can't rate a product which you didn't buy it!!");
         else {
-            Rate rateOfThisProduct = new Rate(person.getUsername(), storage.getProductById(productId), rate);
+            Rate rateOfThisProduct = new Rate(username, storage.getProductById(productId), rate);
             storage.addRate(rateOfThisProduct);
             storage.getProductById(productId).addRate(rateOfThisProduct);
             storage.getProductById(productId).calculateAverageRate();
         }
     }
 
-    public ArrayList<BuyLog> getCustomerBuyLogs() {
-        return ((Customer) person).getBuyHistory();
+    public ArrayList<BuyLog> getCustomerBuyLogs(String username) {
+        return ((Customer) storage.getUserByUsername(username)).getBuyHistory();
     }
 
-    public boolean doesCustomerHasThisBuyLog(int logCode) {
-        for (BuyLog buyLog : ((Customer) person).getBuyHistory()) {
+    public boolean doesCustomerHasThisBuyLog(String username,int logCode) {
+        for (BuyLog buyLog : ((Customer) storage.getUserByUsername(username)).getBuyHistory()) {
             if (logCode == buyLog.getBuyCode()) {
                 return true;
             }

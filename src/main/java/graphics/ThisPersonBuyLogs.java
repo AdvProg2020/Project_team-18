@@ -1,5 +1,6 @@
 package graphics;
 
+import Client.ClientCustomerManager;
 import controller.CustomerManager;
 import controller.Storage;
 import javafx.collections.FXCollections;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class ThisPersonBuyLogs extends Menu implements Initializable {
-    CustomerManager customerManager = new CustomerManager();
+    ClientCustomerManager customerManager = new ClientCustomerManager();
     Storage storage = new Storage();
     @FXML
     TableView<BuyLog> tableView = new TableView<>();
@@ -61,9 +62,9 @@ public class ThisPersonBuyLogs extends Menu implements Initializable {
             showError("Please Enter a code!");
         } else if (!logCode.getText().matches("\\d+")) {
             showError("Buy log code is an integer!");
-        } else if (customerManager.getCustomerBuyLogs().isEmpty()) {
+        } else if (customerManager.getCustomerBuyLogs(person.getUsername()).isEmpty()) {
             showError("You have not purchase anything!");
-        } else if (!customerManager.doesCustomerHasThisBuyLog(Integer.parseInt(logCode.getText()))) {
+        } else if (!customerManager.doesCustomerHasThisBuyLog(person.getUsername(), Integer.parseInt(logCode.getText()))) {
             showError("Oops!You don't have this buy log!");
         } else {
             showWantedBuyLog(logCode.getText());

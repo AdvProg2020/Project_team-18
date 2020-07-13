@@ -1,5 +1,6 @@
 package graphics;
 
+import Client.ClientCustomerManager;
 import controller.*;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -31,7 +32,7 @@ import java.util.ResourceBundle;
 public class ProductMenu extends Menu implements Initializable {
 
     private Product product;
-    private CustomerManager customerManager = new CustomerManager();
+    private ClientCustomerManager customerManager = new ClientCustomerManager();
     private ProductManager productManager = new ProductManager();
     final DoubleProperty zoomProperty = new SimpleDoubleProperty(200);
 
@@ -98,7 +99,7 @@ public class ProductMenu extends Menu implements Initializable {
         dialog.getDialogPane().setContent(content);
         dialog.showAndWait();
         try {
-            customerManager.rateProduct(product.getProductId(),Double.parseDouble(rateField.getText()));
+            customerManager.rateProduct(product.getProductId(),Double.parseDouble(rateField.getText()), person.getUsername());
         } catch (Exception e) {
             showError(e.getMessage(), 200);
         }
