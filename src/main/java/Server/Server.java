@@ -57,6 +57,7 @@ public class Server {
         SellerManager sellerManager = new SellerManager();
         CustomerManager customerManager = new CustomerManager();
         PurchasingManager purchasingManager = new PurchasingManager();
+        SearchingManager searchingManager = new SearchingManager();
         Storage storage = new Storage();
 
         public ClientHandler(OutputStream objectOutputStream, InputStream objectInputStream, ServerImpl server) {
@@ -300,6 +301,55 @@ public class Server {
                     try {
                         purchasingManager.setCart((Cart) clientMessage.getParameters().get(0));
                         return new ServerMessage(MessageType.CALCULATE_TOTAL_PRICE_WITHOUT_DISCOUNT, purchasingManager.getTotalPriceWithoutDiscount());
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case VIEW_ALL_PRODUCTS:
+                    try {
+                        return new ServerMessage(MessageType.VIEW_ALL_PRODUCTS, searchingManager.viewAllProducts());
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case PERFORM_FILTER:
+                    String filterTag = (String) clientMessage.getParameters().get(0);
+                    String info = (String) clientMessage.getParameters().get(1);
+                    try {
+                        return new ServerMessage(MessageType.PERFORM_FILTER, searchingManager.performFilter(filterTag,info));
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case PERFORM_SORT:
+                    String sortTag = (String) clientMessage.getParameters().get(0);
+                    try {
+                        return new ServerMessage(MessageType.PERFORM_SORT, searchingManager.performSort(sortTag));
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case DISABLE_FILTER:
+                     filterTag = (String) clientMessage.getParameters().get(0);
+                     info = (String) clientMessage.getParameters().get(1);
+                    try {
+                        return new ServerMessage(MessageType.DISABLE_FILTER, searchingManager.disableFilter(filterTag,info));
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case DISABLE_SORT:
+                     sortTag = (String) clientMessage.getParameters().get(0);
+                    try {
+                        return new ServerMessage(MessageType.DISABLE_SORT, searchingManager.disableSort(sortTag));
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case DEFAULT_SORT:
+                    ArrayList<Product> productsOfSort = (ArrayList<Product>) clientMessage.getParameters().get(0);
+                    try {
+                        return new ServerMessage(MessageType.DEFAULT_SORT, searchingManager.performDefaultSort(productsOfSort));
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case VIEW_ALL_CATEGORIES:
+                    try {
+                        return new ServerMessage(MessageType.VIEW_ALL_CATEGORIES, searchingManager.viewAllCategories());
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }

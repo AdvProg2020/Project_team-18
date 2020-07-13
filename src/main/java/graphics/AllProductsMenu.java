@@ -1,5 +1,6 @@
 package graphics;
 
+import Client.ClientSearchingManager;
 import controller.SearchingManager;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -20,7 +21,7 @@ import java.util.ResourceBundle;
 
 public class AllProductsMenu extends Menu implements Initializable {
 
-    private SearchingManager searchingManager = new SearchingManager();
+    private ClientSearchingManager searchingManager = new ClientSearchingManager();
     @FXML
     TextField priceTextField = new TextField();
     @FXML
@@ -56,8 +57,12 @@ public class AllProductsMenu extends Menu implements Initializable {
 
     @FXML
     private void populatingChoiceBoxes() {
-        for (Category category : searchingManager.viewAllCategories()) {
-            categoryChoiceBox.getItems().add(category.getCategoryName());
+        try {
+            for (Category category : searchingManager.viewAllCategories()) {
+                categoryChoiceBox.getItems().add(category.getCategoryName());
+            }
+        } catch (Exception e) {
+            showError(e.getMessage() , 20);
         }
         categoryChoiceBox.getItems().add("Choose Category");
         categoryChoiceBox.setValue("Choose Category");
@@ -298,6 +303,10 @@ public class AllProductsMenu extends Menu implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         populatingChoiceBoxes();
-        updateShownProducts(searchingManager.viewAllProducts());
+        try {
+            updateShownProducts(searchingManager.viewAllProducts());
+        } catch (Exception e) {
+            showError(e.getMessage() , 20);
+        }
     }
 }

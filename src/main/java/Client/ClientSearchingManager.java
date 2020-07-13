@@ -1,6 +1,10 @@
 package Client;
 
+import Server.ClientMessage;
+import Server.MessageType;
+import Server.ServerMessage;
 import controller.ProductManager;
+import model.Category;
 import model.Filter;
 import model.Product;
 import model.Sort;
@@ -15,139 +19,79 @@ public class ClientSearchingManager extends ClientManager {
 
     }
 
-    public ArrayList<Filter> getCurrentFilters() {
-        return currentFilters;
-    }
-
-    public ArrayList<Sort> getCurrentSorts() {
-        return currentSorts;
-    }
-
-    public ArrayList<Product> viewAllProducts(){
-        ArrayList<Product> temp = new ArrayList<>();
-        temp.addAll(storage.getAllProducts());
-        return processOfViewProduct(temp);
-    }
-
-    private ArrayList<Product> processOfViewProduct (ArrayList <Product> selectedProducts){
-        return sortProducts(filterProducts(selectedProducts));
-    }
-
-    private ArrayList<Product> filterProducts(ArrayList<Product> products){
-        if (currentFilters.isEmpty()){
-            return products;
+    public ArrayList<Product> viewAllProducts() throws Exception {
+        ClientMessage clientMessage = new ClientMessage(MessageType.VIEW_ALL_PRODUCTS, null);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage.getMessageType() == MessageType.ERROR) {
+            throw (Exception) serverMessage.getResult();
         }
-        else {
-            ArrayList<Product> temp = new ArrayList<>();
-            ArrayList<Product> tempContainer;
-            tempContainer = products;
-            for (Filter filter : currentFilters) {
-                if (filter.getFilterName().equals("category")) {
-                    tempContainer = filter.filterByCategory(storage.getCategoryByName(filter.getFilterInfo()), tempContainer);
-                    for (Product product : tempContainer) {
-                        if(!temp.contains(product))
-                            temp.add(product);
-                    }
-                }
-                if (filter.getFilterName().equals("name")) {
-                    tempContainer = filter.filterByName(filter.getFilterInfo(), tempContainer);
-                    for (Product product : tempContainer) {
-                        if(!temp.contains(product))
-                            temp.add(product);
-                    }
-                }
-                if (filter.getFilterName().equals("price")) {
-                    tempContainer = filter.filterByPrice(Double.parseDouble(filter.getFilterInfo()), tempContainer);
-                    for (Product product : tempContainer) {
-                        if(!temp.contains(product))
-                            temp.add(product);
-                    }
-                }
-            }
-            return tempContainer;
-        }
-    }
-
-    private ArrayList<Product> sortProducts (ArrayList<Product> products){
-        if (currentSorts.isEmpty()){
-            Sort sort = new Sort("");
-            return sort.defaultSort(products);
-        }
-        else{
-            ArrayList<Product> temp = new ArrayList<>();
-            for (Sort sort : currentSorts) {
-                if (sort.getSortName().equals("price"))
-                    temp.addAll(sort.sortByPrice(products));
-                if (sort.getSortName().equals("average rate"))
-                    temp.addAll(sort.sortByAverageRate(products));
-            }
-            return temp;
-        }
+        return (ArrayList<Product>) serverMessage.getResult();
     }
 
     public ArrayList<Product> performFilter(String filterTag, String info) throws Exception {
-        for (Filter filter : currentFilters) {
-            if (filter.getFilterName().equals(filterTag) && filter.getFilterInfo().equals(info))
-                throw new Exception("The " + filterTag +" filter is already selected!");
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(filterTag);
+        params.add(info);
+        ClientMessage clientMessage = new ClientMessage(MessageType.PERFORM_FILTER, params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage.getMessageType() == MessageType.ERROR) {
+            throw (Exception) serverMessage.getResult();
         }
-        Filter filter = new Filter(filterTag,info);
-        storage.addFilter(filter);
-        currentFilters.add(filter);
-        return this.viewAllProducts();
+        return (ArrayList<Product>) serverMessage.getResult();
     }
 
     public ArrayList<Product> performSort(String sortTag) throws Exception {
-        for (Sort sort : currentSorts) {
-            if (sort.getSortName().equals(sortTag))
-                throw new Exception("This sort is already selected!");
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(sortTag);
+        ClientMessage clientMessage = new ClientMessage(MessageType.PERFORM_SORT, params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage.getMessageType() == MessageType.ERROR) {
+            throw (Exception) serverMessage.getResult();
         }
-        Sort sort = new Sort(sortTag);
-        storage.addSort(sort);
-        currentSorts.add(sort);
-        return this.viewAllProducts();
+        return (ArrayList<Product>) serverMessage.getResult();
     }
 
     public ArrayList<Product> disableFilter(String filterTag, String info) throws Exception {
-        Filter removedFilter = null;
-        for (Filter filter : currentFilters) {
-            if(filter.getFilterName().equals("price")) {
-                if (filter.getFilterName().equals(filterTag) && Double.parseDouble(filter.getFilterInfo()) == Double.parseDouble(info)) {
-                    removedFilter = filter;
-                }
-            } else{
-                if (filter.getFilterName().equals(filterTag) && filter.getFilterInfo().equals(info)) {
-                    removedFilter = filter;
-                }
-            }
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(filterTag);
+        params.add(info);
+        ClientMessage clientMessage = new ClientMessage(MessageType.DISABLE_FILTER, params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage.getMessageType() == MessageType.ERROR) {
+            throw (Exception) serverMessage.getResult();
         }
-        if(removedFilter == null){
-            throw new Exception("You did not select this filter");
-        }
-        else {
-            currentFilters.remove(removedFilter);
-            return this.viewAllProducts();
-        }
+        return (ArrayList<Product>) serverMessage.getResult();
     }
 
 
     public ArrayList<Product> disableSort(String sortTag) throws Exception {
-        Sort removedSort = null;
-        for (Sort sort : currentSorts) {
-            if(sort.getSortName().equals(sortTag))
-                removedSort = sort;
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(sortTag);
+        ClientMessage clientMessage = new ClientMessage(MessageType.DISABLE_SORT, params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage.getMessageType() == MessageType.ERROR) {
+            throw (Exception) serverMessage.getResult();
         }
-        if (removedSort == null){
-            throw new Exception("You did not select this sort");
-        }
-        else {
-            currentSorts.remove(removedSort);
-            System.out.println(currentSorts);
-            return this.viewAllProducts();
-        }
+        return (ArrayList<Product>) serverMessage.getResult();
     }
 
-    public ArrayList<Product> performDefaultSort(ArrayList<Product> products){
-        Sort sort = new Sort("name");
-        return sort.defaultSort(products);
+    public ArrayList<Product> performDefaultSort(ArrayList<Product> products) throws Exception{
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(products);
+        ClientMessage clientMessage = new ClientMessage(MessageType.DEFAULT_SORT, params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage.getMessageType() == MessageType.ERROR) {
+            throw (Exception) serverMessage.getResult();
+        }
+        return (ArrayList<Product>) serverMessage.getResult();
+    }
+
+    public ArrayList<Category> viewAllCategories() throws Exception{
+        ClientMessage clientMessage = new ClientMessage(MessageType.VIEW_ALL_CATEGORIES, null);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage.getMessageType() == MessageType.ERROR) {
+            throw (Exception) serverMessage.getResult();
+        }
+        return (ArrayList<Category>) serverMessage.getResult();
     }
 }
