@@ -1,5 +1,6 @@
 package graphics;
 
+import Client.ClientAdminManager;
 import Client.ClientSellerManager;
 import Server.ClientMessage;
 import controller.AdminManager;
@@ -25,7 +26,7 @@ import java.util.ResourceBundle;
 
 public class SellerRequestMenu extends Menu implements Initializable {
 
-    AdminManager adminManager = new AdminManager();
+    ClientAdminManager adminManager = new ClientAdminManager();
     ClientSellerManager sellerManager = new ClientSellerManager();
     private Storage storage = new Storage();
 

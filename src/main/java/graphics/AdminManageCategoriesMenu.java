@@ -1,5 +1,6 @@
 package graphics;
 
+import Client.ClientAdminManager;
 import controller.AdminManager;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -24,7 +25,7 @@ import java.util.ResourceBundle;
 
 public class AdminManageCategoriesMenu extends Menu implements Initializable {
 
-    private AdminManager adminManager = new AdminManager();
+    private ClientAdminManager adminManager = new ClientAdminManager();
 
     @FXML
     TableView categoriesTable = new TableView();
