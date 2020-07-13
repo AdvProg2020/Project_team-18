@@ -1,5 +1,8 @@
 package Server;
 
 public enum MessageType {
-    DOES_USERNAME_EXIST,LOGIN,ERROR;
+    DOES_USERNAME_EXIST,
+    LOGIN,
+    ERROR,
+   ADD_BALANCE
 }

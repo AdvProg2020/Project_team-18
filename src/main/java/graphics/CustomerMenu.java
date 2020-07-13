@@ -161,7 +161,7 @@ public class CustomerMenu extends Menu implements Initializable {
         if (result.isPresent() && result.get() == ButtonType.OK) {
             updatedVersion = textField.getText();
             try {
-                customerManager.addBalance(Double.parseDouble(updatedVersion));
+                customerManager.addBalance(Double.parseDouble(updatedVersion), person.getUsername());
                 viewPersonalInfo();
             } catch (Exception e) {
                 showError(e.getMessage(), 100);

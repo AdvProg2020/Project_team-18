@@ -37,7 +37,9 @@ public class CustomerManager extends Manager {
     }
 
     public void addBalance(double money) {
+        System.out.println("in function");
         person.setBalance(person.getBalance() + money);
+        System.out.println("after function");
     }
 
     public void increaseProduct(String productId) throws Exception {

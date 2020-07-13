@@ -51,7 +51,6 @@ public class ClientManager {
         ArrayList<Object> params = new ArrayList<>();
         params.add(username);
         ClientMessage clientMessage = new ClientMessage(MessageType.DOES_USERNAME_EXIST,params);
-
         return (boolean)clientMessage.sendAndReceive().getResult();
 
     }
