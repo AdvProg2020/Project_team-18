@@ -1,5 +1,6 @@
 package graphics;
 
+import Client.ClientCustomerManager;
 import controller.CustomerManager;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
@@ -20,7 +21,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class CartMenu extends Menu implements Initializable {
-    private CustomerManager customerManager = new CustomerManager();
+    private ClientCustomerManager customerManager = new ClientCustomerManager();
+    //private CustomerManager customerManager = new CustomerManager();
     @FXML
     TextField productTextField;
     @FXML TableView<Product> tableView = new TableView<>(FXCollections.observableList(FXCollections.observableArrayList(

@@ -51,26 +51,17 @@ public class ClientCustomerManager extends ClientManager{
     }
 
     public void increaseProduct(String productId) throws Exception {
-        if (storage.getProductById(Integer.parseInt(productId)) == null)
-            throw new Exception("There is not such product!");
-        if (storage.getProductById(Integer.parseInt(productId)).getSupply() == 0)
-            throw new Exception("We have run out of this product!!");
-        for (Product product : cart.getProductsInCart().keySet()) {
-            if (product.equals(storage.getProductById(Integer.parseInt(productId)))) {
-                super.cart.addNumberOfProductInTheCart(storage.getProductById(Integer.parseInt(productId)));
-                return;
-            }
-        }
-        cart.addProductToCart(storage.getProductById(Integer.parseInt(productId)));
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(productId);
+        ClientMessage clientMessage = new ClientMessage(MessageType.INCREASE_PRODUCT, params);
+        clientMessage.sendAndReceive();
     }
 
     public void decreaseProduct(String productId) throws Exception {
-        if (storage.getProductById(Integer.parseInt(productId)) == null)
-            throw new Exception("There is not such product!");
-        else if (!super.cart.getProductsInCart().containsKey(storage.getProductById(Integer.parseInt(productId))))
-            throw new Exception("You don't have a product with this Id in your cart!");
-        else
-            super.cart.decreaseProduct(storage.getProductById(Integer.parseInt(productId)));
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(productId);
+        ClientMessage clientMessage = new ClientMessage(MessageType.DECREASE_PRODUCT, params);
+        clientMessage.sendAndReceive();
     }
 
     public double getCartTotalPrice() {

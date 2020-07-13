@@ -1,10 +1,12 @@
 package Server;
 
 import com.gilecode.yagson.YaGson;
+import com.sun.org.apache.bcel.internal.generic.CASTORE;
 import controller.CustomerManager;
 import controller.FileSaver;
 import controller.Manager;
 import controller.Storage;
+import javafx.scene.media.MediaPlayer;
 import model.Customer;
 import model.Person;
 
@@ -94,11 +96,26 @@ public class Server {
                         return new ServerMessage(MessageType.ERROR,e);
                     }
                 case ADD_BALANCE:
-                    System.out.println("I'm here!");
                     Double money = (Double) clientMessage.getParameters().get(0);
                     customerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(1)));
                     customerManager.addBalance(money);
-                    System.out.println("Done!");
+                    break;
+                case DECREASE_PRODUCT:
+                    String productId = (String) clientMessage.getParameters().get(0);
+                    try {
+                        customerManager.decreaseProduct(productId);
+                    } catch (Exception e){
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                    break;
+                case INCREASE_PRODUCT:
+                    String id = (String) clientMessage.getParameters().get(0);
+                    try {
+                        customerManager.increaseProduct(id);
+                    } catch (Exception e){
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                    break;
             }
             return null;
         }
