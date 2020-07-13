@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
 
 public class AddProductPage extends Menu implements Initializable {
     ClientSellerManager sellerManager;
-    Storage storage = new Storage();
+    //Storage storage = new Storage();
 
     public AddProductPage(Menu previousMenu, ClientSellerManager sellerManager) {
         super(previousMenu, "src/main/java/graphics/fxml/AddProductPage.fxml");
@@ -38,15 +38,18 @@ public class AddProductPage extends Menu implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        if (!storage.getAllCategories().isEmpty()) {
-            for (Category category : storage.getAllCategories()) {
-                categoryField.getItems().add(category.getCategoryName());
-            }
-        } else {
-            categoryField.getItems().add("No categories yet!");
-        }
-        categoryField.setValue("No categories yet!");
+         try {
+             if (!sellerManager.viewAllCategories().isEmpty()) {
+                 for (Category category : sellerManager.viewAllCategories()) {
+                     categoryField.getItems().add(category.getCategoryName());
+                 }
+             } else {
+                 categoryField.getItems().add("No categories yet!");
+             }
+             categoryField.setValue("No categories yet!");
+         } catch (Exception e){
+             showError(e.getMessage() , 20);
+         }
     }
 
     public void addProduct() {

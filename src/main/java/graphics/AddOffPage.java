@@ -17,7 +17,7 @@ import java.util.Optional;
 
 public class AddOffPage extends Menu {
     private ClientSellerManager sellerManager;
-    private Storage storage = new Storage();
+    //private Storage storage = new Storage();
 
     public AddOffPage(Menu previousMenu, ClientSellerManager sellerManager) {
         super(previousMenu, "src/main/java/graphics/fxml/AddOffPage.fxml");
@@ -87,16 +87,20 @@ public class AddOffPage extends Menu {
         Optional<ButtonType> result = productDialog.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             productId = textField.getText();
-            if (!productId.matches("\\d+")) {
-                showError("ProductId is an integer!", 100);
-            } else {
-                if (storage.getProductById(Integer.parseInt(productId)) == null) {
-                    showError("There's not such product!", 100);
-                } else if (!person.getUsername().equals(storage.getProductById(Integer.parseInt(productId)).getSeller().getUsername())) {
-                    showError("You don't have this product!", 100);
+            try {
+                if (!productId.matches("\\d+")) {
+                    showError("ProductId is an integer!", 100);
                 } else {
-                    productsInSale.add(storage.getProductById(Integer.parseInt(productId)));
+                    if (sellerManager.getProductById(Integer.parseInt(productId)) == null) {
+                        showError("There's not such product!", 100);
+                    } else if (!person.getUsername().equals(sellerManager.getProductById(Integer.parseInt(productId)).getSeller().getUsername())) {
+                        showError("You don't have this product!", 100);
+                    } else {
+                        productsInSale.add(sellerManager.getProductById(Integer.parseInt(productId)));
+                    }
                 }
+            } catch (Exception e){
+                showError(e.getMessage() , 20);
             }
         }
     }

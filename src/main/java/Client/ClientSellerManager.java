@@ -159,4 +159,15 @@ public class ClientSellerManager extends ClientManager {
         }
         return (boolean)serverMessage.getResult();
     }
+
+    public ArrayList<Category> viewAllCategories() throws Exception{
+        ClientMessage clientMessage = new ClientMessage(MessageType.VIEW_ALL_CATEGORIES, null);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage.getMessageType() == MessageType.ERROR) {
+            throw (Exception) serverMessage.getResult();
+        }
+        return (ArrayList<Category>) serverMessage.getResult();
+    }
+
+
 }

@@ -362,6 +362,13 @@ public class Server {
                     return new ServerMessage(MessageType.GET_ALL_PRODUCTS, productManager.viewAllProducts());
                 case GET_ALL_PRODUCTS_IN_SALE:
                     return new ServerMessage(MessageType.GET_ALL_PRODUCTS_IN_SALE, productManager.viewAllProductsWithSale());
+                case GET_PRODUCT_BY_ID:
+                    productId = (int) clientMessage.getParameters().get(0);
+                    try {
+                        return new ServerMessage(MessageType.GET_PRODUCT_BY_ID, manager.getProductById(productId));
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
             }
             return null;
         }
