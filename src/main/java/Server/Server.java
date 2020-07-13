@@ -3,6 +3,7 @@ package Server;
 import controller.FileSaver;
 import controller.Manager;
 import controller.Storage;
+import model.Person;
 
 import java.io.*;
 import java.net.ServerSocket;
