@@ -24,7 +24,10 @@ public class ClientCustomerManager extends ClientManager{
     }
 
     public HashMap<Product, Integer> getProductsInCart() {
-        return super.cart.getProductsInCart();
+        ArrayList<Object> params = new ArrayList<>();
+        ClientMessage clientMessage = new ClientMessage(MessageType.GET_CART, params);
+        clientMessage.sendAndReceive();
+        return null;
     }
 
     public Product getProductInCart(int productId) throws Exception {

@@ -20,8 +20,6 @@ import java.util.ResourceBundle;
 
 public class CustomerMenu extends Menu implements Initializable {
     private ClientCustomerManager customerManager = new ClientCustomerManager();
-    //private CustomerManager customerManager = new CustomerManager();
-    private Storage storage = new Storage();
     @FXML
     private Label usernameLabel;
     @FXML

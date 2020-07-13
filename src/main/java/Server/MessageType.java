@@ -6,5 +6,6 @@ public enum MessageType {
     ERROR,
     ADD_BALANCE,
     DECREASE_PRODUCT,
-    INCREASE_PRODUCT
+    INCREASE_PRODUCT,
+    GET_CART
 }
