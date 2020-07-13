@@ -12,31 +12,18 @@ import java.util.concurrent.ThreadLocalRandom;
 public class ClientAdminManager extends ClientManager{
 
     private SellerManager tempSellerManager = new SellerManager();
-    private static int lastAwardedIndex = 1;
-    private static int lastRandomIndex = 1;
-    public ClientAdminManager() {
-    }
+
 
     public ArrayList<Person> viewAllUsers (){
         return storage.getAllUsers();
     }
 
-    public Person viewUser (String username) throws Exception {
-        if (storage.getUserByUsername(username) == null)
-            throw new Exception("There is not such user!!");
-        else
-            return storage.getUserByUsername(username);
-    }
 
     public void deleteUser (String username) throws Exception {
         if (storage.getUserByUsername(username) == null)
             throw new Exception("There is not such user!!");
         else
             storage.deleteUser(storage.getUserByUsername(username));
-    }
-
-    public void createManager (HashMap<String,String> information) throws Exception {
-
     }
 
     public void removeProduct (String productId) throws Exception {
@@ -125,13 +112,6 @@ public class ClientAdminManager extends ClientManager{
             throw new Exception("There is not such Discount Code!!");
         else
             storage.deleteDiscount(storage.getDiscountByCode(code));
-    }
-
-    public Request viewRequest (String requestId) throws Exception {
-        if (storage.getRequestById(Integer.parseInt(requestId)) == null)
-            throw new Exception("There is not such request!!");
-        else
-            return storage.getRequestById(Integer.parseInt(requestId));
     }
 
     public void removeCategory (String name) throws Exception {
@@ -277,25 +257,13 @@ public class ClientAdminManager extends ClientManager{
         storage.getProductById(productIdForComment).addComment(comment);
     }
 
-    public void getDiscountAwarded() throws Exception {
-        LocalDateTime endDate = LocalDateTime.of(2021, 01, 01, 12, 30);
-        Discount discount = new Discount(("Award" + lastAwardedIndex), LocalDateTime.now(), endDate, 10,
-                3, 100);
-        storage.addDiscount(discount);
-        lastAwardedIndex++;
-        addCustomerToDiscount(person.getUsername(), discount);
+
+
+    public ArrayList<Category> viewAllCategories() {
+        return null;
     }
 
-    public void createRandomDiscounts() throws Exception {
-        long minDay = LocalDate.of(2020, 5, 20).toEpochDay();
-        long maxDay = LocalDate.of(2021, 5, 20).toEpochDay();
-        long randomDay = ThreadLocalRandom.current().nextLong(minDay, maxDay);
-        LocalDate randomDate = LocalDate.ofEpochDay(randomDay);
-        LocalDateTime beginDate = randomDate.atTime(8,00);
-        LocalDateTime endDate = randomDate.atTime(20,00);
-        Discount randomDiscount = new Discount(("Random" + lastRandomIndex),beginDate,endDate,20,
-                2,100);
-        storage.addDiscount(randomDiscount);
-        addCustomerToDiscount(person.getUsername(), randomDiscount);
+    public Category viewCategory(String text) {
+        return null;
     }
 }

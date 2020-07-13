@@ -1,5 +1,6 @@
 package graphics;
 
+import Client.ClientAdminManager;
 import controller.AdminManager;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,7 +14,7 @@ import java.util.ResourceBundle;
 
 public class AddDiscountPage extends Menu implements Initializable {
 
-    AdminManager adminManager = new AdminManager();
+    ClientAdminManager adminManager = new ClientAdminManager();
 
     @FXML private TextField code = new TextField();
     @FXML private TextField percentage = new TextField();

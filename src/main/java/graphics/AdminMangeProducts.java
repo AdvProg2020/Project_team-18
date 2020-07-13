@@ -1,5 +1,6 @@
 package graphics;
 
+import Client.ClientAdminManager;
 import Client.ClientProductManager;
 import controller.AdminManager;
 import controller.ProductManager;
@@ -25,7 +26,7 @@ import java.util.ResourceBundle;
 public class AdminMangeProducts extends Menu implements Initializable {
 
     ClientProductManager productManager = new ClientProductManager();
-    AdminManager adminManager = new AdminManager();
+    ClientAdminManager adminManager = new ClientAdminManager();
 
     @FXML
     TableView productTable = new TableView();
