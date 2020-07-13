@@ -58,14 +58,20 @@ public class ClientCustomerManager extends ClientManager {
         ArrayList<Object> params = new ArrayList<>();
         params.add(productId);
         ClientMessage clientMessage = new ClientMessage(MessageType.INCREASE_PRODUCT, params);
-        clientMessage.sendAndReceive();
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage != null && serverMessage.getMessageType()==MessageType.ERROR){
+            throw  (Exception)serverMessage.getResult();
+        }
     }
 
     public void decreaseProduct(String productId) throws Exception {
         ArrayList<Object> params = new ArrayList<>();
         params.add(productId);
         ClientMessage clientMessage = new ClientMessage(MessageType.DECREASE_PRODUCT, params);
-        clientMessage.sendAndReceive();
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage != null && serverMessage.getMessageType()==MessageType.ERROR){
+            throw  (Exception)serverMessage.getResult();
+        }
     }
 
     public double getCartTotalPrice() {
@@ -88,7 +94,10 @@ public class ClientCustomerManager extends ClientManager {
         params.add(rate);
         params.add(username);
         ClientMessage clientMessage = new ClientMessage(MessageType.ADD_RATE, params);
-        clientMessage.sendAndReceive();
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage != null && serverMessage.getMessageType()==MessageType.ERROR){
+            throw  (Exception)serverMessage.getResult();
+        }
     }
 
     public ArrayList<BuyLog> getCustomerBuyLogs(String username) {
