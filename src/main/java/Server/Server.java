@@ -100,10 +100,10 @@ public class Server {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case SELLER_ADD_BALANCE:
-                    username = (String) clientMessage.getParameters().get(1);
                     double amount = (double) clientMessage.getParameters().get(0);
                     try {
-                        sellerManager.addBalance(amount, username);
+                        sellerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(1)));
+                        sellerManager.addBalance(amount);
                         return new ServerMessage(MessageType.SELLER_ADD_BALANCE, true);
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);

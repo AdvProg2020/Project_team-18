@@ -194,7 +194,7 @@ public class SellerMenu extends Menu implements Initializable {
         if (result.isPresent() && result.get() == ButtonType.OK) {
             updatedVersion = textField.getText();
             try {
-                sellerManager.addBalance(Double.parseDouble(updatedVersion));
+                sellerManager.addBalance(Double.parseDouble(updatedVersion),person.getUsername());
                 viewPersonalInfo();
             } catch (Exception e) {
                 showError(e.getMessage(), 100);
@@ -585,11 +585,4 @@ public class SellerMenu extends Menu implements Initializable {
         sellerRequestMenu.run();
     }
 
-//    public void showMessage() {
-//        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//        alert.setTitle("Request Message");
-//        alert.setContentText("Your Request has been Successfully sent to admin(s)!");
-//        alert.setHeaderText(null);
-//        alert.show();
-//    }
 }

@@ -171,8 +171,8 @@ public class SellerManager extends Manager {
         return ((Seller) storage.getUserByUsername(username)).getSellHistory();
     }
 
-    public void addBalance(double amount , String username) {
-        storage.getUserByUsername(username).setBalance(person.getBalance() + amount);
+    public void addBalance(double amount) {
+        person.setBalance(person.getBalance() + amount);
     }
 
     public boolean doesSellerHasThisSellLog(int sellLogCode , String username) {

@@ -134,10 +134,10 @@ public class ClientSellerManager extends ClientManager {
         return (ArrayList) serverMessage.getResult();
     }
 
-    public void addBalance(double amount) throws Exception{
+    public void addBalance(double amount ,String username) throws Exception{
         ArrayList <Object> params = new ArrayList<>();
         params.add(amount);
-        params.add(person.getUsername());
+        params.add(username);
         ClientMessage clientMessage = new ClientMessage(MessageType.SELLER_ADD_BALANCE,params);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
         if (serverMessage.getMessageType()==MessageType.ERROR){
