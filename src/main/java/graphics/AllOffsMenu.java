@@ -1,4 +1,5 @@
 package graphics;
+import Client.ClientProductManager;
 import controller.ProductManager;
 import controller.SearchingManager;
 import javafx.collections.FXCollections;
@@ -21,7 +22,7 @@ import java.util.ResourceBundle;
 
 public class AllOffsMenu extends Menu implements Initializable {
 
-    private ProductManager productManager = new ProductManager();
+    private ClientProductManager productManager = new ClientProductManager();
     private SearchingManager searchingManager = new SearchingManager();
 
     @FXML TableView<Product> productTable = new TableView<>();

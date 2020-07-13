@@ -1,5 +1,8 @@
 package Client;
 
+import Server.ClientMessage;
+import Server.MessageType;
+import model.Category;
 import model.Comment;
 import model.Product;
 import model.Request;
@@ -13,17 +16,14 @@ public class ClientProductManager extends ClientManager{
         return storage.getProductById(productId).getComments();
     }
 
-    public void addComment(int productId, String title, String content) {
-        HashMap<String,String> information = new HashMap<>();
-        information.put("productId",Integer.toString(productId));
-        information.put("title",title);
-        information.put("content",content);
-        String name;
-        if (person == null){
-            name = "anonymous";
-        }else name=person.getUsername();
-        information.put("username",name);
-        storage.addRequest(new Request("add comment",information));
+    public void addComment(int productId, String title, String content, String username) {
+        ArrayList <Object> params = new ArrayList<>();
+        params.add(productId);
+        params.add(title);
+        params.add(content);
+        params.add(username);
+        ClientMessage clientMessage = new ClientMessage(MessageType.ADD_COMMENT,params);
+        clientMessage.sendAndReceive();
     }
 
     public String compareTwoProducts(int firstProduct, int secondProduct) throws Exception {
@@ -53,7 +53,8 @@ public class ClientProductManager extends ClientManager{
     }
 
     public ArrayList<Product> viewAllProducts() {
-        return storage.getAllProducts();
+        ClientMessage clientMessage = new ClientMessage(MessageType.GET_ALL_PRODUCTS, null);
+        return (ArrayList<Product>) clientMessage.sendAndReceive().getResult();
     }
 
     public HashMap<String, String> viewAttributes(String categoryName) {
@@ -61,17 +62,17 @@ public class ClientProductManager extends ClientManager{
     }
 
     public ArrayList<Product> viewAllProductsWithSale() {
-        ArrayList<Product> finalProducts = new ArrayList<>();
-        for (Product product : storage.getAllProducts()) {
-            if (product.getSale() != null) {
-                finalProducts.add(product);
-            }
-        }
-        return finalProducts;
+       ClientMessage clientMessage = new ClientMessage(MessageType.GET_ALL_PRODUCTS_IN_SALE, null);
+       return (ArrayList<Product>) clientMessage.sendAndReceive().getResult();
     }
 
     public void addNumberOfSeen(int productId){
         Product seenProduct = storage.getProductById(productId);
         seenProduct.setNumberOfSeen(seenProduct.getNumberOfSeen() + 1);
+    }
+
+    public ArrayList<Category> viewAllCategories(){
+        ClientMessage clientMessage = new ClientMessage(MessageType.VIEW_ALL_CATEGORIES, null);
+        return (ArrayList<Category>) clientMessage.sendAndReceive().getResult();
     }
 }

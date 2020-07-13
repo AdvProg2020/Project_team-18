@@ -55,9 +55,6 @@ public class ClientManager {
 
     }
 
-
-
-
     public Product getProductById(int productId) throws Exception {
         return null;
     }

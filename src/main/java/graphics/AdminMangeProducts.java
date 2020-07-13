@@ -1,5 +1,6 @@
 package graphics;
 
+import Client.ClientProductManager;
 import controller.AdminManager;
 import controller.ProductManager;
 import javafx.beans.property.SimpleStringProperty;
@@ -23,7 +24,7 @@ import java.util.ResourceBundle;
 
 public class AdminMangeProducts extends Menu implements Initializable {
 
-    ProductManager productManager = new ProductManager();
+    ClientProductManager productManager = new ClientProductManager();
     AdminManager adminManager = new AdminManager();
 
     @FXML

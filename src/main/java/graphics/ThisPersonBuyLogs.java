@@ -56,7 +56,6 @@ public class ThisPersonBuyLogs extends Menu implements Initializable {
         return ((Customer) person).getBuyHistory();
     }
 
-
     public void showBuyLog() throws IOException {
         if (logCode.getText().equals("")) {
             showError("Please Enter a code!");

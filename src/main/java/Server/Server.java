@@ -58,6 +58,7 @@ public class Server {
         CustomerManager customerManager = new CustomerManager();
         PurchasingManager purchasingManager = new PurchasingManager();
         SearchingManager searchingManager = new SearchingManager();
+        ProductManager productManager = new ProductManager();
         Storage storage = new Storage();
 
         public ClientHandler(OutputStream objectOutputStream, InputStream objectInputStream, ServerImpl server) {
@@ -218,6 +219,7 @@ public class Server {
                     }
                     break;
                 case GET_CART:
+                    customerManager.setCart((Cart) clientMessage.getParameters().get(0));
                     HashMap<Product, Integer> products = customerManager.getProductsInCart();
                     return new ServerMessage(MessageType.GET_CART, products);
                 case GET_CART_PRICE:
@@ -353,6 +355,13 @@ public class Server {
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
+                case ADD_COMMENT:
+                    productManager.addComment((Integer) clientMessage.getParameters().get(0), (String) clientMessage.getParameters().get(1),
+                            (String) clientMessage.getParameters().get(2), (String) clientMessage.getParameters().get(3));
+                case GET_ALL_PRODUCTS:
+                    return new ServerMessage(MessageType.GET_ALL_PRODUCTS, productManager.viewAllProducts());
+                case GET_ALL_PRODUCTS_IN_SALE:
+                    return new ServerMessage(MessageType.GET_ALL_PRODUCTS_IN_SALE, productManager.viewAllProductsWithSale());
             }
             return null;
         }

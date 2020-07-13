@@ -1,6 +1,7 @@
 package graphics;
 
 import Client.ClientCustomerManager;
+import Client.ClientProductManager;
 import controller.*;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -33,7 +34,7 @@ public class ProductMenu extends Menu implements Initializable {
 
     private Product product;
     private ClientCustomerManager customerManager = new ClientCustomerManager();
-    private ProductManager productManager = new ProductManager();
+    private ClientProductManager productManager = new ClientProductManager();
     final DoubleProperty zoomProperty = new SimpleDoubleProperty(200);
 
     @FXML
@@ -157,9 +158,13 @@ public class ProductMenu extends Menu implements Initializable {
         dialog.getDialogPane().setContent(content);
         dialog.showAndWait();
         try {
-            String title = titleField.getText().substring(titleField.getText().indexOf(":")+1);
-            String body = commentField.getText().substring(titleField.getText().indexOf(":")+1);
-            productManager.addComment(product.getProductId(),title,body);
+            String title = titleField.getText().substring(titleField.getText().indexOf(":") + 1);
+            String body = commentField.getText().substring(titleField.getText().indexOf(":") + 1);
+            if (person != null){
+                productManager.addComment(product.getProductId(), title, body, person.getUsername());
+        } else {
+                productManager.addComment(product.getProductId(), title, body, "anonymous");
+            }
         } catch (Exception e) {
             showError(e.getMessage(), 200);
         }

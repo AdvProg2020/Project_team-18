@@ -11,10 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import model.Admin;
-import model.Customer;
-import model.Product;
-import model.Seller;
+import model.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,11 +19,10 @@ import java.util.ResourceBundle;
 
 public class CartMenu extends Menu implements Initializable {
     private ClientCustomerManager customerManager = new ClientCustomerManager();
-    //private CustomerManager customerManager = new CustomerManager();
     @FXML
     TextField productTextField;
     @FXML TableView<Product> tableView = new TableView<>(FXCollections.observableList(FXCollections.observableArrayList(
-            customerManager.getProductsInCart().keySet()
+            customerManager.getProductsInCart(Cart.getCart()).keySet()
     )));
     @FXML TableColumn<Product, Double> priceColumn = new TableColumn<>();
     @FXML TableColumn<Product, Number> totalPriceColumn = new TableColumn<>();
@@ -66,7 +62,7 @@ public class CartMenu extends Menu implements Initializable {
 
     private void updateTable(){
         final ObservableList<Product> data = FXCollections.observableArrayList(
-                customerManager.getProductsInCart().keySet()
+                customerManager.getProductsInCart(Cart.getCart()).keySet()
         );
         idColumn.setCellValueFactory(new PropertyValueFactory<>("productId"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
@@ -96,7 +92,7 @@ public class CartMenu extends Menu implements Initializable {
                     () -> {
                         try {
                             double price = product.getPrice();
-                            int quantity = customerManager.getProductsInCart().get(product);
+                            int quantity = customerManager.getProductsInCart(Cart.getCart()).get(product);
                             return price * quantity ;
                         } catch (NumberFormatException nfe) {
                             return Double.valueOf(0);
@@ -113,7 +109,7 @@ public class CartMenu extends Menu implements Initializable {
     @FXML
     private void purchase() throws IOException {
         if (person instanceof Customer){
-            if (customerManager.getProductsInCart().isEmpty()){
+            if (customerManager.getProductsInCart(Cart.getCart()).isEmpty()){
                 showError("Your cart is empty. Nothing to purchase!", 100);
                 return;
             }

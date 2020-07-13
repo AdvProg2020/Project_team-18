@@ -13,16 +13,12 @@ public class ProductManager extends Manager {
         return storage.getProductById(productId).getComments();
     }
 
-    public void addComment(int productId, String title, String content) {
+    public void addComment(int productId, String title, String content, String username) {
         HashMap<String,String> information = new HashMap<>();
         information.put("productId",Integer.toString(productId));
         information.put("title",title);
         information.put("content",content);
-        String name;
-        if (person == null){
-            name = "anonymous";
-        }else name=person.getUsername();
-        information.put("username",name);
+        information.put("username",username);
         storage.addRequest(new Request("add comment",information));
     }
 

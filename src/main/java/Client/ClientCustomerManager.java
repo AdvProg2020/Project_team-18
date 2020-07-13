@@ -10,7 +10,7 @@ import model.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ClientCustomerManager extends ClientManager{
+public class ClientCustomerManager extends ClientManager {
 
     private AdminManager adminManager = new AdminManager();
 
@@ -24,8 +24,9 @@ public class ClientCustomerManager extends ClientManager{
         return super.cart;
     }
 
-    public HashMap<Product, Integer> getProductsInCart() {
+    public HashMap<Product, Integer> getProductsInCart(Cart cart) {
         ArrayList<Object> params = new ArrayList<>();
+        params.add(cart);
         ClientMessage clientMessage = new ClientMessage(MessageType.GET_CART, params);
         return (HashMap<Product, Integer>) clientMessage.sendAndReceive().getResult();
     }
@@ -49,8 +50,8 @@ public class ClientCustomerManager extends ClientManager{
         params.add(username);
         ClientMessage clientMessage = new ClientMessage(MessageType.ADD_BALANCE, params);
         clientMessage.sendAndReceive();
-            //return (boolean)clientMessage.sendAndReceive().getResult();
-       // person.setBalance(person.getBalance() + money);
+        //return (boolean)clientMessage.sendAndReceive().getResult();
+        // person.setBalance(person.getBalance() + money);
     }
 
     public void increaseProduct(String productId) throws Exception {
@@ -97,7 +98,7 @@ public class ClientCustomerManager extends ClientManager{
         return (ArrayList<BuyLog>) clientMessage.sendAndReceive().getResult();
     }
 
-    public boolean doesCustomerHasThisBuyLog(String username,int logCode) {
+    public boolean doesCustomerHasThisBuyLog(String username, int logCode) {
         ArrayList<Object> params = new ArrayList<>();
         params.add(logCode);
         params.add(username);

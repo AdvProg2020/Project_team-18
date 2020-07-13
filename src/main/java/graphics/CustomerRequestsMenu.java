@@ -1,5 +1,6 @@
 package graphics;
 
+import Client.ClientProductManager;
 import controller.AdminManager;
 import controller.ProductManager;
 import javafx.collections.FXCollections;
@@ -20,7 +21,7 @@ import java.util.ResourceBundle;
 
 public class CustomerRequestsMenu extends Menu implements Initializable {
     private AdminManager adminManager = new AdminManager();
-    ProductManager productManager = new ProductManager();
+    ClientProductManager productManager = new ClientProductManager();
 
 
     @FXML
@@ -58,7 +59,7 @@ public class CustomerRequestsMenu extends Menu implements Initializable {
         try {
             String title = titleField.getText();
             String body = commentField.getText();
-            productManager.addComment(Integer.parseInt(productIdField.getText()), title, body);
+            productManager.addComment(Integer.parseInt(productIdField.getText()), title, body, person.getUsername());
             ArrayList<Request> customerReq = new ArrayList<>();
             for (Request request : adminManager.viewAllRequests()) {
                 if (request.getTypeOfRequest() == RequestType.ADD_COMMENT) {

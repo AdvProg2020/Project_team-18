@@ -92,7 +92,7 @@ public class CustomerManager extends Manager {
         return ((Customer) storage.getUserByUsername(username)).getBuyHistory();
     }
 
-    public boolean doesCustomerHasThisBuyLog(String username,int logCode) {
+    public boolean doesCustomerHasThisBuyLog(String username, int logCode) {
         for (BuyLog buyLog : ((Customer) storage.getUserByUsername(username)).getBuyHistory()) {
             if (logCode == buyLog.getBuyCode()) {
                 return true;
