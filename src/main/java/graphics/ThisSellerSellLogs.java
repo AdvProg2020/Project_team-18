@@ -1,5 +1,6 @@
 package graphics;
 
+import Client.ClientSellerManager;
 import controller.SellerManager;
 import controller.Storage;
 import javafx.collections.FXCollections;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class ThisSellerSellLogs extends Menu implements Initializable {
-    SellerManager sellerManager = new SellerManager();
+    ClientSellerManager sellerManager = new ClientSellerManager();
     Storage storage = new Storage();
     @FXML
     TableView<SellLog> tableView = new TableView<>();
@@ -55,16 +56,20 @@ public class ThisSellerSellLogs extends Menu implements Initializable {
     }
 
     public void showBuyLog() throws IOException {
-        if (logCode.getText().equals("")) {
-            showError("Please Enter a code!");
-        } else if(!logCode.getText().matches("\\d+")){
-            showError("Buy log code is an integer!");
-        } else if (sellerManager.getSellerSellHistory().isEmpty()) {
-            showError("You have not sold anything!");
-        } else if (!sellerManager.doesSellerHasThisSellLog(Integer.parseInt(logCode.getText()))) {
-            showError("Oops!You don't have this sell log!");
-        } else {
-            showWantedSellLog(logCode.getText());
+        try {
+            if (logCode.getText().equals("")) {
+                showError("Please Enter a code!");
+            } else if (!logCode.getText().matches("\\d+")) {
+                showError("Buy log code is an integer!");
+            } else if (sellerManager.getSellerSellHistory().isEmpty()) {
+                showError("You have not sold anything!");
+            } else if (!sellerManager.doesSellerHasThisSellLog(Integer.parseInt(logCode.getText()))) {
+                showError("Oops!You don't have this sell log!");
+            } else {
+                showWantedSellLog(logCode.getText());
+            }
+        } catch (Exception e){
+            showError(e.getMessage() , 20);
         }
     }
 

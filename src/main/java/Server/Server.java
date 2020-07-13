@@ -5,6 +5,7 @@ import com.sun.org.apache.bcel.internal.generic.CASTORE;
 import controller.CustomerManager;
 import controller.FileSaver;
 import controller.Manager;
+import controller.SellerManager;
 import controller.Storage;
 import javafx.scene.media.MediaPlayer;
 import model.Customer;
@@ -15,6 +16,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Formatter;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Server {
@@ -58,6 +60,7 @@ public class Server {
         private YaGson yaGson = new YaGson();
         ServerImpl server;
         Manager manager = new Manager();
+        SellerManager sellerManager = new SellerManager();
         CustomerManager customerManager = new CustomerManager();
         Storage storage = new Storage();
 
@@ -94,6 +97,106 @@ public class Server {
                         return new ServerMessage(MessageType.LOGIN, manager.login(username, password));
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case SELLER_ADD_BALANCE:
+                    username = (String) clientMessage.getParameters().get(1);
+                    double amount = (double) clientMessage.getParameters().get(0);
+                    try {
+                        sellerManager.addBalance(amount,username);
+                        return new ServerMessage(MessageType.SELLER_ADD_BALANCE,true);
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR,e);
+                    }
+                case DOES_SELLER_HAVE_LOG:
+                    username = (String) clientMessage.getParameters().get(1);
+                    int sellLogCode = (int) clientMessage.getParameters().get(0);
+                    try {
+                        return new ServerMessage(MessageType.DOES_SELLER_HAVE_LOG,sellerManager.doesSellerHasThisSellLog(sellLogCode,username));
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR,e);
+                    }
+                case SELLER_SELL_HISTORY:
+                    username = (String) clientMessage.getParameters().get(0);
+                    try {
+                        return new ServerMessage(MessageType.SELLER_SELL_HISTORY,sellerManager.getSellerSellHistory(username));
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR,e);
+                    }
+                case REMOVE_PRODUCT_FROM_OFF:
+                    username = (String) clientMessage.getParameters().get(0);
+                    int offId = (int) clientMessage.getParameters().get(1);
+                    int productId = (int) clientMessage.getParameters().get(2);
+                    try {
+                        sellerManager.removeProductFromOff(offId,productId,username);
+                        return new ServerMessage(MessageType.REMOVE_PRODUCT_FROM_OFF,null);
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR,e);
+                    }
+                case ADD_PRODUCT_TO_OFF:
+                    username = (String) clientMessage.getParameters().get(0);
+                     offId = (int) clientMessage.getParameters().get(1);
+                     productId = (int) clientMessage.getParameters().get(2);
+                    try {
+                        sellerManager.addProductToOff(offId,productId,username);
+                        return new ServerMessage(MessageType.ADD_PRODUCT_TO_OFF,null);
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR,e);
+                    }
+                case DOES_SELLER_HAVE_OFF:
+                    username = (String) clientMessage.getParameters().get(1);
+                    offId = (int) clientMessage.getParameters().get(0);
+                    try {
+                        return new ServerMessage(MessageType.DOES_SELLER_HAVE_OFF,sellerManager.doesSellerHaveThisOff(offId,username));
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR,e);
+                    }
+                case DOES_SELLER_HAVE_PRODUCT:
+                    username = (String) clientMessage.getParameters().get(1);
+                    productId = (int) clientMessage.getParameters().get(0);
+                    try {
+                        return new ServerMessage(MessageType.DOES_SELLER_HAVE_PRODUCT,sellerManager.doesSellerHaveProduct(productId,username));
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR,e);
+                    }
+                case EDIT_OFF:
+                    username = (String) clientMessage.getParameters().get(0);
+                    offId = (int) clientMessage.getParameters().get(1);
+                    String field = (String) clientMessage.getParameters().get(2);
+                    String updatedVersion = (String) clientMessage.getParameters().get(3);
+                    try {
+                        sellerManager.editOff(offId,field,updatedVersion,username);
+                        return new ServerMessage(MessageType.EDIT_OFF,null);
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR,e);
+                    }
+                case EDIT_PRODUCT:
+                    username = (String) clientMessage.getParameters().get(0);
+                    productId = (int) clientMessage.getParameters().get(1);
+                     field = (String) clientMessage.getParameters().get(2);
+                     updatedVersion = (String) clientMessage.getParameters().get(3);
+                    try {
+                        sellerManager.editProduct(productId,field,updatedVersion,username);
+                        return new ServerMessage(MessageType.EDIT_PRODUCT,null);
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR,e);
+                    }
+                case ADD_PRODUCT:
+                    username = (String) clientMessage.getParameters().get(0);
+                    HashMap<String,String> information = (HashMap<String, String>) clientMessage.getParameters().get(1);
+                    try {
+                        sellerManager.addProduct(information,username);
+                        return new ServerMessage(MessageType.ADD_PRODUCT,null);
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR,e);
+                    }
+                case REMOVE_PRODUCT_SELLER:
+                    username = (String) clientMessage.getParameters().get(0);
+                    productId = (int) clientMessage.getParameters().get(1);
+                    try {
+                        sellerManager.removeProduct(productId,username);
+                        return new ServerMessage(MessageType.REMOVE_PRODUCT_SELLER,null);
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR,e);
                     }
                 case ADD_BALANCE:
                     Double money = (Double) clientMessage.getParameters().get(0);
