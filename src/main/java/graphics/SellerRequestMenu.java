@@ -79,7 +79,7 @@ public class SellerRequestMenu extends Menu implements Initializable {
                     showError("There's not such product!", 100);
                 } else {
                     try {
-                        if (!sellerManager.doesSellerHaveProduct(Integer.parseInt(productId.getText()))) {
+                        if (!sellerManager.doesSellerHaveProduct(Integer.parseInt(productId.getText()),person.getUsername())) {
                             showError("Oops!You don't have off with this Id!", 100);
                         } else {
                             editProductProcess(Integer.parseInt(productId.getText()));
@@ -140,7 +140,7 @@ public class SellerRequestMenu extends Menu implements Initializable {
             String selectedCategory = content.getValue();
             if (!categoryNames.isEmpty()) {
                 try {
-                    sellerManager.editProduct(productId, "category", selectedCategory);
+                    sellerManager.editProduct(productId, "category", selectedCategory,person.getUsername());
                     ArrayList<Request> sellerReq = new ArrayList<>();
                     for (Request request : adminManager.viewAllRequests()) {
                         if (!(request.getTypeOfRequest() == RequestType.ADD_COMMENT)) {
@@ -179,7 +179,7 @@ public class SellerRequestMenu extends Menu implements Initializable {
                     showError("Invalid price!", 100);
                 } else {
                     try {
-                        sellerManager.editProduct(productId, field, updatedVersion);
+                        sellerManager.editProduct(productId, field, updatedVersion , person.getUsername());
                         ArrayList<Request> sellerReq = new ArrayList<>();
                         for (Request request : adminManager.viewAllRequests()) {
                             if (!(request.getTypeOfRequest() == RequestType.ADD_COMMENT)) {
@@ -197,7 +197,7 @@ public class SellerRequestMenu extends Menu implements Initializable {
                 }
             } else {
                 try {
-                    sellerManager.editProduct(productId, field, updatedVersion);
+                    sellerManager.editProduct(productId, field, updatedVersion , person.getUsername());
                     ArrayList<Request> sellerReq = new ArrayList<>();
                     for (Request request : adminManager.viewAllRequests()) {
                         if (!(request.getTypeOfRequest() == RequestType.ADD_COMMENT)) {
@@ -237,11 +237,11 @@ public class SellerRequestMenu extends Menu implements Initializable {
                     showError("There's not such product!", 100);
                 } else {
                     try {
-                        if (!sellerManager.doesSellerHaveProduct(Integer.parseInt(productId.getText()))) {
+                        if (!sellerManager.doesSellerHaveProduct(Integer.parseInt(productId.getText()),person.getUsername())) {
                             showError("Oops!You don't have product with this Id!", 100);
                         } else {
                             try {
-                                sellerManager.removeProduct(Integer.parseInt(productId.getText()));
+                                sellerManager.removeProduct(Integer.parseInt(productId.getText()),person.getUsername());
                                 showMessage();
                             } catch (Exception e) {
                                 showError("Oops!Something went wrong!", 100);
@@ -279,7 +279,7 @@ public class SellerRequestMenu extends Menu implements Initializable {
                 showError("Off Id is an integer!", 100);
             } else {
                 try {
-                    if (sellerManager.doesSellerHaveThisOff(Integer.parseInt(offId.getText()))) {
+                    if (sellerManager.doesSellerHaveThisOff(Integer.parseInt(offId.getText()),person.getUsername())) {
                         editOffProcess(Integer.parseInt(offId.getText()));
                     } else {
                         showError("Oops!You don't have off with this Id!", 100);
@@ -340,7 +340,7 @@ public class SellerRequestMenu extends Menu implements Initializable {
                 showError("Invalid Format of date!", 100);
             } else {
                 try {
-                    sellerManager.editOff(offId, "beginDate", updatedVersion);
+                    sellerManager.editOff(offId, "beginDate", updatedVersion,person.getUsername());
                     ArrayList<Request> sellerReq = new ArrayList<>();
                     for (Request request : adminManager.viewAllRequests()) {
                         if (!(request.getTypeOfRequest() == RequestType.ADD_COMMENT)) {
@@ -377,7 +377,7 @@ public class SellerRequestMenu extends Menu implements Initializable {
                 showError("Invalid Format of date!", 100);
             } else {
                 try {
-                    sellerManager.editOff(offId, "endDate", updatedVersion);
+                    sellerManager.editOff(offId, "endDate", updatedVersion,person.getUsername());
                     ArrayList<Request> sellerReq = new ArrayList<>();
                     for (Request request : adminManager.viewAllRequests()) {
                         if (!(request.getTypeOfRequest() == RequestType.ADD_COMMENT)) {
@@ -414,7 +414,7 @@ public class SellerRequestMenu extends Menu implements Initializable {
                 showError("Invalid amount!", 100);
             } else {
                 try {
-                    sellerManager.editOff(offId, "amountOfSale", updatedVersion);
+                    sellerManager.editOff(offId, "amountOfSale", updatedVersion,person.getUsername());
                     ArrayList<Request> sellerReq = new ArrayList<>();
                     for (Request request : adminManager.viewAllRequests()) {
                         if (!(request.getTypeOfRequest() == RequestType.ADD_COMMENT)) {
@@ -448,7 +448,7 @@ public class SellerRequestMenu extends Menu implements Initializable {
         if (result.isPresent() && result.get() == ButtonType.OK) {
             updatedVersion = textField.getText();
             try {
-                sellerManager.addProductToOff(offId, Integer.parseInt(updatedVersion));
+                sellerManager.addProductToOff(offId, Integer.parseInt(updatedVersion),person.getUsername());
                 ArrayList<Request> sellerReq = new ArrayList<>();
                 for (Request request : adminManager.viewAllRequests()) {
                     if (!(request.getTypeOfRequest() == RequestType.ADD_COMMENT)) {
@@ -482,7 +482,7 @@ public class SellerRequestMenu extends Menu implements Initializable {
         if (result.isPresent() && result.get() == ButtonType.OK) {
             updatedVersion = textField.getText();
             try {
-                sellerManager.removeProductFromOff(offId, Integer.parseInt(updatedVersion));
+                sellerManager.removeProductFromOff(offId, Integer.parseInt(updatedVersion),person.getUsername());
                 ArrayList<Request> sellerReq = new ArrayList<>();
                 for (Request request : adminManager.viewAllRequests()) {
                     if (!(request.getTypeOfRequest() == RequestType.ADD_COMMENT)) {

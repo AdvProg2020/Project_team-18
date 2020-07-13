@@ -145,9 +145,9 @@ public class SellerProductMenu extends Menu implements Initializable {
             showError("Product Id is an integer!", 100);
         } else {
             try {
-                if (sellerManager.doesSellerHaveProduct(Integer.parseInt(productId.getText()))) {
+                if (sellerManager.doesSellerHaveProduct(Integer.parseInt(productId.getText()),person.getUsername())) {
                     try {
-                        sellerManager.removeProduct(Integer.parseInt(productId.getText()));
+                        sellerManager.removeProduct(Integer.parseInt(productId.getText()),person.getUsername());
                         showMessage();
                     } catch (Exception e) {
                         showError("Oops!Something went wrong!", 100);
@@ -209,7 +209,7 @@ public class SellerProductMenu extends Menu implements Initializable {
             showError("Invalid amount!", 100);
         } else {
             try {
-                sellerManager.editOff(productId, "price", updatedVersion);
+                sellerManager.editOff(productId, "price", updatedVersion,person.getUsername());
             } catch (Exception ex) {
                 showError("Oops!Something went wrong!", 100);
             }
@@ -234,7 +234,7 @@ public class SellerProductMenu extends Menu implements Initializable {
         String selectedCategory = content.getValue();
         if (!categoryNames.isEmpty()) {
             try {
-                sellerManager.editProduct(productId, "category", selectedCategory);
+                sellerManager.editProduct(productId, "category", selectedCategory,person.getUsername());
                 showMessage();
             } catch (Exception e) {
                 showError("Oops!Something went wrong!", 100);
@@ -261,7 +261,7 @@ public class SellerProductMenu extends Menu implements Initializable {
                 showError("Invalid price!", 100);
             } else {
                 try {
-                    sellerManager.editProduct(productId, field, updatedVersion);
+                    sellerManager.editProduct(productId, field, updatedVersion,person.getUsername());
                 } catch (Exception ex) {
                     showError("Oops!Something went wrong!", 100);
                 }
@@ -269,7 +269,7 @@ public class SellerProductMenu extends Menu implements Initializable {
             }
         } else {
             try {
-                sellerManager.editProduct(productId, field, updatedVersion);
+                sellerManager.editProduct(productId, field, updatedVersion, person.getUsername());
             } catch (Exception ex) {
                 showError("Oops!Something went wrong!", 100);
             }

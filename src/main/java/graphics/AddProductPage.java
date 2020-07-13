@@ -70,7 +70,7 @@ public class AddProductPage extends Menu implements Initializable {
             productInformation.put("explanation", productExplanation);
             productInformation.put("categoryName", productCategory);
             try {
-                sellerManager.addProduct(productInformation);
+                sellerManager.addProduct(productInformation,person.getUsername());
             } catch (Exception e) {
                 showError(e.getMessage(),20);
             }

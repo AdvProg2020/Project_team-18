@@ -61,9 +61,9 @@ public class ThisSellerSellLogs extends Menu implements Initializable {
                 showError("Please Enter a code!");
             } else if (!logCode.getText().matches("\\d+")) {
                 showError("Buy log code is an integer!");
-            } else if (sellerManager.getSellerSellHistory().isEmpty()) {
+            } else if (sellerManager.getSellerSellHistory(person.getUsername()).isEmpty()) {
                 showError("You have not sold anything!");
-            } else if (!sellerManager.doesSellerHasThisSellLog(Integer.parseInt(logCode.getText()))) {
+            } else if (!sellerManager.doesSellerHasThisSellLog(Integer.parseInt(logCode.getText()),person.getUsername())) {
                 showError("Oops!You don't have this sell log!");
             } else {
                 showWantedSellLog(logCode.getText());
