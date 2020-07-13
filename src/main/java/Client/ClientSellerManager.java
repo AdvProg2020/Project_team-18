@@ -24,7 +24,7 @@ public class ClientSellerManager extends ClientManager {
         params.add(information);
         ClientMessage clientMessage = new ClientMessage(MessageType.ADD_PRODUCT,params);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
-        if (serverMessage.getMessageType()==MessageType.ERROR){
+        if (serverMessage != null && serverMessage.getMessageType()==MessageType.ERROR){
             throw  (Exception)serverMessage.getResult();
         }
     }
@@ -35,7 +35,7 @@ public class ClientSellerManager extends ClientManager {
         params.add(productId);
         ClientMessage clientMessage = new ClientMessage(MessageType.REMOVE_PRODUCT_SELLER,params);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
-        if (serverMessage.getMessageType()==MessageType.ERROR){
+        if (serverMessage != null && serverMessage.getMessageType()==MessageType.ERROR){
             throw  (Exception)serverMessage.getResult();
         }
     }
@@ -48,18 +48,21 @@ public class ClientSellerManager extends ClientManager {
         params.add(updatedVersion);
         ClientMessage clientMessage = new ClientMessage(MessageType.EDIT_PRODUCT,params);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
-        if (serverMessage.getMessageType()==MessageType.ERROR){
+        if (serverMessage != null && serverMessage.getMessageType()==MessageType.ERROR){
             throw  (Exception)serverMessage.getResult();
         }
     }
 
-    public void addOff(HashMap<String, String> information, ArrayList<Product> productsInOff) {
-        Sale sale = new Sale(null, null, 0, null);
-        int offId = sale.getLastSaleId();
-        savedProductsInSale.put(offId, productsInOff);
-        information.put("seller", person.getUsername());
-        information.put("offId", Integer.toString(offId));
-        storage.addRequest(new Request("add sale", information));
+    public void addOff(HashMap<String, String> information, ArrayList<Product> productsInOff , String username) throws Exception{
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(username);
+        params.add(information);
+        params.add(productsInOff);
+        ClientMessage clientMessage = new ClientMessage(MessageType.ADD_OFF,params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage != null && serverMessage.getMessageType()==MessageType.ERROR){
+            throw  (Exception)serverMessage.getResult();
+        }
     }
 
     public void editOff(int offId, String field, String updatedVersion , String username) throws Exception {
@@ -70,7 +73,7 @@ public class ClientSellerManager extends ClientManager {
         params.add(updatedVersion);
         ClientMessage clientMessage = new ClientMessage(MessageType.EDIT_OFF,params);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
-        if (serverMessage.getMessageType()==MessageType.ERROR){
+        if (serverMessage != null && serverMessage.getMessageType()==MessageType.ERROR){
             throw  (Exception)serverMessage.getResult();
         }
     }
@@ -106,7 +109,7 @@ public class ClientSellerManager extends ClientManager {
         params.add(productId);
         ClientMessage clientMessage = new ClientMessage(MessageType.ADD_PRODUCT_TO_OFF,params);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
-        if (serverMessage.getMessageType()==MessageType.ERROR){
+        if (serverMessage != null && serverMessage.getMessageType()==MessageType.ERROR){
             throw  (Exception)serverMessage.getResult();
         }
     }
@@ -118,7 +121,7 @@ public class ClientSellerManager extends ClientManager {
         params.add(productId);
         ClientMessage clientMessage = new ClientMessage(MessageType.REMOVE_PRODUCT_FROM_OFF,params);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
-        if (serverMessage.getMessageType()==MessageType.ERROR){
+        if (serverMessage != null && serverMessage.getMessageType()==MessageType.ERROR){
             throw  (Exception)serverMessage.getResult();
         }
     }
@@ -140,7 +143,7 @@ public class ClientSellerManager extends ClientManager {
         params.add(username);
         ClientMessage clientMessage = new ClientMessage(MessageType.SELLER_ADD_BALANCE,params);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
-        if (serverMessage.getMessageType()==MessageType.ERROR){
+        if (serverMessage != null && serverMessage.getMessageType()==MessageType.ERROR){
             throw  (Exception)serverMessage.getResult();
         }
     }

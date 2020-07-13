@@ -42,7 +42,11 @@ public class AddOffPage extends Menu {
             productInformation.put("beginDate", beginDate);
             productInformation.put("endDate", endDate);
             productInformation.put("amountOfSale", amountOfOff);
-            sellerManager.addOff(productInformation, productsInSale);
+            try {
+                sellerManager.addOff(productInformation, productsInSale,person.getUsername());
+            } catch (Exception e) {
+                showError(e.getMessage(),20);
+            }
             showMessage();
             back();
         }

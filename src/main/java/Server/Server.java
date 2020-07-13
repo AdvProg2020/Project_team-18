@@ -104,7 +104,6 @@ public class Server {
                     try {
                         sellerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(1)));
                         sellerManager.addBalance(amount);
-                        return new ServerMessage(MessageType.SELLER_ADD_BALANCE, true);
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
@@ -129,7 +128,6 @@ public class Server {
                     try {
                         sellerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(0)));
                         sellerManager.removeProductFromOff(offId, productId);
-                        return new ServerMessage(MessageType.REMOVE_PRODUCT_FROM_OFF, null);
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
@@ -139,7 +137,6 @@ public class Server {
                     try {
                         sellerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(0)));
                         sellerManager.addProductToOff(offId, productId);
-                        return new ServerMessage(MessageType.ADD_PRODUCT_TO_OFF, null);
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
@@ -166,7 +163,15 @@ public class Server {
                     try {
                         sellerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(0)));
                         sellerManager.editOff(offId, field, updatedVersion);
-                        return new ServerMessage(MessageType.EDIT_OFF, null);
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case ADD_OFF:
+                    HashMap<String, String> informationOFF = (HashMap<String, String>) clientMessage.getParameters().get(1);
+                    ArrayList<Product> productsInOff = (ArrayList<Product>) clientMessage.getParameters().get(2);
+                    try {
+                        sellerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(0)));
+                        sellerManager.addOff(informationOFF,productsInOff);
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
@@ -177,7 +182,6 @@ public class Server {
                     try {
                         sellerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(0)));
                         sellerManager.editProduct(productId, field, updatedVersion);
-                        return new ServerMessage(MessageType.EDIT_PRODUCT, null);
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
@@ -186,7 +190,6 @@ public class Server {
                     try {
                         sellerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(0)));
                         sellerManager.addProduct(information);
-                        return new ServerMessage(MessageType.ADD_PRODUCT, null);
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
@@ -195,7 +198,6 @@ public class Server {
                     try {
                         sellerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(0)));
                         sellerManager.removeProduct(productId);
-                        return new ServerMessage(MessageType.REMOVE_PRODUCT_SELLER, null);
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
