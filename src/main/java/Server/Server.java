@@ -391,6 +391,16 @@ public class Server {
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
+                case DOES_ANY_ADMIN_EXIST:
+                    return new ServerMessage(MessageType.DOES_ANY_ADMIN_EXIST,manager.doesAnyAdminExist());
+                case EDIT_FIELD:
+                    field = (String)clientMessage.getParameters().get(0);
+                    updatedVersion = (String)clientMessage.getParameters().get(1);
+                    try {
+                        manager.editField(field,updatedVersion);
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
             }
             return null;
         }
