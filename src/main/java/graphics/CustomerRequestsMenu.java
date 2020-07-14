@@ -1,5 +1,6 @@
 package graphics;
 
+import Client.ClientAdminManager;
 import Client.ClientProductManager;
 import controller.AdminManager;
 import controller.ProductManager;
@@ -20,8 +21,8 @@ import java.util.ResourceBundle;
 
 
 public class CustomerRequestsMenu extends Menu implements Initializable {
-    private AdminManager adminManager = new AdminManager();
-    ClientProductManager productManager = new ClientProductManager();
+    private ClientAdminManager adminManager = new ClientAdminManager();
+    private ClientProductManager productManager = new ClientProductManager();
 
 
     @FXML

@@ -20,7 +20,7 @@ import java.util.ResourceBundle;
 
 public class ThisPersonBuyLogs extends Menu implements Initializable {
     ClientCustomerManager customerManager = new ClientCustomerManager();
-    Storage storage = new Storage();
+    //Storage storage = new Storage();
     @FXML
     TableView<BuyLog> tableView = new TableView<>();
     @FXML
@@ -71,7 +71,12 @@ public class ThisPersonBuyLogs extends Menu implements Initializable {
     }
 
     private void showWantedBuyLog(String code) throws IOException {
-        BuyLog thisBuyLog = storage.getBuyLogByCode(code);
+        BuyLog thisBuyLog = null;
+        try {
+            thisBuyLog = customerManager.getBuyLogByCode(code);
+        } catch (Exception e) {
+            showError(e.getMessage() , 20);
+        }
         PerBuyLog buyLog = new PerBuyLog(thisBuyLog, this);
         buyLog.run();
     }

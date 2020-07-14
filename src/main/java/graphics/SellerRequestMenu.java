@@ -1,5 +1,6 @@
 package graphics;
 
+import Client.ClientAdminManager;
 import Client.ClientSellerManager;
 import Server.ClientMessage;
 import controller.AdminManager;
@@ -25,9 +26,9 @@ import java.util.ResourceBundle;
 
 public class SellerRequestMenu extends Menu implements Initializable {
 
-    AdminManager adminManager = new AdminManager();
+    ClientAdminManager adminManager = new ClientAdminManager();
     ClientSellerManager sellerManager = new ClientSellerManager();
-    private Storage storage = new Storage();
+    //private Storage storage = new Storage();
 
     @FXML
     TableView<Request> requestsTable = new TableView<>();
@@ -59,7 +60,7 @@ public class SellerRequestMenu extends Menu implements Initializable {
     }
 
     @FXML
-    private void editProduct() {
+    private void editProduct() throws Exception {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Edit Product");
         dialog.setHeaderText(null);
@@ -75,7 +76,7 @@ public class SellerRequestMenu extends Menu implements Initializable {
             if (!productId.getText().matches("\\d+")) {
                 showError("Off Id is an integer!", 100);
             } else {
-                if (storage.getProductById(Integer.parseInt(productId.getText())) == null) {
+                if (sellerManager.getProductById(Integer.parseInt(productId.getText())) == null) {
                     showError("There's not such product!", 100);
                 } else {
                     try {
@@ -217,7 +218,7 @@ public class SellerRequestMenu extends Menu implements Initializable {
     }
 
     @FXML
-    private void removeProduct() {
+    private void removeProduct() throws Exception {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Remove Product");
         dialog.setHeaderText(null);
@@ -233,7 +234,7 @@ public class SellerRequestMenu extends Menu implements Initializable {
             if (!productId.getText().matches("\\d+")) {
                 showError("Product Id is an integer!", 100);
             } else {
-                if (storage.getProductById(Integer.parseInt(productId.getText())) == null) {
+                if (sellerManager.getProductById(Integer.parseInt(productId.getText())) == null) {
                     showError("There's not such product!", 100);
                 } else {
                     try {
@@ -511,10 +512,14 @@ public class SellerRequestMenu extends Menu implements Initializable {
 
     private ArrayList<String> getCategoryNames() {
         ArrayList<String> categoryName = new ArrayList<>();
-        if (!storage.getAllCategories().isEmpty()) {
-            for (Category category : storage.getAllCategories()) {
-                categoryName.add(category.getCategoryName());
+        try {
+            if (!sellerManager.viewAllCategories().isEmpty()) {
+                for (Category category : sellerManager.viewAllCategories()) {
+                    categoryName.add(category.getCategoryName());
+                }
             }
+        } catch (Exception e){
+            showError(e.getMessage() , 20);
         }
         return categoryName;
     }
