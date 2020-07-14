@@ -221,7 +221,7 @@ public class Server {
                 case INCREASE_PRODUCT:
                     try {
                         System.out.println("I'm here!");
-                        manager.setCart((Cart) clientMessage.getParameters().get(0));
+                        customerManager.setCart((Cart) clientMessage.getParameters().get(0));
                         customerManager.increaseProduct((String) clientMessage.getParameters().get(1));
                         System.out.println("done!");
                     } catch (Exception e) {
