@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 import controller.FileSaver;
 import controller.Storage;
@@ -42,6 +43,7 @@ public class ClientView extends Application {
             socket = new Socket("localhost",9090);
             inputStream = socket.getInputStream();
             outputStream = socket.getOutputStream();
+            ClientMessage.scanner = new Scanner(inputStream);
         } catch (IOException e) {
             e.printStackTrace();
         }

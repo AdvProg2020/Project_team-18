@@ -35,8 +35,6 @@ public class Server {
                         new ClientHandler(outputStream, inputStream, this).start();
                     } catch (Exception e) {
                         System.err.println("Error in accepting client!");
-                      /*  FileSaver fileSaver = new FileSaver(Storage.getStorage());
-                        fileSaver.dataSaver();*/
                         break;
                     }
                 }
@@ -387,6 +385,12 @@ public class Server {
                         return new ServerMessage(MessageType.GET_SELL_LOG_BY_CODE, storage.getSellLogByCode((String)clientMessage.getParameters().get(0)));
                 case GET_BUY_LOG_BY_CODE:
                     return new ServerMessage(MessageType.GET_BUY_LOG_BY_CODE, storage.getBuyLogByCode((String)clientMessage.getParameters().get(0)));
+                case REGISTER:
+                    try {
+                        manager.register((HashMap<String, String>)clientMessage.getParameters().get(0));
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
             }
             return null;
         }
