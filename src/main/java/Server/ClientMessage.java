@@ -12,6 +12,7 @@ public class ClientMessage implements Serializable {
     private MessageType messageType;
     private ArrayList<Object> parameters;
     private static YaGson yaGson = new YaGson();
+    public  static Scanner scanner;
 
 
     public ClientMessage(MessageType messageType, ArrayList<Object> parameters) {
@@ -29,8 +30,9 @@ public class ClientMessage implements Serializable {
         Formatter formatter = new Formatter(ClientView.getOutputStream());
         formatter.format(yaGson.toJson(this)+"\n");
         formatter.flush();
-        Scanner scanner = new Scanner(ClientView.getInputStream());
-        return yaGson.fromJson(scanner.nextLine(),ServerMessage.class);
+        String tempServerMessage = scanner.nextLine();
+       ServerMessage temp = yaGson.fromJson(tempServerMessage,ServerMessage.class);
+        return temp;
     }
 
     public MessageType getMessageType() {

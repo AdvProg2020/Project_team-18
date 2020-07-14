@@ -22,7 +22,8 @@ public class ClientManager {
     protected static ArrayList<Sort> currentSorts = new ArrayList<>();
 
     public boolean doesAnyAdminExist(){
-        return false;
+        ClientMessage clientMessage = new ClientMessage(MessageType.DOES_ANY_ADMIN_EXIST,null);
+        return (boolean)clientMessage.sendAndReceive().getResult();
     }
 
     public void register(HashMap<String, String> information) throws Exception {
@@ -30,7 +31,7 @@ public class ClientManager {
         params.add(information);
         ClientMessage clientMessage = new ClientMessage(MessageType.REGISTER,params);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
-        if (serverMessage.getMessageType()==MessageType.ERROR){
+        if (serverMessage!=null && serverMessage.getMessageType()==MessageType.ERROR){
             throw  (Exception)serverMessage.getResult();
         }
 
@@ -43,7 +44,7 @@ public class ClientManager {
         params.add(password);
         ClientMessage clientMessage = new ClientMessage(MessageType.LOGIN,params);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
-        if (serverMessage.getMessageType()==MessageType.ERROR){
+        if (serverMessage!=null && serverMessage.getMessageType()==MessageType.ERROR){
            throw  (Exception)serverMessage.getResult();
         }
         return (Person)serverMessage.getResult();

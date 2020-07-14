@@ -91,7 +91,9 @@ public class RegisterMenu extends Menu implements Initializable {
         data.put("email", email);
         data.put("number", number);
         try {
+            System.out.println("94 register");
             manager.register(data);
+            System.out.println("94 namoldaaammm");
             message.setText("register successful!");
         } catch (Exception e) {
             message.setText(e.getMessage());
