@@ -55,6 +55,7 @@ public class CustomerMenu extends Menu implements Initializable {
         numberLabel.setText(person.getNumber());
         balanceLabel.setText(Double.toString(person.getBalance()));
         roleLabel.setText("customer");
+        System.out.println("58 customer menu***\n"+person);
     }
 
     public void editPasswordField() {
@@ -94,10 +95,15 @@ public class CustomerMenu extends Menu implements Initializable {
         content.getChildren().addAll(new Label("Enter your new name :"), textField);
         dialog.getDialogPane().setContent(content);
         Optional<ButtonType> result = dialog.showAndWait();
+        System.out.println("ammmmmmm");
         if (result.isPresent() && result.get() == ButtonType.OK) {
+            System.out.println("ammmmmmm");
             updatedVersion = textField.getText();
+            System.out.println("100 customer menu ******");
             try {
+                System.out.println("101 customermenu hi");
                 manager.editField("name", updatedVersion);
+                System.out.println("101 customermenu bye");
                 viewPersonalInfo();
             } catch (Exception e) {
                 e.printStackTrace();
