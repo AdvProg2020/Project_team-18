@@ -26,6 +26,14 @@ public class ClientManager {
     }
 
     public void register(HashMap<String, String> information) throws Exception {
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(information);
+        ClientMessage clientMessage = new ClientMessage(MessageType.REGISTER,params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage.getMessageType()==MessageType.ERROR){
+            throw  (Exception)serverMessage.getResult();
+        }
+
 
     }
 
