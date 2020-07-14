@@ -2,6 +2,7 @@ package Client;
 
 import Server.ClientMessage;
 import Server.MessageType;
+import Server.ServerMessage;
 import model.Category;
 import model.Comment;
 import model.Product;
@@ -16,14 +17,17 @@ public class ClientProductManager extends ClientManager{
         return storage.getProductById(productId).getComments();
     }
 
-    public void addComment(int productId, String title, String content, String username) {
+    public void addComment(int productId, String title, String content, String username) throws Exception{
         ArrayList <Object> params = new ArrayList<>();
         params.add(productId);
         params.add(title);
         params.add(content);
         params.add(username);
         ClientMessage clientMessage = new ClientMessage(MessageType.ADD_COMMENT,params);
-        clientMessage.sendAndReceive();
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage != null && serverMessage.getMessageType()==MessageType.ERROR){
+            throw  (Exception)serverMessage.getResult();
+        }
     }
 
     public String compareTwoProducts(int firstProduct, int secondProduct) throws Exception {
