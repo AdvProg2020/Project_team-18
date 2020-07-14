@@ -24,7 +24,7 @@ public class ClientCustomerManager extends ClientManager {
         return super.cart;
     }
 
-    public HashMap<Product, Integer> getProductsInCart(Cart cart) {
+    public HashMap<Product, Integer> getProductsInCart() {
         ArrayList<Object> params = new ArrayList<>();
         params.add(cart);
         ClientMessage clientMessage = new ClientMessage(MessageType.GET_CART, params);
@@ -54,8 +54,9 @@ public class ClientCustomerManager extends ClientManager {
         // person.setBalance(person.getBalance() + money);
     }
 
-    public void increaseProduct(String productId) throws Exception {
+    public void increaseProduct(Cart cart, String productId) throws Exception {
         ArrayList<Object> params = new ArrayList<>();
+        params.add(cart);
         params.add(productId);
         ClientMessage clientMessage = new ClientMessage(MessageType.INCREASE_PRODUCT, params);
         clientMessage.sendAndReceive();

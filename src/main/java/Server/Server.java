@@ -219,15 +219,16 @@ public class Server {
                     }
                     break;
                 case INCREASE_PRODUCT:
-                    String id = (String) clientMessage.getParameters().get(0);
                     try {
-                        customerManager.increaseProduct(id);
+                        System.out.println("I'm here!");
+                        manager.setCart((Cart) clientMessage.getParameters().get(0));
+                        customerManager.increaseProduct((String) clientMessage.getParameters().get(1));
+                        System.out.println("done!");
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
-                    break;
                 case GET_CART:
-                    customerManager.setCart((Cart) clientMessage.getParameters().get(0));
+                    //customerManager.setCart((Cart) clientMessage.getParameters().get(0));
                     HashMap<Product, Integer> products = customerManager.getProductsInCart();
                     return new ServerMessage(MessageType.GET_CART, products);
                 case GET_CART_PRICE:

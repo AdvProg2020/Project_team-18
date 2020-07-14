@@ -43,17 +43,24 @@ public class CustomerManager extends Manager {
     }
 
     public void increaseProduct(String productId) throws Exception {
-        if (storage.getProductById(Integer.parseInt(productId)) == null)
+        System.out.println("in function");
+        if (storage.getProductById(Integer.parseInt(productId)) == null) {
+            System.out.println("not such product");
             throw new Exception("There is not such product!");
-        if (storage.getProductById(Integer.parseInt(productId)).getSupply() == 0)
+        }
+        if (storage.getProductById(Integer.parseInt(productId)).getSupply() == 0) {
+            System.out.println("run out of");
             throw new Exception("We have run out of this product!!");
+        }
         for (Product product : cart.getProductsInCart().keySet()) {
             if (product.equals(storage.getProductById(Integer.parseInt(productId)))) {
-                super.cart.addNumberOfProductInTheCart(storage.getProductById(Integer.parseInt(productId)));
+                cart.addNumberOfProductInTheCart(storage.getProductById(Integer.parseInt(productId)));
+                System.out.println("proper!");
                 return;
             }
         }
         cart.addProductToCart(storage.getProductById(Integer.parseInt(productId)));
+        System.out.println("again proper!");
     }
 
     public void decreaseProduct(String productId) throws Exception {

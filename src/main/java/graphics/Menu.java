@@ -19,6 +19,7 @@ public abstract class Menu {
     protected static Stage stage = ClientView.getStage();
     protected static Person person;
     protected static ClientManager manager = new ClientManager();
+    //protected static Manager manager = new Manager();
     protected Parent root;
     private Menu previousMenu;
     protected String fxmlPath;
