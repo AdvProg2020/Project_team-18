@@ -54,18 +54,25 @@ public class ClientCustomerManager extends ClientManager {
         // person.setBalance(person.getBalance() + money);
     }
 
-    public void increaseProduct(String productId) throws Exception {
+    public void increaseProduct(Cart cart, String productId) throws Exception {
         ArrayList<Object> params = new ArrayList<>();
+        params.add(cart);
         params.add(productId);
         ClientMessage clientMessage = new ClientMessage(MessageType.INCREASE_PRODUCT, params);
-        clientMessage.sendAndReceive();
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage != null && serverMessage.getMessageType()==MessageType.ERROR){
+            throw  (Exception)serverMessage.getResult();
+        }
     }
 
     public void decreaseProduct(String productId) throws Exception {
         ArrayList<Object> params = new ArrayList<>();
         params.add(productId);
         ClientMessage clientMessage = new ClientMessage(MessageType.DECREASE_PRODUCT, params);
-        clientMessage.sendAndReceive();
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage != null && serverMessage.getMessageType()==MessageType.ERROR){
+            throw  (Exception)serverMessage.getResult();
+        }
     }
 
     public double getCartTotalPrice() {
@@ -88,7 +95,10 @@ public class ClientCustomerManager extends ClientManager {
         params.add(rate);
         params.add(username);
         ClientMessage clientMessage = new ClientMessage(MessageType.ADD_RATE, params);
-        clientMessage.sendAndReceive();
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage != null && serverMessage.getMessageType()==MessageType.ERROR){
+            throw  (Exception)serverMessage.getResult();
+        }
     }
 
     public ArrayList<BuyLog> getCustomerBuyLogs(String username) {
@@ -104,6 +114,17 @@ public class ClientCustomerManager extends ClientManager {
         params.add(username);
         ClientMessage clientMessage = new ClientMessage(MessageType.DOES_CUSTOMER_HAVE_BUY_LOG, params);
         return (boolean) clientMessage.sendAndReceive().getResult();
+    }
+
+    public BuyLog getBuyLogByCode (String code) throws Exception{
+        ArrayList <Object> params = new ArrayList<>();
+        params.add(code);
+        ClientMessage clientMessage = new ClientMessage(MessageType.GET_BUY_LOG_BY_CODE,params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage.getMessageType()==MessageType.ERROR){
+            throw  (Exception)serverMessage.getResult();
+        }
+        return (BuyLog) serverMessage.getResult();
     }
 
 }

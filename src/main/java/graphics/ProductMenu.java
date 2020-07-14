@@ -62,7 +62,7 @@ public class ProductMenu extends Menu implements Initializable {
 
     public void button(){
         try {
-            customerManager.increaseProduct(Integer.toString(this.product.getProductId()));
+            customerManager.increaseProduct(Cart.getCart(), Integer.toString(this.product.getProductId()));
         } catch (Exception e){
             showError(e.getMessage(), 200);
         }

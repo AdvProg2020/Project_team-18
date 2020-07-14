@@ -56,7 +56,10 @@ public class ClientManager {
     }
 
     public Product getProductById(int productId) throws Exception {
-        return null;
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(productId);
+        ClientMessage clientMessage = new ClientMessage(MessageType.GET_PRODUCT_BY_ID,params);
+        return (Product) clientMessage.sendAndReceive().getResult();
     }
 
     public void setPerson(Person person1){

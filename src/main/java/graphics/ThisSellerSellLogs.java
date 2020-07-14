@@ -20,7 +20,7 @@ import java.util.ResourceBundle;
 
 public class ThisSellerSellLogs extends Menu implements Initializable {
     ClientSellerManager sellerManager = new ClientSellerManager();
-    Storage storage = new Storage();
+    //Storage storage = new Storage();
     @FXML
     TableView<SellLog> tableView = new TableView<>();
     @FXML
@@ -74,7 +74,12 @@ public class ThisSellerSellLogs extends Menu implements Initializable {
     }
 
     private void showWantedSellLog(String code) throws IOException {
-        SellLog thisSellLog = storage.getSellLogByCode(code);
+        SellLog thisSellLog = null;
+        try {
+            thisSellLog = sellerManager.getSellLogByCode(code);
+        } catch (Exception e) {
+            showError(e.getMessage() , 20);
+        }
         PerSellLog sellLog =new PerSellLog(thisSellLog, this);
         sellLog.run();
     }

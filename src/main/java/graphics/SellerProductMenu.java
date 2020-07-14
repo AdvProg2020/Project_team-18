@@ -27,7 +27,7 @@ import java.util.ResourceBundle;
 
 public class SellerProductMenu extends Menu implements Initializable {
     private ClientSellerManager sellerManager;
-    private Storage storage = new Storage();
+    //private Storage storage = new Storage();
 
     public SellerProductMenu(Menu previousMenu, ClientSellerManager sellerManager) {
         super(previousMenu, "src/main/java/graphics/fxml/SellerProductMenu.fxml");
@@ -287,10 +287,14 @@ public class SellerProductMenu extends Menu implements Initializable {
 
     private ArrayList<String> getCategoryNames() {
         ArrayList<String> categoryName = new ArrayList<>();
-        if (!storage.getAllCategories().isEmpty()) {
-            for (Category category : storage.getAllCategories()) {
-                categoryName.add(category.getCategoryName());
+        try {
+            if (!sellerManager.viewAllCategories().isEmpty()) {
+                for (Category category : sellerManager.viewAllCategories()) {
+                    categoryName.add(category.getCategoryName());
+                }
             }
+        } catch (Exception e){
+            showError(e.getMessage() , 20);
         }
         return categoryName;
     }

@@ -22,7 +22,7 @@ import java.util.ResourceBundle;
 
 public class CustomerRequestsMenu extends Menu implements Initializable {
     private ClientAdminManager adminManager = new ClientAdminManager();
-    ClientProductManager productManager = new ClientProductManager();
+    private ClientProductManager productManager = new ClientProductManager();
 
 
     @FXML

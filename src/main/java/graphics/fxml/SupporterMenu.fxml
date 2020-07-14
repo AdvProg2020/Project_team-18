@@ -25,7 +25,7 @@
                         <MenuItem mnemonicParsing="false" onAction="#editNumberField" text="Number" />
                     </items>
                 </MenuButton>
-                <Button layoutX="10.0" layoutY="143.0" mnemonicParsing="false" onAction="#back" onMousePressed="#buttonSound" prefHeight="67.0" prefWidth="171.0" text="Chats" />
+                <Button layoutX="10.0" layoutY="143.0" mnemonicParsing="false" onAction="#back" onMousePressed="#buttonSound" prefHeight="67.0" prefWidth="171.0" text="Chat Room" />
                 <Button mnemonicParsing="false" onAction="#goToMainMenu" prefHeight="65.0" prefWidth="171.0" text="Go To Main Menu" />
                 <Button layoutX="10.0" layoutY="174.0" mnemonicParsing="false" onAction="#logout" onMousePressed="#buttonSound" prefHeight="56.0" prefWidth="171.0" text="logout" />
             </children>

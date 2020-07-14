@@ -101,6 +101,7 @@ public class Server {
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
+                    break;
                 case DOES_SELLER_HAVE_LOG:
                     int sellLogCode = (int) clientMessage.getParameters().get(0);
                     try {
@@ -125,6 +126,7 @@ public class Server {
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
+                    break;
                 case ADD_PRODUCT_TO_OFF:
                     offId = (int) clientMessage.getParameters().get(1);
                     productId = (int) clientMessage.getParameters().get(2);
@@ -134,6 +136,7 @@ public class Server {
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
+                    break;
                 case DOES_SELLER_HAVE_OFF:
                     offId = (int) clientMessage.getParameters().get(0);
                     try {
@@ -160,6 +163,7 @@ public class Server {
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
+                    break;
                 case ADD_OFF:
                     HashMap<String, String> informationOFF = (HashMap<String, String>) clientMessage.getParameters().get(1);
                     ArrayList<Product> productsInOff = (ArrayList<Product>) clientMessage.getParameters().get(2);
@@ -169,6 +173,7 @@ public class Server {
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
+                    break;
                 case EDIT_PRODUCT:
                     productId = (int) clientMessage.getParameters().get(1);
                     field = (String) clientMessage.getParameters().get(2);
@@ -179,6 +184,7 @@ public class Server {
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
+                    break;
                 case ADD_PRODUCT:
                     HashMap<String, String> information = (HashMap<String, String>) clientMessage.getParameters().get(1);
                     try {
@@ -187,6 +193,7 @@ public class Server {
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
+                    break;
                 case REMOVE_PRODUCT_SELLER:
                     productId = (int) clientMessage.getParameters().get(1);
                     try {
@@ -195,6 +202,7 @@ public class Server {
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
+                    break;
                 case ADD_BALANCE:
                     Double money = (Double) clientMessage.getParameters().get(0);
                     customerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(1)));
@@ -209,15 +217,16 @@ public class Server {
                     }
                     break;
                 case INCREASE_PRODUCT:
-                    String id = (String) clientMessage.getParameters().get(0);
                     try {
-                        customerManager.increaseProduct(id);
+                        System.out.println("I'm here!");
+                        customerManager.setCart((Cart) clientMessage.getParameters().get(0));
+                        customerManager.increaseProduct((String) clientMessage.getParameters().get(1));
+                        System.out.println("done!");
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
-                    break;
                 case GET_CART:
-                    customerManager.setCart((Cart) clientMessage.getParameters().get(0));
+                    //customerManager.setCart((Cart) clientMessage.getParameters().get(0));
                     HashMap<Product, Integer> products = customerManager.getProductsInCart();
                     return new ServerMessage(MessageType.GET_CART, products);
                 case GET_CART_PRICE:
@@ -232,6 +241,7 @@ public class Server {
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                 }
+                    break;
                 case GET_ALL_BUY_LOGS:
                     ArrayList<BuyLog> buyLogs = customerManager.getCustomerBuyLogs((String) clientMessage.getParameters().get(0));
                     return new ServerMessage(MessageType.GET_ALL_BUY_LOGS, buyLogs);
@@ -255,6 +265,7 @@ public class Server {
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
+                    break;
                 case GET_DISCOUNT_PERCENTAGE:
                      discountCode = (String) clientMessage.getParameters().get(0);
                     try {
@@ -277,6 +288,7 @@ public class Server {
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
+                    break;
                 case PERFORM_PAYMENT:
                     HashMap<String, String> receiverInformation = (HashMap<String, String>) clientMessage.getParameters().get(2);
                     double totalPrice = (double) clientMessage.getParameters().get(3);
@@ -289,6 +301,7 @@ public class Server {
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
+                    break;
                 case CALCULATE_TOTAL_PRICE_WITH_DISCOUNT:
                     discountCode = (String) clientMessage.getParameters().get(0);
                     try {
@@ -356,10 +369,22 @@ public class Server {
                 case ADD_COMMENT:
                     productManager.addComment((Integer) clientMessage.getParameters().get(0), (String) clientMessage.getParameters().get(1),
                             (String) clientMessage.getParameters().get(2), (String) clientMessage.getParameters().get(3));
+                    break;
                 case GET_ALL_PRODUCTS:
                     return new ServerMessage(MessageType.GET_ALL_PRODUCTS, productManager.viewAllProducts());
                 case GET_ALL_PRODUCTS_IN_SALE:
                     return new ServerMessage(MessageType.GET_ALL_PRODUCTS_IN_SALE, productManager.viewAllProductsWithSale());
+                case GET_PRODUCT_BY_ID:
+                    productId = (int) clientMessage.getParameters().get(0);
+                    try {
+                        return new ServerMessage(MessageType.GET_PRODUCT_BY_ID, manager.getProductById(productId));
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case GET_SELL_LOG_BY_CODE:
+                        return new ServerMessage(MessageType.GET_SELL_LOG_BY_CODE, storage.getSellLogByCode((String)clientMessage.getParameters().get(0)));
+                case GET_BUY_LOG_BY_CODE:
+                    return new ServerMessage(MessageType.GET_BUY_LOG_BY_CODE, storage.getBuyLogByCode((String)clientMessage.getParameters().get(0)));
             }
             return null;
         }
