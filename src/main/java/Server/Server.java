@@ -35,8 +35,6 @@ public class Server {
                         new ClientHandler(outputStream, inputStream, this).start();
                     } catch (Exception e) {
                         System.err.println("Error in accepting client!");
-                      /*  FileSaver fileSaver = new FileSaver(Storage.getStorage());
-                        fileSaver.dataSaver();*/
                         break;
                     }
                 }
