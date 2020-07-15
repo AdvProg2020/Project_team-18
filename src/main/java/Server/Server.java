@@ -8,6 +8,7 @@ import model.*;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.HashMap;
@@ -57,6 +58,7 @@ public class Server {
         PurchasingManager purchasingManager = new PurchasingManager();
         SearchingManager searchingManager = new SearchingManager();
         ProductManager productManager = new ProductManager();
+        AdminManager adminManager = new AdminManager();
         Storage storage = new Storage();
 
         public ClientHandler(OutputStream objectOutputStream, InputStream objectInputStream, ServerImpl server) {
@@ -388,6 +390,7 @@ public class Server {
                 case REGISTER:
                     try {
                         manager.register((HashMap<String, String>)clientMessage.getParameters().get(0));
+                        break;
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
@@ -398,6 +401,96 @@ public class Server {
                     updatedVersion = (String)clientMessage.getParameters().get(1);
                     try {
                         manager.editField(field,updatedVersion);
+                        break;
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case GET_ALL_USERS:
+                    return new ServerMessage(MessageType.GET_ALL_USERS,adminManager.viewAllUsers());
+                case DELETE_USER:
+                    try {
+                        adminManager.deleteUser((String) clientMessage.getParameters().get(0));
+                        break;
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case REMOVE_PRODUCT:
+                    try {
+                        adminManager.removeProduct((String) clientMessage.getParameters().get(0));
+                        break;
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case ADD_CATEGORY:
+
+                    try {
+                        adminManager.addCategory((String) clientMessage.getParameters().get(0),(String) clientMessage.getParameters().get(1));
+                        break;
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case VIEW_ALL_DISCOUNT_CODES:
+                    return new ServerMessage(MessageType.VIEW_ALL_DISCOUNT_CODES,adminManager.viewAllDiscountCodes());
+                case VIEW_ALL_REQUESTS:
+                    return new ServerMessage(MessageType.VIEW_ALL_REQUESTS,adminManager.viewAllRequests());
+                case VIEW_DISCOUNT_CODE:
+                    try {
+                        adminManager.viewDiscountCode((String) clientMessage.getParameters().get(0));
+                        break;
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case ADD_CUSTOMER_TO_DISCOUNT:
+                    try {
+                        adminManager.addCustomerToDiscount((String) clientMessage.getParameters().get(0),(Discount) clientMessage.getParameters().get(1));
+                        break;
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case REMOVE_CUSTOMER_FROM_DISCOUNT:
+                    try {
+                        adminManager.removeCustomerFromDiscount((Discount) clientMessage.getParameters().get(0),(String) clientMessage.getParameters().get(1));
+                        break;
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case EDIT_DISCOUNT_FIELD:
+                    adminManager.editDiscountField((Discount) clientMessage.getParameters().get(0),(String) clientMessage.getParameters().get(1),(String) clientMessage.getParameters().get(2));
+                    break;
+                case CREATE_DISCOUNT_CODE:
+                    String code =(String) clientMessage.getParameters().get(0);
+                    LocalDateTime startDate = (LocalDateTime)clientMessage.getParameters().get(1);
+                    LocalDateTime endDate = (LocalDateTime)clientMessage.getParameters().get(2);
+                    int percentage1 = (int)clientMessage.getParameters().get(3);
+                    int usagePerCustomer = (int)clientMessage.getParameters().get(4);
+                    double maxAmount = (double)clientMessage.getParameters().get(5);
+                    adminManager.createDiscountCode(code,startDate,endDate,percentage1,usagePerCustomer,maxAmount);
+                    break;
+                case REMOVE_DISCOUNT_CODE:
+                    try {
+                        adminManager.removeDiscountCode((String) clientMessage.getParameters().get(0));
+                        break;
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case REMOVE_CATEGORY:
+                    try {
+                        adminManager.removeCategory((String) clientMessage.getParameters().get(0));
+                        break;
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case ACCEPT_REQUEST:
+                    try {
+                        adminManager.acceptRequest((String) clientMessage.getParameters().get(0));
+                        break;
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case DECLINE_REQUEST:
+                    try {
+                        adminManager.declineRequest((String) clientMessage.getParameters().get(0));
+                        break;
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }

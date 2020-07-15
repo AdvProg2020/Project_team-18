@@ -35,7 +35,6 @@ public class ClientManager {
             throw  (Exception)serverMessage.getResult();
         }
 
-
     }
 
     public Person login(String username, String password) throws Exception {
@@ -60,7 +59,7 @@ public class ClientManager {
         if (serverMessage!=null && serverMessage.getMessageType()==MessageType.ERROR){
             throw  (Exception)serverMessage.getResult();
         }
-        //System.out.println("63 client manager edit field");
+
     }
 
 
