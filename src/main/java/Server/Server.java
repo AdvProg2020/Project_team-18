@@ -494,6 +494,19 @@ public class Server {
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
+                case EDIT_CATEGORY_BY_NAME:
+                        adminManager.editCategoryByName((String) clientMessage.getParameters().get(0),(String) clientMessage.getParameters().get(1));
+                        break;
+                case EDIT_CATEGORY_BY_PROPERTIES:
+                        adminManager.editCategoryByProperties((Category) clientMessage.getParameters().get(0),(String) clientMessage.getParameters().get(1),(String) clientMessage.getParameters().get(2));
+                        break;
+                case VIEW_CATEGORY:
+                    try {
+                        return new ServerMessage(MessageType.VIEW_CATEGORY,adminManager.viewCategory((String) clientMessage.getParameters().get(0)));
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+
             }
             return null;
         }

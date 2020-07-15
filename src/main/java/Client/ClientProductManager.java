@@ -75,8 +75,9 @@ public class ClientProductManager extends ClientManager{
         seenProduct.setNumberOfSeen(seenProduct.getNumberOfSeen() + 1);
     }
 
-    public ArrayList<Category> viewAllCategories(){
+    public ArrayList<Category> viewAllCategories() {
         ClientMessage clientMessage = new ClientMessage(MessageType.VIEW_ALL_CATEGORIES, null);
         return (ArrayList<Category>) clientMessage.sendAndReceive().getResult();
+
     }
 }

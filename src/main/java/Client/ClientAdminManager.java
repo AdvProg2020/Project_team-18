@@ -144,11 +144,20 @@ public class ClientAdminManager extends ClientManager{
     }
 
     public void editCategoryByName (String oldName , String newName){
-
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(oldName);
+        params.add(newName);
+        ClientMessage clientMessage = new ClientMessage(MessageType.EDIT_CATEGORY_BY_NAME,params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
     }
 
     public void editCategoryByProperties (Category category ,String property, String newValue){
-
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(category);
+        params.add(property);
+        params.add(newValue);
+        ClientMessage clientMessage = new ClientMessage(MessageType.EDIT_CATEGORY_BY_PROPERTIES,params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
     }
 
     public void acceptRequest (String requestId) throws Exception {
@@ -170,15 +179,20 @@ public class ClientAdminManager extends ClientManager{
             throw  (Exception)serverMessage.getResult();
         }
     }
-
-
-
-
     public ArrayList<Category> viewAllCategories() {
+        ClientMessage clientMessage = new ClientMessage(MessageType.VIEW_ALL_CATEGORIES, null);
+        return (ArrayList<Category>) clientMessage.sendAndReceive().getResult();
 
     }
 
-    public Category viewCategory(String text) {
-
+    public Category viewCategory(String text) throws Exception {
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(text);
+        ClientMessage clientMessage = new ClientMessage(MessageType.VIEW_CATEGORY,params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage!=null && serverMessage.getMessageType()==MessageType.ERROR){
+            throw  (Exception)serverMessage.getResult();
+        }
+        return (Category) serverMessage.getResult();
     }
 }
