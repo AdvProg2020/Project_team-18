@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphics.AdminMenu">
+<AnchorPane prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphics.AdminMenu">
     <stylesheets>
         <URL value="@cssSheets/BasicStyle.css" />
     </stylesheets>
@@ -22,7 +22,7 @@
         <URL value="@cssSheets/CustomerSellerAdminMenu.css" />
     </stylesheets>
     <children>
-        <VBox layoutX="10.0" layoutY="113.0" prefHeight="246.0" prefWidth="171.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+        <VBox layoutX="10.0" layoutY="113.0" prefHeight="300.0" prefWidth="171.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
             <children>
                 <MenuButton mnemonicParsing="false" prefHeight="34.0" prefWidth="173.0" text="Edit Personal Info">
                     <items>
@@ -36,13 +36,14 @@
                 <Button mnemonicParsing="false" onAction="#goToManageUsersMenu" onMousePressed="#buttonSound" prefHeight="35.0" prefWidth="179.0" text="Manage Users" />
                 <Button mnemonicParsing="false" onAction="#goToManageProductsMenu" onMousePressed="#buttonSound" prefHeight="38.0" prefWidth="174.0" text="Manage All Products" />
                 <Button mnemonicParsing="false" onAction="#goToManageCodesMenu" onMousePressed="#buttonSound" prefHeight="38.0" prefWidth="171.0" text="Manage Discount Codes">
-               <font>
-                  <Font size="11.0" />
-               </font></Button>
+                    <font>
+                        <Font size="11.0" />
+                    </font></Button>
                 <Button mnemonicParsing="false" onAction="#goToManageRequestsMenu" onMousePressed="#buttonSound" prefHeight="38.0" prefWidth="171.0" text="Manage Requests" />
-            <Button layoutX="10.0" layoutY="143.0" mnemonicParsing="false" onAction="#goToManageCategoryMenu" onMousePressed="#buttonSound" prefHeight="35.0" prefWidth="173.0" text="Manage Categories" />
-            <Button mnemonicParsing="false" onAction="#goToMainMenu" prefHeight="31.0" prefWidth="171.0" text="Go To Main Menu" />
-            <Button layoutX="10.0" layoutY="174.0" mnemonicParsing="false" onAction="#logout" onMousePressed="#buttonSound" prefHeight="35.0" prefWidth="171.0" text="logout" />
+                <Button layoutX="10.0" layoutY="143.0" mnemonicParsing="false" onAction="#goToManageCategoryMenu" onMousePressed="#buttonSound" prefHeight="35.0" prefWidth="173.0" text="Manage Categories" />
+                <Button mnemonicParsing="false" onAction="#goToMainMenu" prefHeight="31.0" prefWidth="171.0" text="Go To Main Menu" />
+                <Button layoutX="10.0" layoutY="174.0" mnemonicParsing="false" onMousePressed="#buttonSound" prefHeight="35.0" prefWidth="171.0" text="Center's Settings" />
+                <Button layoutX="10.0" layoutY="226.0" mnemonicParsing="false" onAction="#logout" onMousePressed="#buttonSound" prefHeight="35.0" prefWidth="171.0" text="logout" />
             </children>
         </VBox>
         <Label alignment="CENTER" contentDisplay="CENTER" ellipsisString="" layoutX="161.0" layoutY="29.0" prefHeight="48.0" prefWidth="278.0" text="WELCOME  ADMIN!" textAlignment="CENTER">
@@ -76,33 +77,33 @@
                     </font>
                 </Label>
                 <Label alignment="CENTER" prefHeight="18.0" prefWidth="72.0" text="username" GridPane.rowIndex="1">
-               <font>
-                  <Font name="Andalus" size="14.0" />
-               </font></Label>
+                    <font>
+                        <Font name="Andalus" size="14.0" />
+                    </font></Label>
                 <Label alignment="CENTER" prefHeight="18.0" prefWidth="70.0" text="password" GridPane.rowIndex="2">
-               <font>
-                  <Font name="Andalus" size="14.0" />
-               </font></Label>
+                    <font>
+                        <Font name="Andalus" size="14.0" />
+                    </font></Label>
                 <Label alignment="CENTER" prefHeight="18.0" prefWidth="41.0" text="role" GridPane.rowIndex="3">
-               <font>
-                  <Font name="Andalus" size="14.0" />
-               </font></Label>
+                    <font>
+                        <Font name="Andalus" size="14.0" />
+                    </font></Label>
                 <Label alignment="CENTER" prefHeight="18.0" prefWidth="51.0" text="name" GridPane.rowIndex="4">
-               <font>
-                  <Font name="Andalus" size="14.0" />
-               </font></Label>
+                    <font>
+                        <Font name="Andalus" size="14.0" />
+                    </font></Label>
                 <Label alignment="CENTER" prefHeight="18.0" prefWidth="85.0" text="family name" GridPane.rowIndex="5">
-               <font>
-                  <Font name="Andalus" size="14.0" />
-               </font></Label>
+                    <font>
+                        <Font name="Andalus" size="14.0" />
+                    </font></Label>
                 <Label alignment="CENTER" prefHeight="18.0" prefWidth="57.0" text="e-mail" GridPane.rowIndex="6">
-               <font>
-                  <Font name="Andalus" size="14.0" />
-               </font></Label>
+                    <font>
+                        <Font name="Andalus" size="14.0" />
+                    </font></Label>
                 <Label alignment="CENTER" prefHeight="18.0" prefWidth="66.0" text="number" GridPane.rowIndex="7">
-               <font>
-                  <Font name="Andalus" size="14.0" />
-               </font></Label>
+                    <font>
+                        <Font name="Andalus" size="14.0" />
+                    </font></Label>
                 <Label fx:id="usernameLabel" prefHeight="18.0" prefWidth="171.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                 <Label fx:id="passwordLabel" prefHeight="18.0" prefWidth="196.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                 <Label fx:id="roleLabel" prefHeight="18.0" prefWidth="215.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
@@ -129,7 +130,7 @@
             </font>
         </Label>
         <Separator layoutX="23.0" layoutY="104.0" prefHeight="18.0" prefWidth="146.0" />
-      <Button layoutX="14.0" layoutY="17.0" mnemonicParsing="false" onAction="#back" onMousePressed="#buttonSound" text="back" />
+        <Button layoutX="14.0" layoutY="17.0" mnemonicParsing="false" onAction="#back" onMousePressed="#buttonSound" text="back" />
     </children>
 
 </AnchorPane>

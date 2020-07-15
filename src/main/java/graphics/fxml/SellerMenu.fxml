@@ -40,7 +40,7 @@
                 <Button mnemonicParsing="false" onAction="#viewCategories" onMousePressed="#buttonSound" prefHeight="36.0" prefWidth="166.0" text="All Category" />
                 <Button mnemonicParsing="false" onAction="#goToMainMenu" onMousePressed="#buttonSound" prefHeight="36.0" prefWidth="164.0" text="Go To Main Menu" />
                 <Button mnemonicParsing="false" onAction="#goToRequestsMenu" onMousePressed="#buttonSound" prefHeight="35.0" prefWidth="157.0" text="Go to Requests Menu" />
-                <Button layoutX="10.0" layoutY="82.0" mnemonicParsing="false" onMousePressed="#buttonSound" prefHeight="36.0" prefWidth="167.0" text="Wallet" />
+                <Button layoutX="10.0" layoutY="82.0" mnemonicParsing="false" onAction="#wallet" onMousePressed="#buttonSound" prefHeight="36.0" prefWidth="167.0" text="Wallet" />
                 <Button layoutX="10.0" layoutY="226.0" mnemonicParsing="false" onAction="#logout" onMousePressed="#buttonSound" prefHeight="35.0" prefWidth="157.0" text="logout" />
             </children>
         </VBox>
