@@ -299,6 +299,25 @@ public class CustomerMenu extends Menu implements Initializable {
 
     }
 
+    public void wallet() {
+        Dialog<String> dialog = new Dialog<>();
+        Button addBalance = new Button("Add Balance");
+        addBalance.setOnAction(e -> addBalanceToWallet());
+        dialog.setTitle("Managing your wallet");
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.FINISH);
+        Label label = new Label("Your wallet's balance is : " + person.getBalance());
+        HBox content = new HBox();
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setSpacing(10);
+        content.getChildren().addAll(label , addBalance);
+        dialog.getDialogPane().setContent(content);
+        dialog.showAndWait();
+    }
+
+    public void addBalanceToWallet () {
+
+    }
+
     public void goToCartMenu() {
         CartMenu cartMenu = new CartMenu(this);
         cartMenu.run();
