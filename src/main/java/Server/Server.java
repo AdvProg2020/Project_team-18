@@ -279,7 +279,7 @@ public class Server {
                 case DOES_CUSTOMER_HAVE_MONEY:
                     double price = (double) clientMessage.getParameters().get(0);
                     try {
-                        purchasingManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(1)));
+                        purchasingManager.setPerson(storage.getUserByUsername((String)clientMessage.getParameters().get(1)));
                         return new ServerMessage(MessageType.DOES_CUSTOMER_HAVE_MONEY, purchasingManager.doesCustomerHaveEnoughMoney(price));
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
@@ -301,6 +301,7 @@ public class Server {
                         purchasingManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(0)));
                         purchasingManager.setCart((Cart) clientMessage.getParameters().get(1));
                         purchasingManager.performPayment(receiverInformation,totalPrice,percentage,discountUsed);
+                        System.out.println("Im in server");
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }

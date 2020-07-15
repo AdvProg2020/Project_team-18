@@ -15,6 +15,7 @@ import model.*;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class CartMenu extends Menu implements Initializable {
@@ -92,7 +93,7 @@ public class CartMenu extends Menu implements Initializable {
                     () -> {
                         try {
                             double price = product.getPrice();
-                            int quantity = customerManager.getProductsInCart(Cart.getCart()).get(product);
+                            int quantity = interpretHashMap(customerManager.getProductsInCart(Cart.getCart()),product);
                             return price * quantity ;
                         } catch (NumberFormatException nfe) {
                             return Double.valueOf(0);
@@ -104,6 +105,14 @@ public class CartMenu extends Menu implements Initializable {
         });
         tableView.setItems(data);
         totalPriceLabel.setText("Total Price OF Cart : " + customerManager.getCartTotalPrice());
+    }
+
+    private int interpretHashMap (HashMap<Product,Integer> products , Product desiredProduct){
+        for (Product product : products.keySet()) {
+            if(product.getId() == desiredProduct.getId())
+                return products.get(product);
+        }
+        return 0;
     }
 
     @FXML
