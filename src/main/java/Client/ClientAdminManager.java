@@ -1,5 +1,8 @@
 package Client;
 
+import Server.ClientMessage;
+import Server.MessageType;
+import Server.ServerMessage;
 import controller.SellerManager;
 import model.*;
 import java.time.LocalDate;
@@ -15,255 +18,181 @@ public class ClientAdminManager extends ClientManager{
 
 
     public ArrayList<Person> viewAllUsers (){
-        return storage.getAllUsers();
+        ClientMessage clientMessage = new ClientMessage(MessageType.GET_ALL_USERS,null);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        return (ArrayList<Person>)serverMessage.getResult();
+
     }
 
 
     public void deleteUser (String username) throws Exception {
-        if (storage.getUserByUsername(username) == null)
-            throw new Exception("There is not such user!!");
-        else
-            storage.deleteUser(storage.getUserByUsername(username));
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(username);
+        ClientMessage clientMessage = new ClientMessage(MessageType.DELETE_USER,params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage!=null && serverMessage.getMessageType()==MessageType.ERROR){
+            throw  (Exception)serverMessage.getResult();
+        }
     }
 
     public void removeProduct (String productId) throws Exception {
-        if(storage.getProductById(Integer.parseInt(productId)) == null)
-            throw new Exception("There is not such product!!");
-        else {
-            Sale sale = null;
-            Product removedProduct = storage.getProductById(Integer.parseInt(productId));
-            storage.deleteProduct(removedProduct);
-            removedProduct.getSeller().removeProduct(removedProduct);
-            sale.removeProductFromItSale(storage.getAllSales(),removedProduct);
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(productId);
+        ClientMessage clientMessage = new ClientMessage(MessageType.REMOVE_PRODUCT,params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage!=null && serverMessage.getMessageType()==MessageType.ERROR){
+            throw  (Exception)serverMessage.getResult();
         }
     }
 
     public void addCategory (String name,String imageOption) throws Exception {
-        if (storage.getCategoryByName(name) != null)
-            throw new Exception("Category with this name already exists!!");
-        else
-            storage.addCategory(new Category(name,imageOption));
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(name);
+        params.add(imageOption);
+        ClientMessage clientMessage = new ClientMessage(MessageType.ADD_CATEGORY,params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage!=null && serverMessage.getMessageType()==MessageType.ERROR){
+            throw  (Exception)serverMessage.getResult();
+        }
     }
 
     public ArrayList<Discount> viewAllDiscountCodes (){
-        return storage.getAllDiscounts();
+        ClientMessage clientMessage = new ClientMessage(MessageType.VIEW_ALL_DISCOUNT_CODES,null);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        return (ArrayList<Discount>)serverMessage.getResult();
     }
 
     public ArrayList<Request> viewAllRequests (){
-        return storage.getAllRequests();
+        ClientMessage clientMessage = new ClientMessage(MessageType.VIEW_ALL_REQUESTS,null);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        return (ArrayList<Request>)serverMessage.getResult();
     }
 
     public Discount viewDiscountCode (String code) throws Exception{
-        if (storage.getDiscountByCode(code) == null)
-            throw new Exception("There is no such discount");
-        return storage.getDiscountByCode(code);
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(code);
+        ClientMessage clientMessage = new ClientMessage(MessageType.VIEW_DISCOUNT_CODE,params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage!=null && serverMessage.getMessageType()==MessageType.ERROR){
+            throw  (Exception)serverMessage.getResult();
+        }
+        return (Discount) serverMessage.getResult();
     }
 
     public void addCustomerToDiscount(String username , Discount discount) throws Exception {
-        if (storage.getUserByUsername(username) == null)
-            throw new Exception("There is not a user with this username!");
-        else if (discount.getCustomersWithThisDiscount().containsKey(storage.getUserByUsername(username)))
-            throw new Exception("This customer is already added to this discount!");
-        else {
-            discount.addCustomer((Customer) storage.getUserByUsername(username));
-            ((Customer) storage.getUserByUsername(username)).addToAllDiscounts(discount);
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(username);
+        params.add(discount);
+        ClientMessage clientMessage = new ClientMessage(MessageType.ADD_CUSTOMER_TO_DISCOUNT,params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage!=null && serverMessage.getMessageType()==MessageType.ERROR){
+            throw  (Exception)serverMessage.getResult();
         }
     }
 
     public void removeCustomerFromDiscount (Discount discount , String username) throws Exception {
-        if (storage.getUserByUsername(username) == null)
-            throw new Exception("There is not a user with this username!");
-        else if (!discount.getCustomersWithThisDiscount().containsKey(storage.getUserByUsername(username)))
-            throw new Exception("This customer does not have this discount!!");
-        else
-            discount.removeCustomer((Customer) storage.getUserByUsername(username),discount.getUsagePerCustomer());
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(discount);
+        params.add(username);
+        ClientMessage clientMessage = new ClientMessage(MessageType.REMOVE_CUSTOMER_FROM_DISCOUNT,params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage!=null && serverMessage.getMessageType()==MessageType.ERROR){
+            throw  (Exception)serverMessage.getResult();
+        }
     }
 
     public void editDiscountField ( Discount discount,String field , String updatedVersion ){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy,MM,dd,HH,mm");
-        switch (field){
-            case "percentage" :
-                discount.setPercentage(Integer.parseInt(updatedVersion));
-                return;
-            case "usagePerCustomer":
-                discount.setUsageCount(Integer.parseInt(updatedVersion));
-                return;
-            case "beginDate":
-                LocalDateTime beginDate = LocalDateTime.parse(updatedVersion,formatter);
-                discount.setBeginDate(beginDate);
-                return;
-            case "endDate":
-                LocalDateTime endDate = LocalDateTime.parse(updatedVersion,formatter);
-                discount.setEndDate(endDate);
-                return;
-            case "maxAmount":
-                discount.setMaxAmount(Double.parseDouble(updatedVersion));
-                return;
-        }
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(discount);
+        params.add(field);
+        params.add(updatedVersion);
+        ClientMessage clientMessage = new ClientMessage(MessageType.EDIT_DISCOUNT_FIELD,params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
     }
 
     public void createDiscountCode (String code, LocalDateTime startDate, LocalDateTime endDate,
                                     int percentage, int usagePerCustomer, double maxAmount){
-        storage.addDiscount(new Discount(code,startDate,endDate,percentage,usagePerCustomer,maxAmount));
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(code);
+        params.add(startDate);
+        params.add(endDate);
+        params.add(percentage);
+        params.add(usagePerCustomer);
+        params.add(maxAmount);
+        ClientMessage clientMessage = new ClientMessage(MessageType.CREATE_DISCOUNT_CODE,params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
     }
 
     public void removeDiscountCode (String code) throws Exception {
-        if (storage.getDiscountByCode(code) == null)
-            throw new Exception("There is not such Discount Code!!");
-        else
-            storage.deleteDiscount(storage.getDiscountByCode(code));
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(code);
+        ClientMessage clientMessage = new ClientMessage(MessageType.REMOVE_DISCOUNT_CODE,params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage!=null && serverMessage.getMessageType()==MessageType.ERROR){
+            throw  (Exception)serverMessage.getResult();
+        }
     }
 
     public void removeCategory (String name) throws Exception {
-        if (storage.getCategoryByName(name) == null)
-            throw new Exception("There is not a category with this name!!");
-        else
-            storage.deleteCategory(storage.getCategoryByName(name));
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(name);
+        ClientMessage clientMessage = new ClientMessage(MessageType.REMOVE_CATEGORY,params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage!=null && serverMessage.getMessageType()==MessageType.ERROR){
+            throw  (Exception)serverMessage.getResult();
+        }
     }
 
     public void editCategoryByName (String oldName , String newName){
-        storage.getCategoryByName(oldName).setCategoryName(newName);
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(oldName);
+        params.add(newName);
+        ClientMessage clientMessage = new ClientMessage(MessageType.EDIT_CATEGORY_BY_NAME,params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
     }
 
     public void editCategoryByProperties (Category category ,String property, String newValue){
-        if(!category.getProperties().containsKey(property))
-            category.addNewProperty(property,newValue);
-        else
-            category.setSingleValueInProperties(property,newValue);
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(category);
+        params.add(property);
+        params.add(newValue);
+        ClientMessage clientMessage = new ClientMessage(MessageType.EDIT_CATEGORY_BY_PROPERTIES,params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
     }
 
     public void acceptRequest (String requestId) throws Exception {
-        if(storage.getRequestById(Integer.parseInt(requestId)) == null)
-            throw new Exception("There is not a request with this Id!!");
-        else {
-            storage.getRequestById(Integer.parseInt(requestId)).acceptRequest();
-            processAcceptedRequest(storage.getRequestById(Integer.parseInt(requestId)));
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(requestId);
+        ClientMessage clientMessage = new ClientMessage(MessageType.ACCEPT_REQUEST,params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage!=null && serverMessage.getMessageType()==MessageType.ERROR){
+            throw  (Exception)serverMessage.getResult();
         }
     }
 
     public void declineRequest (String requestId) throws Exception {
-        if(storage.getRequestById(Integer.parseInt(requestId)) == null)
-            throw new Exception("There is not a request with this Id!!");
-        else
-            storage.getRequestById(Integer.parseInt(requestId)).declineRequest();
-    }
-
-    public void processAcceptedRequest (Request request){
-        switch (request.getTypeOfRequest()) {
-            case REGISTER_SELLER:
-                storage.addUser(new Seller(request.getInformation()));
-                return;
-            case ADD_PRODUCT:
-                Seller seller = (Seller) storage.getUserByUsername(request.getInformation().get("seller"));
-                Product product = new Product(request.getInformation(),seller);
-                storage.addProduct(product);
-                seller.addProduct(product);
-                return;
-            case ADD_SALE:
-                addSaleRequest(request);
-                return;
-            case EDIT_PRODUCT:
-                String productField = request.getInformation().get("field");
-                String productUpdatedVersion = request.getInformation().get("updatedVersion");
-                String productId = request.getInformation().get("productId");
-                editProduct(productId,productField,productUpdatedVersion);
-                return;
-            case EDIT_SALE:
-                String saleField = request.getInformation().get("field");
-                String saleUpdatedVersion = request.getInformation().get("updatedVersion");
-                int saleId = Integer.parseInt(request.getInformation().get("offId"));
-                editSale(saleId,saleField,saleUpdatedVersion);
-                return;
-            case REMOVE_PRODUCT:
-                Product removedProduct = storage.getProductById(Integer.parseInt(request.getInformation().get("productId")));
-                storage.deleteProduct(removedProduct);
-                ((Seller)storage.getUserByUsername(request.getInformation().get("seller"))).removeProduct(removedProduct);
-                Sale.removeProductFromItSale(storage.getAllSales(),removedProduct);
-                return;
-            case ADD_COMMENT:
-                addCommentRequest(request);
-                return;
-            case ADD_PRODUCT_TO_SALE:
-                addProductToSAleRequest(request);
-                return;
-            case REMOVE_PRODUCT_FROM_SALE:
-                removeProductFromSaleRequest(request);
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(requestId);
+        ClientMessage clientMessage = new ClientMessage(MessageType.DECLINE_REQUEST,params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage!=null && serverMessage.getMessageType()==MessageType.ERROR){
+            throw  (Exception)serverMessage.getResult();
         }
     }
-
-    public void editProduct (String productId, String field, String updatedVersion){
-        if (field.equalsIgnoreCase("name"))
-            storage.getProductById(Integer.parseInt(productId)).setName(updatedVersion);
-        else if (field.equalsIgnoreCase("brand"))
-            storage.getProductById(Integer.parseInt(productId)).setBrand(updatedVersion);
-        else if (field.equalsIgnoreCase("price"))
-            storage.getProductById(Integer.parseInt(productId)).setPrice(Double.parseDouble(updatedVersion));
-        else if (field.equalsIgnoreCase("explanation"))
-            storage.getProductById(Integer.parseInt(productId)).setExplanation(updatedVersion);
-        else if (field.equalsIgnoreCase("supply"))
-            storage.getProductById(Integer.parseInt(productId)).setSupply(Integer.parseInt(updatedVersion));
-        else if (field.equalsIgnoreCase("category"))
-            storage.getProductById(Integer.parseInt(productId)).setCategory(Category.getCategoryByName(updatedVersion));
-    }
-
-    public void editSale (int offId, String field, String updatedVersion){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy,MM,dd,HH,mm");
-        System.out.println(updatedVersion);
-        if (field.equalsIgnoreCase("beginDate"))
-            storage.getSaleById(offId).setBeginDate(LocalDateTime.parse(updatedVersion, formatter));
-        if (field.equalsIgnoreCase("endDate"))
-            storage.getSaleById(offId).setEndDate(LocalDateTime.parse(updatedVersion, formatter));
-        if (field.equalsIgnoreCase("amountOfSale"))
-            storage.getSaleById(offId).setAmountOfSale(Integer.parseInt(updatedVersion));
-    }
-
-    private void addSaleRequest (Request request){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy,MM,dd,HH,mm");
-        LocalDateTime beginDate = LocalDateTime.parse(request.getInformation().get("beginDate"),formatter);
-        LocalDateTime endDate = LocalDateTime.parse(request.getInformation().get("endDate"),formatter);
-        int amountOfOff = Integer.parseInt(request.getInformation().get("amountOfSale"));
-        int offId = Integer.parseInt(request.getInformation().get("offId"));
-        Sale sale = new Sale(beginDate,endDate,amountOfOff,tempSellerManager.getSavedProductsInSale().get(offId));
-        storage.addSale(sale);
-        ((Seller)storage.getUserByUsername(request.getInformation().get("seller"))).addSale(sale);
-        for (Product product : tempSellerManager.getSavedProductsInSale().get(offId)) {
-            product.setSale(sale);
-        }
-    }
-
-    private void addProductToSAleRequest (Request request){
-        int addedProductToSAle = Integer.parseInt(request.getInformation().get("productId"));
-        int saleIdToBeAdded = Integer.parseInt(request.getInformation().get("offId"));
-        storage.getProductById(addedProductToSAle).setSale(storage.getSaleById(saleIdToBeAdded));
-        storage.getSaleById(saleIdToBeAdded).addProductToThisSale(storage.getProductById(addedProductToSAle));
-    }
-
-    private void removeProductFromSaleRequest(Request request) {
-        int removedProductFromSale = Integer.parseInt(request.getInformation().get("productId"));
-        int saleIdToBeRemoved = Integer.parseInt(request.getInformation().get("offId"));
-        if (storage.getProductById(removedProductFromSale).getSale() == storage.getSaleById(saleIdToBeRemoved)) {
-            storage.getProductById(removedProductFromSale).setSale(null);
-        }
-        storage.getSaleById(saleIdToBeRemoved).removeProductFromThisSale(storage.getProductById(removedProductFromSale));
-    }
-
-    public void addCommentRequest (Request request){
-        int productIdForComment = Integer.parseInt(request.getInformation().get("productId"));
-        String title = request.getInformation().get("title");
-        String content = request.getInformation().get("content");
-        String username = request.getInformation().get("username");
-        Comment comment = new Comment(username,storage.getProductById(productIdForComment),title,content);
-        storage.addComment(comment);
-        storage.getProductById(productIdForComment).addComment(comment);
-    }
-
-
-
     public ArrayList<Category> viewAllCategories() {
-        return null;
+        ClientMessage clientMessage = new ClientMessage(MessageType.VIEW_ALL_CATEGORIES, null);
+        return (ArrayList<Category>) clientMessage.sendAndReceive().getResult();
+
     }
 
-    public Category viewCategory(String text) {
-        return null;
+    public Category viewCategory(String text) throws Exception {
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(text);
+        ClientMessage clientMessage = new ClientMessage(MessageType.VIEW_CATEGORY,params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage!=null && serverMessage.getMessageType()==MessageType.ERROR){
+            throw  (Exception)serverMessage.getResult();
+        }
+        return (Category) serverMessage.getResult();
     }
 }

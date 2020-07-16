@@ -8,6 +8,7 @@ import model.*;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.HashMap;
@@ -18,7 +19,6 @@ public class Server {
 
     public static void main(String[] args) {
         new ServerImpl().run();
-        new ChatServer(8080);
     }
 
     private static class ServerImpl {
@@ -58,6 +58,7 @@ public class Server {
         PurchasingManager purchasingManager = new PurchasingManager();
         SearchingManager searchingManager = new SearchingManager();
         ProductManager productManager = new ProductManager();
+        AdminManager adminManager = new AdminManager();
         Storage storage = new Storage();
 
         public ClientHandler(OutputStream objectOutputStream, InputStream objectInputStream, ServerImpl server) {
@@ -170,7 +171,7 @@ public class Server {
                     ArrayList<Product> productsInOff = (ArrayList<Product>) clientMessage.getParameters().get(2);
                     try {
                         sellerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(0)));
-                        sellerManager.addOff(informationOFF, productsInOff);
+                        sellerManager.addOff(informationOFF,productsInOff);
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
@@ -234,14 +235,14 @@ public class Server {
                     Double totalCartPrice = customerManager.getCartTotalPrice();
                     return new ServerMessage(MessageType.GET_CART_PRICE, totalCartPrice);
                 case ADD_RATE:
-                    int idOfProduct = (Integer) clientMessage.getParameters().get(0);
+                    int idOfProduct =  (Integer) clientMessage.getParameters().get(0);
                     double rate = (Double) clientMessage.getParameters().get(1);
                     String userId = (String) clientMessage.getParameters().get(2);
                     try {
                         customerManager.rateProduct(idOfProduct, rate, userId);
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
-                    }
+                }
                     break;
                 case GET_ALL_BUY_LOGS:
                     ArrayList<BuyLog> buyLogs = customerManager.getCustomerBuyLogs((String) clientMessage.getParameters().get(0));
@@ -268,7 +269,7 @@ public class Server {
                     }
                     break;
                 case GET_DISCOUNT_PERCENTAGE:
-                    discountCode = (String) clientMessage.getParameters().get(0);
+                     discountCode = (String) clientMessage.getParameters().get(0);
                     try {
                         return new ServerMessage(MessageType.GET_DISCOUNT_PERCENTAGE, purchasingManager.getDiscountPercentage(discountCode));
                     } catch (Exception e) {
@@ -285,7 +286,7 @@ public class Server {
                 case CHECK_DISCOUNT_VALIDITY:
                     discountCode = (String) clientMessage.getParameters().get(0);
                     try {
-                        purchasingManager.checkDiscountValidity(discountCode);
+                       purchasingManager.checkDiscountValidity(discountCode);
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
@@ -298,7 +299,7 @@ public class Server {
                     try {
                         purchasingManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(0)));
                         purchasingManager.setCart((Cart) clientMessage.getParameters().get(1));
-                        purchasingManager.performPayment(receiverInformation, totalPrice, percentage, discountUsed);
+                        purchasingManager.performPayment(receiverInformation,totalPrice,percentage,discountUsed);
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
@@ -328,7 +329,7 @@ public class Server {
                     String filterTag = (String) clientMessage.getParameters().get(0);
                     String info = (String) clientMessage.getParameters().get(1);
                     try {
-                        return new ServerMessage(MessageType.PERFORM_FILTER, searchingManager.performFilter(filterTag, info));
+                        return new ServerMessage(MessageType.PERFORM_FILTER, searchingManager.performFilter(filterTag,info));
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
@@ -340,15 +341,15 @@ public class Server {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case DISABLE_FILTER:
-                    filterTag = (String) clientMessage.getParameters().get(0);
-                    info = (String) clientMessage.getParameters().get(1);
+                     filterTag = (String) clientMessage.getParameters().get(0);
+                     info = (String) clientMessage.getParameters().get(1);
                     try {
-                        return new ServerMessage(MessageType.DISABLE_FILTER, searchingManager.disableFilter(filterTag, info));
+                        return new ServerMessage(MessageType.DISABLE_FILTER, searchingManager.disableFilter(filterTag,info));
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case DISABLE_SORT:
-                    sortTag = (String) clientMessage.getParameters().get(0);
+                     sortTag = (String) clientMessage.getParameters().get(0);
                     try {
                         return new ServerMessage(MessageType.DISABLE_SORT, searchingManager.disableSort(sortTag));
                     } catch (Exception e) {
@@ -383,18 +384,128 @@ public class Server {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case GET_SELL_LOG_BY_CODE:
-                    return new ServerMessage(MessageType.GET_SELL_LOG_BY_CODE, storage.getSellLogByCode((String) clientMessage.getParameters().get(0)));
+                        return new ServerMessage(MessageType.GET_SELL_LOG_BY_CODE, storage.getSellLogByCode((String)clientMessage.getParameters().get(0)));
                 case GET_BUY_LOG_BY_CODE:
-                    return new ServerMessage(MessageType.GET_BUY_LOG_BY_CODE, storage.getBuyLogByCode((String) clientMessage.getParameters().get(0)));
+                    return new ServerMessage(MessageType.GET_BUY_LOG_BY_CODE, storage.getBuyLogByCode((String)clientMessage.getParameters().get(0)));
                 case REGISTER:
                     try {
-                        manager.register((HashMap<String, String>) clientMessage.getParameters().get(0));
+                        manager.register((HashMap<String, String>)clientMessage.getParameters().get(0));
+                        break;
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
-                case CHAT_MESSAGE:
-                    ChatClient client = new ChatClient((String) clientMessage.getParameters().get(0));
-                    return new ServerMessage(MessageType.CHAT_MESSAGE, client);
+                case DOES_ANY_ADMIN_EXIST:
+                    return new ServerMessage(MessageType.DOES_ANY_ADMIN_EXIST,manager.doesAnyAdminExist());
+                case EDIT_FIELD:
+                    field = (String)clientMessage.getParameters().get(0);
+                    updatedVersion = (String)clientMessage.getParameters().get(1);
+                    try {
+                        manager.editField(field,updatedVersion);
+                        break;
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case GET_ALL_USERS:
+                    return new ServerMessage(MessageType.GET_ALL_USERS,adminManager.viewAllUsers());
+                case DELETE_USER:
+                    try {
+                        adminManager.deleteUser((String) clientMessage.getParameters().get(0));
+                        break;
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case REMOVE_PRODUCT:
+                    try {
+                        adminManager.removeProduct((String) clientMessage.getParameters().get(0));
+                        break;
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case ADD_CATEGORY:
+
+                    try {
+                        adminManager.addCategory((String) clientMessage.getParameters().get(0),(String) clientMessage.getParameters().get(1));
+                        break;
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case VIEW_ALL_DISCOUNT_CODES:
+                    return new ServerMessage(MessageType.VIEW_ALL_DISCOUNT_CODES,adminManager.viewAllDiscountCodes());
+                case VIEW_ALL_REQUESTS:
+                    return new ServerMessage(MessageType.VIEW_ALL_REQUESTS,adminManager.viewAllRequests());
+                case VIEW_DISCOUNT_CODE:
+                    try {
+                        adminManager.viewDiscountCode((String) clientMessage.getParameters().get(0));
+                        break;
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case ADD_CUSTOMER_TO_DISCOUNT:
+                    try {
+                        adminManager.addCustomerToDiscount((String) clientMessage.getParameters().get(0),(Discount) clientMessage.getParameters().get(1));
+                        break;
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case REMOVE_CUSTOMER_FROM_DISCOUNT:
+                    try {
+                        adminManager.removeCustomerFromDiscount((Discount) clientMessage.getParameters().get(0),(String) clientMessage.getParameters().get(1));
+                        break;
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case EDIT_DISCOUNT_FIELD:
+                    adminManager.editDiscountField((Discount) clientMessage.getParameters().get(0),(String) clientMessage.getParameters().get(1),(String) clientMessage.getParameters().get(2));
+                    break;
+                case CREATE_DISCOUNT_CODE:
+                    String code =(String) clientMessage.getParameters().get(0);
+                    LocalDateTime startDate = (LocalDateTime)clientMessage.getParameters().get(1);
+                    LocalDateTime endDate = (LocalDateTime)clientMessage.getParameters().get(2);
+                    int percentage1 = (int)clientMessage.getParameters().get(3);
+                    int usagePerCustomer = (int)clientMessage.getParameters().get(4);
+                    double maxAmount = (double)clientMessage.getParameters().get(5);
+                    adminManager.createDiscountCode(code,startDate,endDate,percentage1,usagePerCustomer,maxAmount);
+                    break;
+                case REMOVE_DISCOUNT_CODE:
+                    try {
+                        adminManager.removeDiscountCode((String) clientMessage.getParameters().get(0));
+                        break;
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case REMOVE_CATEGORY:
+                    try {
+                        adminManager.removeCategory((String) clientMessage.getParameters().get(0));
+                        break;
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case ACCEPT_REQUEST:
+                    try {
+                        adminManager.acceptRequest((String) clientMessage.getParameters().get(0));
+                        break;
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case DECLINE_REQUEST:
+                    try {
+                        adminManager.declineRequest((String) clientMessage.getParameters().get(0));
+                        break;
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case EDIT_CATEGORY_BY_NAME:
+                        adminManager.editCategoryByName((String) clientMessage.getParameters().get(0),(String) clientMessage.getParameters().get(1));
+                        break;
+                case EDIT_CATEGORY_BY_PROPERTIES:
+                        adminManager.editCategoryByProperties((Category) clientMessage.getParameters().get(0),(String) clientMessage.getParameters().get(1),(String) clientMessage.getParameters().get(2));
+                        break;
+                case VIEW_CATEGORY:
+                    try {
+                        return new ServerMessage(MessageType.VIEW_CATEGORY,adminManager.viewCategory((String) clientMessage.getParameters().get(0)));
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
 
             }
             return null;

@@ -35,7 +35,6 @@ public class ClientManager {
             throw  (Exception)serverMessage.getResult();
         }
 
-
     }
 
     public Person login(String username, String password) throws Exception {
@@ -52,6 +51,14 @@ public class ClientManager {
 
 
     public void editField(String field, String updatedVersion) throws Exception {
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(field);
+        params.add(updatedVersion);
+        ClientMessage clientMessage = new ClientMessage(MessageType.EDIT_FIELD,params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage!=null && serverMessage.getMessageType()==MessageType.ERROR){
+            throw  (Exception)serverMessage.getResult();
+        }
 
     }
 
@@ -68,7 +75,11 @@ public class ClientManager {
         ArrayList<Object> params = new ArrayList<>();
         params.add(productId);
         ClientMessage clientMessage = new ClientMessage(MessageType.GET_PRODUCT_BY_ID,params);
-        return (Product) clientMessage.sendAndReceive().getResult();
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage!=null && serverMessage.getMessageType()==MessageType.ERROR){
+            throw  (Exception)serverMessage.getResult();
+        }
+        return (Product) serverMessage.getResult();
     }
 
     public void setPerson(Person person1){

@@ -60,6 +60,7 @@ public class CustomerMenu extends Menu implements Initializable {
         numberLabel.setText(person.getNumber());
         balanceLabel.setText(Double.toString(person.getBalance()));
         roleLabel.setText("customer");
+        System.out.println("58 customer menu***\n"+person);
     }
 
     public void editPasswordField() {
