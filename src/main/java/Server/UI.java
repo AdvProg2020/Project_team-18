@@ -1,13 +1,10 @@
 package Server;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -15,19 +12,11 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javax.swing.JOptionPane;
 
-/**
- *
- * @author hth
- */
 public class UI extends VBox implements EventHandler{
 
     private final boolean serverMode;
@@ -41,9 +30,6 @@ public class UI extends VBox implements EventHandler{
     private final TextField message = new TextField();
     private final Label msgLabel = new Label("Message:");
     private ListView lw = new ListView();
-    private MenuBar mBar;
-    private Menu fileMenu, helpMenu;
-    private MenuItem closeItem, dcItem, clearItem, aboutItem;
 
     private Button closeButton;
     private Button sendButton;
@@ -86,8 +72,6 @@ public class UI extends VBox implements EventHandler{
         }
         chatBox.getChildren().add(chat);
         chatBox.setPadding(new Insets(5, 5, 5, 5));
-        this.setupMenu();
-        this.getChildren().add(mBar);
         this.getChildren().add(chatBox);
 
         // Add a listener to ListView to track the selected name.
@@ -136,51 +120,12 @@ public class UI extends VBox implements EventHandler{
 //        this.server = server;
 //    }
 
-    private void setupMenu() {
-        mBar = new MenuBar();
-        fileMenu = new Menu("File");
-        helpMenu = new Menu("Help");
-        dcItem = new MenuItem("Disconnect");
-        dcItem.setOnAction(this);
-        closeItem = new MenuItem("Exit");
-        closeItem.setOnAction(this);
-        clearItem = new MenuItem("Clear chat");
-        clearItem.setOnAction(this);
-        aboutItem = new MenuItem("About");
-        aboutItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "JavaFX exercise for the Software development course 2014.\n\n" +
-                                "Java version: " + System.getProperty("java.version") + "\nOS: " +
-                                System.getProperty("os.name") + " " + System.getProperty("os.version") + " " + System.getProperty("os.arch"),
-                        "About FXAddressBook", JOptionPane.INFORMATION_MESSAGE);
-            }
-        });
-        if(!this.serverMode)
-            fileMenu.getItems().add(dcItem);
-        fileMenu.getItems().add(clearItem);
-        fileMenu.getItems().add(closeItem);
-        helpMenu.getItems().add(aboutItem);
-        mBar.getMenus().addAll(fileMenu);
-        mBar.getMenus().addAll(helpMenu);
-    }
-
     @Override
     public void handle(Event event) {
         if(event.getSource().equals(sendButton) || event.getSource().equals(message)) {
             String msg = message.getText();
             if(!msg.equals(""))
                 sendMessage(msg);
-        }
-        else if(event.getSource().equals(dcItem)) {
-            enableUi(false);
-            client.closeSocket();
-            setStatusBarText("Disconnected");
-        }
-        else if(event.getSource().equals(closeItem)) {
-            Platform.exit();
-        }
-        else if(event.getSource().equals(clearItem)) {
-            chat.setText("");
         }
         else if(event.getSource().equals(dcButton)) {
             if(selectedIndex != 0) {
@@ -198,21 +143,8 @@ public class UI extends VBox implements EventHandler{
         message.setText("");
         if(!selectedUser.equals(""))
             chat.appendText("\n" + userName + "->" + selectedUser + ": " + msg);
-
         String cmsg;
         cmsg = userName + " " + selectedUser + " " + msg;
-//        cmsg.setReceiverName(selectedUser);
-//        cmsg.setMessage(msg);
-//        if(serverMode){
-//            if(cmsg.getReceiverName().equals("")) {
-//                chat.appendText("\n" + userName + ": " + msg);
-//                server.broadcastMessage(cmsg, 0);
-//            }
-//            else {
-//                server.sendTo(cmsg);
-//            }
-//        }
-//        else
             client.sendMessage(cmsg);
     }
 
@@ -228,7 +160,6 @@ public class UI extends VBox implements EventHandler{
         userNames.add(0, "");
         for(String name : names) {
             userNames.add(name);
-            //sortUserNames();
         }
         lw.setItems(userNames);
     }
@@ -236,24 +167,11 @@ public class UI extends VBox implements EventHandler{
     public void addUserName(String name) {
         userNames.add(name);
         chat.appendText("\n" + name + " has joined the chat.");
-        //sortUserNames();
     }
 
     public void removeUserName(String name) {
         userNames.remove(name);
         chat.appendText("\n" + name + " has left the chat.");
-        //sortUserNames();
-    }
-
-    private void sortUserNames() {
-        if(userNames.size() > 2)
-            Collections.sort(userNames);
-        lw.setItems(userNames);
-    }
-
-    public void clearUserNames() {
-        userNames.clear();
-        lw.setItems(userNames);
     }
 
     public void setStatusBarText(String text) {

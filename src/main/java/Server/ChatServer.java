@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class ChatServer implements Runnable {
 
-    private ArrayList<ServerClient> clients = new ArrayList();
+    private ArrayList<ServerClient> clients = new ArrayList<>();
     private String userName;
     private int port;
     private UI ui;
@@ -53,12 +53,7 @@ public class ChatServer implements Runnable {
         }
     }
 
-    /**
-     * Send a message to all users
-     *
-     * @param cm        Message
-     * @param excludeId Client Id to exclude from broadcast
-     */
+     // Send a message to all users
     public void broadcastMessage(ChatMessage cm, int excludeId) {
         for (ServerClient temp : clients) {
             if (temp.getId() != excludeId && temp.getId() != 0)
@@ -66,13 +61,9 @@ public class ChatServer implements Runnable {
         }
     }
 
-    /**
-     * Send a list of usernames to a specified client id
-     *
-     * @param clientId
-     */
+     //Send a list of usernames to a specified client id
     public void sendUserNames(int clientId) {
-        ArrayList<String> users = new ArrayList();
+        ArrayList<String> users = new ArrayList<>();
         ServerClient client = null;
         for (ServerClient temp : clients) {
             users.add(temp.getUserName());
@@ -86,11 +77,7 @@ public class ChatServer implements Runnable {
         client.sendMessage(sm);
     }
 
-    /**
-     * Send a message to a specified client.
-     *
-     * @param m
-     */
+   // Send a message to a specified client.
     public void sendTo(ChatMessage m) {
         String receiver = m.getReceiverName();
         if (receiver.equals(userName)) {
@@ -104,28 +91,4 @@ public class ChatServer implements Runnable {
             }
         }
     }
-
-    /**
-     * Disconnect and remove a client
-     *
-     * @param name
-     */
-    public void disconnectClient(String name) {
-        for (ServerClient temp : clients) {
-            if (temp.getUserName().equals(name)) {
-                StatusMessage sm = new StatusMessage();
-                sm.setLogOutMessage(true);
-                sm.setData((String) temp.getUserName());
-                clients.remove(temp);
-                temp.sendMessage(sm);
-
-                sm.setLogOutMessage(false);
-                sm.setUserLeft(true);
-                clients.remove(temp);
-                broadcastMessage(sm, 0);
-                return;
-            }
-        }
-    }
-
 }

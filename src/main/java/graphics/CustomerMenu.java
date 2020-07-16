@@ -350,7 +350,7 @@ public class CustomerMenu extends Menu implements Initializable {
                     "Connection to " + "localhost" + " failed.",
                     "Chat",
                     JOptionPane.ERROR_MESSAGE);
-            Platform.exit();
+            //Platform.exit();
         }
         ui.setClient(client);
         Thread clientThread = new Thread(client);
