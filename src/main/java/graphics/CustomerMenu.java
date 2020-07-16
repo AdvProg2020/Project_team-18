@@ -1,17 +1,22 @@
 package graphics;
 
 import Client.ClientCustomerManager;
+import Server.*;
 import controller.CustomerManager;
 import controller.Storage;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import model.*;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -332,7 +337,26 @@ public class CustomerMenu extends Menu implements Initializable {
         thisPersonBuyLogs.run();
     }
 
-    public void goToSupportMenu(){
+    public void goToChatRoom(){
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(person.getUsername());
+        ClientMessage clientMessage = new ClientMessage(MessageType.CHAT_MESSAGE,params);
+        ChatClient client = ((ChatClient)clientMessage.sendAndReceive().getResult());
+        StackPane root = new StackPane();
+        UI ui = new UI(person.getUsername(), false);
+        if(!client.connect()) {
+            JOptionPane.showMessageDialog(null,
+                    "Connection to " + "localhost" + " failed.",
+                    "Chat",
+                    JOptionPane.ERROR_MESSAGE);
+            Platform.exit();
+        }
+        ui.setClient(client);
+        Thread clientThread = new Thread(client);
+        clientThread.setDaemon(true);
+        clientThread.start();
+        root.getChildren().add(ui);
+        stage.setScene(new Scene(root));
         /*Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Online Supporters");
         dialog.setHeaderText(null);
