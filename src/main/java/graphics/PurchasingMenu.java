@@ -76,7 +76,7 @@ public class PurchasingMenu extends Menu {
             }
             try {
                 purchasingManager.checkDiscountValidity(discountCode);
-                finalPrice = purchasingManager.calculateTotalPriceWithDiscount(discountCode,Cart.getCart());
+                finalPrice = purchasingManager.calculateTotalPriceWithDiscount(discountCode,currentCart);
                 return true;
             } catch (Exception e) {
                 showError("You can't use this discount for one of following reasons:\n -This discount is expired!\n" +
@@ -85,7 +85,7 @@ public class PurchasingMenu extends Menu {
             }
         } else {
             try {
-                finalPrice = purchasingManager.getTotalPriceWithoutDiscount(Cart.getCart());
+                finalPrice = purchasingManager.getTotalPriceWithoutDiscount(currentCart);
             } catch (Exception e) {
                 showError(e.getMessage() , 20);
             }
@@ -116,7 +116,7 @@ public class PurchasingMenu extends Menu {
                 receivedInfo.put("phoneNumber", name.getText());
                 purchasingManager.performPayment(receivedInfo, finalPrice,
                         purchasingManager.getDiscountPercentage(discountCodeField.getText()), discountCodeField.getText(),
-                        person.getUsername() , Cart.getCart());
+                        person.getUsername() ,currentCart);
                 if (!discountCodeField.getText().equals("")) {
                     purchasingManager.updateDiscountUsagePerPerson(discountCodeField.getText() , person.getUsername());
                 }

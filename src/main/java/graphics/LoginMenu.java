@@ -5,10 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import model.Admin;
-import model.Person;
-import model.Seller;
-import model.Supporter;
+import model.*;
 
 public class LoginMenu extends Menu {
     public LoginMenu(Menu previousMenu) {
@@ -32,6 +29,7 @@ public class LoginMenu extends Menu {
         }
         try {
             Menu.setPerson(manager.login(username, password));
+            Menu.setCurrentCart(Cart.getCart());
             goToAccount(person);
 
         } catch (Exception e) {

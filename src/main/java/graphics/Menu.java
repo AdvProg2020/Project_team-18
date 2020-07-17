@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+import model.Cart;
 import model.Person;
 
 import java.io.File;
@@ -18,6 +19,7 @@ public abstract class Menu {
 
     protected static Stage stage = ClientView.getStage();
     protected static Person person;
+    protected static Cart currentCart;
     protected static ClientManager manager = new ClientManager();
     //protected static Manager manager = new Manager();
     protected Parent root;
@@ -43,6 +45,14 @@ public abstract class Menu {
 
     public static void setPerson(Person person) {
         Menu.person = person;
+    }
+
+    public static Cart getCurrentCart() {
+        return currentCart;
+    }
+
+    public static void setCurrentCart(Cart currentCart) {
+        Menu.currentCart = currentCart;
     }
 
     public void showError(String message, double height){
