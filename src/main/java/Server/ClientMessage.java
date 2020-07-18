@@ -18,12 +18,6 @@ public class ClientMessage implements Serializable {
     public ClientMessage(MessageType messageType, ArrayList<Object> parameters) {
         this.messageType = messageType;
         this.parameters = parameters;
-       /* try {
-            objectInputStream = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
-            objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-        } catch (IOException e){
-            System.out.println(e.getMessage());
-        }*/
     }
 
     public synchronized ServerMessage sendAndReceive() {

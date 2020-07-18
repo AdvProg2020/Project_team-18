@@ -39,6 +39,7 @@ public class AdminMenu extends Menu implements Initializable {
     }
 
     public void viewPersonalInfo() {
+        System.out.println("****"+person);
         usernameLabel.setText(person.getUsername());
         passwordLabel.setText(person.getPassword());
         nameLabel.setText(person.getName());
