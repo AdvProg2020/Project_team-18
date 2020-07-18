@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+import Client.ClientManager;
 import controller.FileSaver;
 import controller.Storage;
 import graphics.MainMenu;
@@ -49,9 +50,10 @@ public class ClientView extends Application {
         }
         MainMenu mainMenu = new MainMenu(null);
         stage.setTitle("TEAM-18");
-      /*  stage.setOnCloseRequest(event -> {
-            FileSaver fileSaver = new FileSaver(Storage.getStorage());
-            fileSaver.dataSaver();
+        //commented temporarily!
+      /* stage.setOnCloseRequest(event -> {
+           ClientManager clientManager = new ClientManager();
+           clientManager.terminate();
         });*/
         mainMenu.run();
         stage.show();

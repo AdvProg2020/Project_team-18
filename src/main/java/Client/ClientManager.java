@@ -50,6 +50,7 @@ public class ClientManager {
     }
 
 
+
     public void editField(String field, String updatedVersion) throws Exception {
         ArrayList<Object> params = new ArrayList<>();
         params.add(field);
@@ -84,5 +85,9 @@ public class ClientManager {
 
     public void setPerson(Person person1){
         person = person1;
+    }
+    public void terminate() {
+        ClientMessage clientMessage = new ClientMessage(MessageType.TERMINATE,null);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
     }
 }
