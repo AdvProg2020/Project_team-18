@@ -24,8 +24,15 @@ public class Server {
     }
 
     private static class ServerImpl {
+        DataInputStream bankDataInputStream ;
+        DataOutputStream bankDataOutputStream;
         private void run() {
             try {
+                Socket bankSocket = new Socket("127.0.0.1", 8787);
+                bankDataInputStream = new DataInputStream(bankSocket.getInputStream());
+                bankDataOutputStream = new DataOutputStream(bankSocket.getOutputStream());
+                bankDataOutputStream.writeUTF("connected");
+                bankDataOutputStream.flush();
                 ServerSocket serverSocket = new ServerSocket(9090);
 
                 while (true) {
@@ -393,6 +400,7 @@ public class Server {
                 case REGISTER:
                     try {
                         manager.register((HashMap<String, String>)clientMessage.getParameters().get(0));
+                        createBankAccount((HashMap<String, String>)clientMessage.getParameters().get(0));
                         break;
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
@@ -527,6 +535,32 @@ public class Server {
                     break;
             }
             return null;
+        }
+
+        private void createBankAccount(HashMap<String, String>information){
+            if(!information.get("role").equals("admin")) {
+                String username = information.get("username") + information.get("role");
+                String password = "im" + information.get("username");
+                String string = "create_account " + information.get("name") + " " + information.get("familyName") +
+                        " " + username + " " + password + " " + password;
+                try {
+                    server.bankDataOutputStream.writeUTF(string);
+                    String result = server.bankDataInputStream.readUTF();
+                    System.out.println(result);
+                    if (result.equals("Done"))
+                        setWallet(information,username,password);
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+
+        private void setWallet(HashMap<String,String> information , String accountUsername , String accountPassword){
+            Person person = storage.getUserByUsername(information.get("username"));
+            if (information.get("role").equals("seller"))
+                ((Seller) person).setWallet(new Wallet(50.0 , accountUsername , accountPassword , ""));
+            if (information.get("role").equals("customer"))
+                ((Customer) person).setWallet(new Wallet(50.0 , accountUsername , accountPassword , ""));
         }
 
         @Override

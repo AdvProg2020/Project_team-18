@@ -6,9 +6,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
 
@@ -63,8 +61,9 @@ public class BankClientHandler {
             try {
                 while (true) {
                     input = inputStream.readUTF();
+                    System.out.println(input);
                     if (input.startsWith("create_account")) {
-                        String[] inputs = input.split("\\s");
+                         String[] inputs = input.split("\\s");
                         String firstName = inputs[1];
                         String lastName = inputs[2];
                         String username = inputs[3];
