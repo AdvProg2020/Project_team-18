@@ -1,7 +1,7 @@
 package model;
 
 
-
+import java.security.PublicKey;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,8 +14,10 @@ public class BuyLog extends Log {
     private ArrayList<Seller> seller;
     private HashMap<String, String> customerInfo;
     private transient static ArrayList<Integer> allBuyCodes = new ArrayList<>();
-    private transient static ArrayList<Log>allBuyLogs = new ArrayList<>();
+    private transient static ArrayList<Log> allBuyLogs = new ArrayList<>();
     private String discountUsed;
+    private BuyLogStatus status;
+
     public static ArrayList<Log> getAllBuyLogs() {
         return allBuyLogs;
     }
@@ -23,7 +25,7 @@ public class BuyLog extends Log {
     public BuyLog() {
     }
 
-    public BuyLog(LocalDateTime date) {
+    public BuyLog(LocalDateTime date, HashMap<String, String> info) {
         super(date);
     }
 
@@ -33,14 +35,14 @@ public class BuyLog extends Log {
         }
         int max = 0;
         for (Log buyLog : allBuyLogs) {
-            if (((BuyLog)buyLog).getBuyCode() > max)
-                max = ((BuyLog)buyLog).getBuyCode();
+            if (((BuyLog) buyLog).getBuyCode() > max)
+                max = ((BuyLog) buyLog).getBuyCode();
         }
         return max + 1;
     }
 
     public BuyLog(LocalDateTime date, double paidMoney, double discountAmount, ArrayList<Seller> sellers,
-                  HashMap<String, String> customerInfo , HashMap<Product, Integer> productsInThisBuyLog,String discountUsed) {
+                  HashMap<String, String> customerInfo, HashMap<Product, Integer> productsInThisBuyLog, String discountUsed) {
         super(date);
         this.paidMoney = paidMoney;
         this.discountAmount = discountAmount;
@@ -48,10 +50,11 @@ public class BuyLog extends Log {
         this.customerInfo = customerInfo;
         this.buyCode = idSetter();
         for (Product product : productsInThisBuyLog.keySet()) {
-            this.products.put(product,productsInThisBuyLog.get(product));
+            this.products.put(product, productsInThisBuyLog.get(product));
         }
         this.discountUsed = discountUsed;
         allBuyCodes.add(buyCode);
+        this.status = BuyLogStatus.WAITING;
     }
 
     public int getBuyCode() {
@@ -66,7 +69,7 @@ public class BuyLog extends Log {
         return discountAmount;
     }
 
-    public String getDiscountUsed(){
+    public String getDiscountUsed() {
         return discountUsed;
     }
 
@@ -76,5 +79,17 @@ public class BuyLog extends Log {
 
     public ArrayList<Integer> getAllBuyCodes() {
         return allBuyCodes;
+    }
+
+    public HashMap<String, String> getCustomerInfo(){
+        return customerInfo;
+    }
+
+    public BuyLogStatus getStatus(){
+        return this.status;
+    }
+
+    public void sendPurchase() {
+        this.status = BuyLogStatus.SENT;
     }
 }

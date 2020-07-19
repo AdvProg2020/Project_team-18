@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+
+import com.sun.org.apache.bcel.internal.generic.PUSH;
 import model.*;
 import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
@@ -18,6 +20,14 @@ public class AdminManager extends Manager {
 
     public ArrayList<Person> viewAllUsers (){
         return storage.getAllUsers();
+    }
+
+    public ArrayList<BuyLog> viewAllBuyLogs(){
+        ArrayList<BuyLog> allBuyLogs = new ArrayList<>();
+        for (Log log : storage.getAllBuyLogs()) {
+            allBuyLogs.add((BuyLog) log);
+        }
+        return allBuyLogs;
     }
 
     public Person viewUser (String username) throws Exception {
@@ -305,5 +315,12 @@ public class AdminManager extends Manager {
                 2,100);
         storage.addDiscount(randomDiscount);
         addCustomerToDiscount(person.getUsername(), randomDiscount);
+    }
+
+    public void sendPurchase(String buyCode) throws Exception {
+        if(storage.getBuyLogByCode(buyCode) == null)
+            throw new Exception("There is not a buyLog with this Id!!");
+        else
+            storage.getBuyLogByCode(buyCode).sendPurchase();
     }
 }

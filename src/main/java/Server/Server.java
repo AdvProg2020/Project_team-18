@@ -5,6 +5,7 @@ import controller.*;
 import javafx.scene.media.MediaPlayer;
 import model.*;
 
+import javax.print.DocFlavor;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -505,6 +506,16 @@ public class Server {
                 case VIEW_CATEGORY:
                     try {
                         return new ServerMessage(MessageType.VIEW_CATEGORY,adminManager.viewCategory((String) clientMessage.getParameters().get(0)));
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                case VIEW_ALL_BUY_LOGS:
+                    return new ServerMessage(MessageType.VIEW_ALL_BUY_LOGS, adminManager.viewAllBuyLogs());
+
+                case SEND_PURCHASE:
+                    try {
+                        adminManager.sendPurchase((String) clientMessage.getParameters().get(0));
+                        break;
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }

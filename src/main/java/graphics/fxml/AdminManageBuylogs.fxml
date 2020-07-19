@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphics.AdminManageBuyLogs">
+    <stylesheets>
+        <URL value="@cssSheets/BasicStyle.css" />
+    </stylesheets>
+    <stylesheets>
+        <URL value="@cssSheets/BackGround.css" />
+    </stylesheets>
+    <stylesheets>
+        <URL value="@cssSheets/AddProduct.css" />
+    </stylesheets>
+    <children>
+        <Button layoutX="14.0" layoutY="20.0" mnemonicParsing="false" onAction="#back" onMousePressed="#buttonSound" text="back" />
+        <TableView fx:id="buyLogsTable" layoutX="83.0" prefHeight="600.0" prefWidth="517.0">
+            <columns>
+                <TableColumn fx:id="idColumn" prefWidth="72.79999542236328" text="ID" />
+                <TableColumn fx:id="statusColumn" prefWidth="152.0" text="Status" />
+                <TableColumn fx:id="viewMoreColumn" prefWidth="152.0" text="More Details" />
+                <TableColumn fx:id="respondColumn" prefWidth="142.19998168945312" text="Respond" />
+            </columns>
+        </TableView>
+    </children>
+</AnchorPane>

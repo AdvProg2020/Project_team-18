@@ -40,6 +40,8 @@ public class PerBuyLog extends Menu implements Initializable {
     Label date;
     @FXML
     Label logCode;
+    @FXML
+    Label buyLogStatus;
 
     public PerBuyLog(BuyLog buyLog, Menu previousMenu) {
         super(previousMenu, "src/main/java/graphics/fxml/PerBuyLog.fxml");
@@ -67,5 +69,7 @@ public class PerBuyLog extends Menu implements Initializable {
         }
         date.setText(buyLog.getDate().toString());
         logCode.setText(Integer.toString(buyLog.getBuyCode()));
+        buyLogStatus.setText(buyLog.getStatus().toString());
     }
+
 }
