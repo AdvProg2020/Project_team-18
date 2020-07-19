@@ -72,7 +72,6 @@ public class BankServer {
                         String password = inputs[4];
                         String repeatedPassword = inputs[5];
                         createAccount(firstName, lastName, username, password, repeatedPassword);
-                        break;
                     } else if (input.startsWith("get_token")) {
                         System.out.println("in bank server");
                         String[] inputs = input.split("\\s");
