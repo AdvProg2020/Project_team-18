@@ -537,7 +537,7 @@ public class Server {
             return null;
         }
 
-        private void createBankAccount(HashMap<String, String>information){
+        private void createBankAccount(HashMap<String, String>information) throws Exception{
             if(!information.get("role").equals("admin")) {
                 String username = information.get("username") + information.get("role");
                 String password = "im" + information.get("username");
@@ -549,6 +549,10 @@ public class Server {
                     System.out.println(result);
                     if (result.equals("Done"))
                         setWallet(information,username,password);
+                    else if (result.equals("Passwords do not match"))
+                        throw new Exception ("Passwords do not match");
+                    else if (result.equals("Username is not available"))
+                        throw new Exception("Username is not available");
                 } catch (IOException e) {
                     System.out.println(e.getMessage());
                 }

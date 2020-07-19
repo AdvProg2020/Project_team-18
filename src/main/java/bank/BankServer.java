@@ -10,7 +10,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.HashMap;
 
-public class BankClientHandler {
+public class BankServer {
 
     public static void main(String[] args) {
         new BankImpl().run();
