@@ -15,12 +15,14 @@ import static javax.crypto.Cipher.SECRET_KEY;
 public class Token {
     private static SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
     public static String createJWS(long validPeriod){
+        String jws = null;
+        if (validPeriod>0){
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
             long expMillis = nowMillis + validPeriod;
            Date exp = new Date(expMillis);
 
-        String jws = Jwts.builder()
+         jws = Jwts.builder()
                 .setSubject("authenticationToken")
                 .setId("id")
                 .setExpiration(exp)
@@ -28,7 +30,18 @@ public class Token {
                         signatureAlgorithm,
                         TextCodec.BASE64.decode("Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=")
                 )
-                .compact();
+                .compact();}
+        else {
+            jws = Jwts.builder()
+                    .setSubject("authenticationToken")
+                    .setId("id")
+                    .signWith(
+                            signatureAlgorithm,
+                            TextCodec.BASE64.decode("Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=")
+                    )
+                    .compact();
+        }
+
         return jws;
     }
     public static void readJWS(String jws){
