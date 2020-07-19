@@ -20,6 +20,14 @@ public class AdminManager extends Manager {
         return storage.getAllUsers();
     }
 
+    public ArrayList<BuyLog> viewAllBuyLogs(){
+        ArrayList<BuyLog> allBuyLogs = new ArrayList<>();
+        for (Log log : storage.getAllBuyLogs()) {
+            allBuyLogs.add((BuyLog) log);
+        }
+        return allBuyLogs;
+    }
+
     public Person viewUser (String username) throws Exception {
         if (storage.getUserByUsername(username) == null)
             throw new Exception("There is not such user!!");
@@ -305,5 +313,12 @@ public class AdminManager extends Manager {
                 2,100);
         storage.addDiscount(randomDiscount);
         addCustomerToDiscount(person.getUsername(), randomDiscount);
+    }
+
+    public void sendPurchase(String buyCode) throws Exception {
+        if(storage.getBuyLogByCode(buyCode) == null)
+            throw new Exception("There is not a buyLog with this Id!!");
+        else
+            storage.getBuyLogByCode(buyCode).sendPurchase();
     }
 }

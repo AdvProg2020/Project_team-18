@@ -5,6 +5,7 @@ import controller.*;
 import javafx.scene.media.MediaPlayer;
 import model.*;
 
+import javax.print.DocFlavor;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -23,8 +24,15 @@ public class Server {
     }
 
     private static class ServerImpl {
+        DataInputStream bankDataInputStream ;
+        DataOutputStream bankDataOutputStream;
         private void run() {
             try {
+                Socket bankSocket = new Socket("127.0.0.1", 8787);
+                bankDataInputStream = new DataInputStream(bankSocket.getInputStream());
+                bankDataOutputStream = new DataOutputStream(bankSocket.getOutputStream());
+                bankDataOutputStream.writeUTF("connected");
+                bankDataOutputStream.flush();
                 ServerSocket serverSocket = new ServerSocket(9090);
 
                 while (true) {
@@ -392,6 +400,7 @@ public class Server {
                 case REGISTER:
                     try {
                         manager.register((HashMap<String, String>)clientMessage.getParameters().get(0));
+                        createBankAccount((HashMap<String, String>)clientMessage.getParameters().get(0));
                         break;
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
@@ -508,14 +517,77 @@ public class Server {
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
+                case VIEW_ALL_BUY_LOGS:
+                    return new ServerMessage(MessageType.VIEW_ALL_BUY_LOGS, adminManager.viewAllBuyLogs());
+
+                case SEND_PURCHASE:
+                    try {
+                        adminManager.sendPurchase((String) clientMessage.getParameters().get(0));
+                        break;
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
                 case CHAT_MESSAGE:
                     ChatClient client = new ChatClient((String)clientMessage.getParameters().get(0));
                     return new ServerMessage(MessageType.CHAT_MESSAGE, client);
                 case TERMINATE:
                     manager.terminate();
                     break;
+                case CHARGE_WALLET:
+                    Person person = storage.getUserByUsername((String) clientMessage.getParameters().get(1));
+                    Customer customer = (Customer) person;
+                    String charge = "get_token " + customer.getWallet().getBankAccountUsername() + " " +
+                            customer.getWallet().getBankAccountPassword();
+                    try {
+                        System.out.println(charge);
+                        getTokenFromBank(charge);
+                        //System.out.println(server.bankDataInputStream.readUTF());
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                    break;
             }
             return null;
+        }
+
+        private void createBankAccount(HashMap<String, String>information) throws Exception{
+            if(!information.get("role").equals("admin")) {
+                String username = information.get("username") + information.get("role");
+                String password = "im" + information.get("username");
+                String string = "create_account " + information.get("name") + " " + information.get("familyName") +
+                        " " + username + " " + password + " " + password;
+                try {
+                    server.bankDataOutputStream.writeUTF(string);
+                    server.bankDataOutputStream.flush();
+                    String result = server.bankDataInputStream.readUTF();
+                    System.out.println(result);
+                    if (result.equals("Done"))
+                        setWallet(information,username,password);
+                    else if (result.equals("Passwords do not match"))
+                        throw new Exception ("Passwords do not match");
+                    else if (result.equals("Username is not available"))
+                        throw new Exception("Username is not available");
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+
+        private void setWallet(HashMap<String,String> information , String accountUsername , String accountPassword){
+            Person person = storage.getUserByUsername(information.get("username"));
+            if (information.get("role").equals("seller"))
+                ((Seller) person).setWallet(new Wallet(50.0 , accountUsername , accountPassword , ""));
+            if (information.get("role").equals("customer"))
+                ((Customer) person).setWallet(new Wallet(50.0 , accountUsername , accountPassword , ""));
+        }
+
+        private void getTokenFromBank(String info) {
+            try {
+                server.bankDataOutputStream.writeUTF(info);
+                server.bankDataOutputStream.flush();
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
         }
 
         @Override

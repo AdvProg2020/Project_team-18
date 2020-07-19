@@ -257,4 +257,9 @@ public class AdminMenu extends Menu implements Initializable {
         MainMenu mainMenu = new MainMenu(this);
         mainMenu.run();
     }
+
+    public void goToManageBuyLogs(){
+        AdminManageBuyLogs adminManageBuyLogs =new AdminManageBuyLogs(this);
+        adminManageBuyLogs.run();
+    }
 }

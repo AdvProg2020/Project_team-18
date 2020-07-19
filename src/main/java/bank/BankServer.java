@@ -6,13 +6,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
 
-public class BankClientHandler {
+public class BankServer {
 
     public static void main(String[] args) {
         new BankImpl().run();
@@ -48,6 +46,7 @@ public class BankClientHandler {
         DataInputStream inputStream;
         HashMap<String, String> allAccounts;
         HashMap<String, LocalDateTime> validTokens;
+        HashMap<String,String> tokenPerAccount;
         private static final SecureRandom secureRandom = new SecureRandom(); //threadsafe
         private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder(); //threadsafe
 
@@ -56,15 +55,17 @@ public class BankClientHandler {
             this.inputStream = inputStream;
             allAccounts = new HashMap<>();
             validTokens = new HashMap<>();
+            tokenPerAccount = new HashMap<>();
         }
 
         private void handleClient() {
             String input = "";
             try {
-                while (true) {
+                while (!input.equals("exit")) {
                     input = inputStream.readUTF();
+                    System.out.println(input);
                     if (input.startsWith("create_account")) {
-                        String[] inputs = input.split("\\s");
+                         String[] inputs = input.split("\\s");
                         String firstName = inputs[1];
                         String lastName = inputs[2];
                         String username = inputs[3];
@@ -73,6 +74,7 @@ public class BankClientHandler {
                         createAccount(firstName, lastName, username, password, repeatedPassword);
                         break;
                     } else if (input.startsWith("get_token")) {
+                        System.out.println("in bank server");
                         String[] inputs = input.split("\\s");
                         String username = inputs[1];
                         String password = inputs[2];
@@ -144,6 +146,7 @@ public class BankClientHandler {
                     secureRandom.nextBytes(randomBytes);
                     token = base64Encoder.encodeToString(randomBytes);
                     validTokens.put(token,LocalDateTime.now());
+                    tokenPerAccount.put(token,username);
                     outputStream.writeUTF(token);
                     outputStream.flush();
                 }
