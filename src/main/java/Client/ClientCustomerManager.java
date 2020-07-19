@@ -54,6 +54,17 @@ public class ClientCustomerManager extends ClientManager {
         // person.setBalance(person.getBalance() + money);
     }
 
+    public void chargeWallet(double money, String person) throws Exception{
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(money);
+        params.add(person);
+        ClientMessage clientMessage = new ClientMessage(MessageType.CHARGE_WALLET, params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage != null && serverMessage.getMessageType()==MessageType.ERROR){
+            throw  (Exception)serverMessage.getResult();
+        }
+    }
+
     public void increaseProduct(Cart cart, String productId) throws Exception {
         ArrayList<Object> params = new ArrayList<>();
         params.add(cart);

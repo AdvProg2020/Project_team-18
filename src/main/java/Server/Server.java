@@ -533,6 +533,19 @@ public class Server {
                 case TERMINATE:
                     manager.terminate();
                     break;
+                case CHARGE_WALLET:
+                    Person person = storage.getUserByUsername((String) clientMessage.getParameters().get(1));
+                    Customer customer = (Customer) person;
+                    String charge = "get_token " + customer.getWallet().getBankAccountUsername() + " " +
+                            customer.getWallet().getBankAccountPassword();
+                    try {
+                        System.out.println(charge);
+                        getTokenFromBank(charge);
+                        //System.out.println(server.bankDataInputStream.readUTF());
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                    break;
             }
             return null;
         }
@@ -545,6 +558,7 @@ public class Server {
                         " " + username + " " + password + " " + password;
                 try {
                     server.bankDataOutputStream.writeUTF(string);
+                    server.bankDataOutputStream.flush();
                     String result = server.bankDataInputStream.readUTF();
                     System.out.println(result);
                     if (result.equals("Done"))
@@ -565,6 +579,15 @@ public class Server {
                 ((Seller) person).setWallet(new Wallet(50.0 , accountUsername , accountPassword , ""));
             if (information.get("role").equals("customer"))
                 ((Customer) person).setWallet(new Wallet(50.0 , accountUsername , accountPassword , ""));
+        }
+
+        private void getTokenFromBank(String info) {
+            try {
+                server.bankDataOutputStream.writeUTF(info);
+                server.bankDataOutputStream.flush();
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
         }
 
         @Override

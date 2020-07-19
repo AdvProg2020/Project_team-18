@@ -17,4 +17,16 @@ public class Wallet {
     public double getMoney() {
         return money;
     }
+
+    public String getBankAccountUsername() {
+        return bankAccountUsername;
+    }
+
+    public String getBankAccountPassword() {
+        return bankAccountPassword;
+    }
+
+    public String getCurrentBankToken() {
+        return currentBankToken;
+    }
 }
