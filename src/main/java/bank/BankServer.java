@@ -98,7 +98,9 @@ public class BankServer {
                         String receiptId = inputs[1];
                         performPayment(receiptId);
                     } else if (input.startsWith("get_balance")) {
-
+                        String[] inputs = input.split("\\s");
+                        String token = inputs[1];
+                        getBalanceByToken(token);
                     } else if (input.startsWith("exit")) {
 
                     } else {
@@ -308,6 +310,18 @@ public class BankServer {
             destination.setValue(destination.getValue() + Double.parseDouble(receipt.getMoney()));
             try {
                 outputStream.writeUTF("done move payment ");
+                outputStream.flush();
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        private void getBalanceByToken(String token) {
+            String username = tokenPerAccount.get(token);
+            BankAccount temp = new BankAccount(null,null,null,null);
+            String balance = Double.toString(temp.getValueByUsername(username));
+            try {
+                outputStream.writeUTF(balance);
                 outputStream.flush();
             } catch (IOException e) {
                 System.out.println(e.getMessage());

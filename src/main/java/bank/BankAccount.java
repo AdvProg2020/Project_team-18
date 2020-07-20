@@ -53,4 +53,16 @@ public class BankAccount {
     public Double getValue() {
         return value;
     }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public double getValueByUsername (String username) {
+        for (BankAccount account : allAccounts) {
+            if (account.getUserName().equals(username))
+                return account.getValue();
+        }
+        return 0.0;
+    }
 }
