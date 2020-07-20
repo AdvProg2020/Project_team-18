@@ -7,6 +7,7 @@ import io.jsonwebtoken.impl.TextCodec;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
+import java.io.UnsupportedEncodingException;
 import java.security.Key;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -21,9 +22,10 @@ public class Token {
         this.JWS = createJWS(validPeriod);
     }
     private static SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-    private static final String SECRET_KEY = "Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=";
+  /*  private static final String SECRET_KEY = "Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=";
     private static byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECRET_KEY);
     private static Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
+   */
     public static String createJWS(long validPeriod){
         String jws = null;
         if (validPeriod>0){
@@ -32,15 +34,20 @@ public class Token {
             long expMillis = nowMillis + validPeriod;
            Date exp = new Date(expMillis);
 
-         jws = Jwts.builder()
-                .setSubject("timedToken")
-                .setId("id")
-                .setExpiration(exp)
-                .signWith(
-                        signatureAlgorithm,signingKey
-                        //TextCodec.BASE64.decode("Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=")
-                )
-                .compact();}
+            try {
+                jws = Jwts.builder()
+                       .setSubject("timedToken")
+                       .setId("id")
+                       .setExpiration(exp)
+                       .signWith(
+                               signatureAlgorithm,"secret".getBytes("UTF-8")
+                               //TextCodec.BASE64.decode("Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=")
+                       )
+                       .compact();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
         else {
             jws = Jwts.builder()
                     .setSubject("authenticationToken")
