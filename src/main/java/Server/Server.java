@@ -85,6 +85,7 @@ public class Server {
                     if (clientMessage.getToken()!= null) {
                         try {
                             String token = clientMessage.getToken().getJWS();
+                            System.out.println(token);
                             Token.readJWS(token);
                         } catch (Exception e) {
                             if (e instanceof io.jsonwebtoken.ExpiredJwtException) {

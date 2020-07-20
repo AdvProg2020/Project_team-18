@@ -21,6 +21,7 @@ public class Token {
         this.JWS = createJWS(validPeriod);
     }
     private static SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
+    private static final String secretCode = "secretCodeFromServer";
   /*  private static final String SECRET_KEY = "Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=";
     private static byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECRET_KEY);
     private static Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
@@ -38,7 +39,7 @@ public class Token {
                        .setId("id")
                        .setExpiration(exp)
                        .signWith(
-                               signatureAlgorithm,"secret".getBytes("UTF-8")
+                               signatureAlgorithm,secretCode.getBytes("UTF-8")
                        )
                        .compact();
             } catch (UnsupportedEncodingException e) {
@@ -52,7 +53,7 @@ public class Token {
                         .setId("id")
                         .signWith(
                                 signatureAlgorithm,
-                                "secret".getBytes("UTF-8")
+                                secretCode.getBytes("UTF-8")
                         )
                         .compact();
             } catch (UnsupportedEncodingException e) {
@@ -65,7 +66,7 @@ public class Token {
     public static void readJWS(String jws){
         try {
             Jwts.parser()
-                    .setSigningKey("secret".getBytes("UTF-8"))
+                    .setSigningKey(secretCode.getBytes("UTF-8"))
                     .parseClaimsJws(jws).getBody();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
