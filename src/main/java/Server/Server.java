@@ -87,6 +87,10 @@ public class Server {
                             Token.readJWS(token);
                         } catch (Exception e) {
                             if (e instanceof io.jsonwebtoken.ExpiredJwtException) {
+                                System.out.println("expired token!");
+                                Formatter formatter = new Formatter(outputStream);
+                                formatter.format(yaGson.toJson(new ServerMessage(MessageType.ERROR,new Exception("expired token!"))) + "\n");
+                                formatter.flush();
                                 continue;
                             }else{
                                 break;
@@ -113,7 +117,7 @@ public class Server {
                     String password = (String) clientMessage.getParameters().get(1);
                     try {
                         ServerMessage serverMessage = new ServerMessage(MessageType.LOGIN, manager.login(username, password));
-                        serverMessage.setToken(new Token(0));
+                        serverMessage.setToken(new Token(10000));
                         return serverMessage;
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
