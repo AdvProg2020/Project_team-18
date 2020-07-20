@@ -24,8 +24,15 @@ public class Server {
     }
 
     private static class ServerImpl {
+        DataInputStream bankDataInputStream ;
+        DataOutputStream bankDataOutputStream;
         private void run() {
             try {
+                Socket bankSocket = new Socket("127.0.0.1", 8787);
+                bankDataInputStream = new DataInputStream(bankSocket.getInputStream());
+                bankDataOutputStream = new DataOutputStream(bankSocket.getOutputStream());
+                bankDataOutputStream.writeUTF("connected");
+                bankDataOutputStream.flush();
                 ServerSocket serverSocket = new ServerSocket(9090);
 
                 while (true) {
@@ -393,6 +400,7 @@ public class Server {
                 case REGISTER:
                     try {
                         manager.register((HashMap<String, String>)clientMessage.getParameters().get(0));
+                        createBankAccount((HashMap<String, String>)clientMessage.getParameters().get(0));
                         break;
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
@@ -525,8 +533,101 @@ public class Server {
                 case TERMINATE:
                     manager.terminate();
                     break;
+                case CHARGE_WALLET:
+                    Person person = storage.getUserByUsername((String) clientMessage.getParameters().get(1));
+                    Customer customer = (Customer) person;
+                    String charge = "get_token " + customer.getWallet().getBankAccountUsername() + " " +
+                            customer.getWallet().getBankAccountPassword();
+                    try {
+                        System.out.println(charge);
+                        String token = getTokenFromBank(charge);
+                        int receipt = withdraw(token , (double) clientMessage.getParameters().get(0) ,
+                                customer.getWallet().getAccountId() ,"charging_wallet");
+                        boolean wasPaid = pay(receipt);
+                        if (wasPaid) {
+                            customer.setBalance(customer.getBalance() + (double) clientMessage.getParameters().get(0));
+                            server.bankDataOutputStream.writeUTF("get_transactions " + token + " -");
+                            System.out.println(server.bankDataInputStream.readUTF());
+                        }
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                    break;
             }
             return null;
+        }
+
+        private void createBankAccount(HashMap<String, String>information) throws Exception{
+            if(!information.get("role").equals("admin")) {
+                String username = information.get("username") + information.get("role");
+                String password = "im" + information.get("username");
+                String string = "create_account " + information.get("name") + " " + information.get("familyName") +
+                        " " + username + " " + password + " " + password;
+                try {
+                    server.bankDataOutputStream.writeUTF(string);
+                    server.bankDataOutputStream.flush();
+                    String result = server.bankDataInputStream.readUTF();
+                    System.out.println(result);
+                    if (result.startsWith("Done"))
+                        setWallet(information,username,password,result.substring(result.indexOf(" ")+1));
+                    else if (result.equals("Passwords do not match"))
+                        throw new Exception ("Passwords do not match");
+                    else if (result.equals("Username is not available"))
+                        throw new Exception("Username is not available");
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+
+        private void setWallet(HashMap<String,String> information , String accountUsername , String accountPassword , String id){
+            int accountId = Integer.parseInt(id);
+            Person person = storage.getUserByUsername(information.get("username"));
+            if (information.get("role").equals("seller"))
+                ((Seller) person).setWallet(new Wallet(50.0 , accountUsername , accountPassword , accountId, ""));
+            if (information.get("role").equals("customer"))
+                ((Customer) person).setWallet(new Wallet(50.0 , accountUsername , accountPassword ,accountId, ""));
+        }
+
+        private String getTokenFromBank(String info) {
+            try {
+                server.bankDataOutputStream.writeUTF(info);
+                server.bankDataOutputStream.flush();
+                return server.bankDataInputStream.readUTF();
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+            return null;
+        }
+
+        private int withdraw(String token, double money, int srcId, String description){
+            String request = "create_receipt " + token + " withdraw " + money + " " + srcId + " -1 " + description;
+            System.out.println(request);
+            try {
+                server.bankDataOutputStream.writeUTF(request);
+                server.bankDataOutputStream.flush();
+                int id = Integer.parseInt(server.bankDataInputStream.readUTF());
+                System.out.println(id);
+                return id;
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+            return 0;
+        }
+
+        private boolean pay(int id){
+            try {
+                server.bankDataOutputStream.writeUTF("pay " + id);
+                server.bankDataOutputStream.flush();
+                String result = server.bankDataInputStream.readUTF();
+                System.out.println(result);
+                if (result.startsWith("done"))
+                    return true;
+                else return false;
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+            return false;
         }
 
         @Override

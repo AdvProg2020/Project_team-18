@@ -9,6 +9,7 @@ import java.util.Formatter;
 import java.util.Scanner;
 
 public class ClientMessage implements Serializable {
+    private Token token;
     private MessageType messageType;
     private ArrayList<Object> parameters;
     private static YaGson yaGson = new YaGson();

@@ -8,6 +8,7 @@ public class Seller extends Person {
     private static ArrayList<SellLog> sellHistory = new ArrayList<>();
     private ArrayList<Product> productsToSell;
     private ArrayList<Sale> saleList;
+    private Wallet wallet;
     private transient static ArrayList<Person> allSellers = new ArrayList<>();
 
     public static ArrayList<Person> getAllSellers() {
@@ -26,6 +27,15 @@ public class Seller extends Person {
 
     public ArrayList<SellLog> getSellHistory() {
         return sellHistory;
+    }
+
+    public Wallet getWallet() {
+        return wallet;
+    }
+
+    public void setWallet(Wallet wallet) {
+        this.wallet = wallet;
+        this.setBalance(this.wallet.getMoney());
     }
 
     public ArrayList<Product> getProductsToSell() {

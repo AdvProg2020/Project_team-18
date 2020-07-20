@@ -1,28 +1,27 @@
 package bank;
 
-import model.Request;
-
 import java.util.ArrayList;
 
 public class Receipt {
     String token;
-    String type;
-    String sourceAccount;
-    String destAccount;
+    String receiptType;
+    String sourceAccountID;
+    String destAccountID;
     String money;
     String description;
     int receiptId;
     static ArrayList<Receipt> allReceipts = new ArrayList<>();
 
-    public Receipt(String token, String type, String sourceAccount, String destAccount, String money, String description) {
+    public Receipt(String token, String type, String sourceAccountID, String destAccountID, String money, String description) {
         this.token = token;
-        this.type = type;
-        this.sourceAccount = sourceAccount;
-        this.destAccount = destAccount;
+        this.receiptType = type;
+        this.sourceAccountID = sourceAccountID;
+        this.destAccountID = destAccountID;
         this.money = money;
         this.description = description;
         this.receiptId = idSetter();
-        allReceipts.add(this);
+        if (type != null)
+            allReceipts.add(this);
     }
 
     private int idSetter (){
@@ -40,4 +39,37 @@ public class Receipt {
     public int getReceiptId() {
         return receiptId;
     }
+
+    public Receipt getReceiptById (int id) {
+        for (Receipt receipt : allReceipts) {
+            if(receipt.getReceiptId() == id)
+                return receipt;
+        }
+        return null;
+    }
+
+    public String getReceiptType() {
+        return receiptType;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public String getSourceAccountID() {
+        return sourceAccountID;
+    }
+
+    public String getDestAccountID() {
+        return destAccountID;
+    }
+
+    public String getMoney() {
+        return money;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
 }

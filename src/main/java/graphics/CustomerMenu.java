@@ -320,7 +320,26 @@ public class CustomerMenu extends Menu implements Initializable {
     }
 
     public void addBalanceToWallet () {
-
+        Dialog<ButtonType> dialog = new Dialog<>();
+        String updatedVersion;
+        dialog.setTitle("Change Personal Information");
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        TextField textField = new TextField();
+        HBox content = new HBox();
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setSpacing(10);
+        content.getChildren().addAll(new Label("Enter amount of money you want to add to you account :"), textField);
+        dialog.getDialogPane().setContent(content);
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            updatedVersion = textField.getText();
+            try {
+                customerManager.chargeWallet(Double.parseDouble(updatedVersion), person.getUsername());
+            } catch (Exception e) {
+                showError(e.getMessage(), 100);
+            }
+        }
     }
 
     public void goToCartMenu() {
