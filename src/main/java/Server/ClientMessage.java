@@ -22,6 +22,9 @@ public class ClientMessage implements Serializable {
     }
 
     public synchronized ServerMessage sendAndReceive() {
+        if (token ==null){
+            this.token = ClientView.getToken();
+        }
         this.token = ClientView.getToken();
         Formatter formatter = new Formatter(ClientView.getOutputStream());
         formatter.format(yaGson.toJson(this)+"\n");
