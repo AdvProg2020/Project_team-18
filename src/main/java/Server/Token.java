@@ -13,6 +13,10 @@ import java.util.Date;
 import static javax.crypto.Cipher.SECRET_KEY;
 
 public class Token {
+    private String JWS;
+    public Token(long validPeriod){
+        this.JWS = createJWS(validPeriod);
+    }
     private static SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
     public static String createJWS(long validPeriod){
         String jws = null;
@@ -23,7 +27,7 @@ public class Token {
            Date exp = new Date(expMillis);
 
          jws = Jwts.builder()
-                .setSubject("authenticationToken")
+                .setSubject("timedToken")
                 .setId("id")
                 .setExpiration(exp)
                 .signWith(
@@ -49,4 +53,20 @@ public class Token {
                 .setSigningKey(TextCodec.BASE64.decode("Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E="))
                 .parseClaimsJws(jws).getBody();
     }
+
+    public String getJWS() {
+        return JWS;
+    }
+
+ /*   public static void main(String[] args){
+        String temp = new Token(1000).getJWS();
+        System.out.println(temp);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        readJWS(temp);
+        System.out.println("finished");
+    }*/
 }

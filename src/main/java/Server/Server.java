@@ -81,6 +81,18 @@ public class Server {
                 while (true) {
                     Scanner scanner = new Scanner(inputStream);
                     clientMessage = yaGson.fromJson(scanner.nextLine(), ClientMessage.class);
+                    if (clientMessage.getToken()!= null) {
+                        try {
+                            String token = clientMessage.getToken().getJWS();
+                            Token.readJWS(token);
+                        } catch (Exception e) {
+                            if (e instanceof io.jsonwebtoken.ExpiredJwtException) {
+                                continue;
+                            }else{
+                                break;
+                            }
+                        }
+                    }
                     System.out.println("message received");
                     Formatter formatter = new Formatter(outputStream);
                     formatter.format(yaGson.toJson(interpret(clientMessage)) + "\n");
@@ -100,7 +112,9 @@ public class Server {
                     username = (String) clientMessage.getParameters().get(0);
                     String password = (String) clientMessage.getParameters().get(1);
                     try {
-                        return new ServerMessage(MessageType.LOGIN, manager.login(username, password));
+                        ServerMessage serverMessage = new ServerMessage(MessageType.LOGIN, manager.login(username, password));
+                        serverMessage.setToken(new Token(0));
+                        return serverMessage;
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }

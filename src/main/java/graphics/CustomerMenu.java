@@ -420,6 +420,7 @@ public class CustomerMenu extends Menu implements Initializable {
     }
 
     public void logout(ActionEvent actionEvent) {
+        ClientView.setToken(null);
         MainMenu mainMenu = new MainMenu(null);
         person = null;
         mainMenu.run();

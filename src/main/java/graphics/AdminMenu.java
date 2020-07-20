@@ -1,5 +1,6 @@
 package graphics;
 
+import Server.ClientView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -248,6 +249,7 @@ public class AdminMenu extends Menu implements Initializable {
     }
 
     public void logout(ActionEvent actionEvent) {
+        ClientView.setToken(null);
         MainMenu mainMenu = new MainMenu(null);
         person = null;
         mainMenu.run();
