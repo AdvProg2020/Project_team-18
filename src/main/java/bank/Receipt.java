@@ -10,6 +10,7 @@ public class Receipt {
     String money;
     String description;
     int receiptId;
+    boolean paid;
     static ArrayList<Receipt> allReceipts = new ArrayList<>();
 
     public Receipt(String token, String type, String sourceAccountID, String destAccountID, String money, String description) {
@@ -20,6 +21,7 @@ public class Receipt {
         this.money = money;
         this.description = description;
         this.receiptId = idSetter();
+        this.paid = false;
         if (type != null)
             allReceipts.add(this);
     }
@@ -72,4 +74,25 @@ public class Receipt {
         return description;
     }
 
+    public boolean isPaid() {
+        return paid;
+    }
+
+    public void setPaid(boolean paid) {
+        this.paid = paid;
+    }
+
+    @Override
+    public String toString() {
+        return "Receipt{" +
+                "token='" + token + '\'' +
+                ", receiptType='" + receiptType + '\'' +
+                ", sourceAccountID='" + sourceAccountID + '\'' +
+                ", destAccountID='" + destAccountID + '\'' +
+                ", money='" + money + '\'' +
+                ", description='" + description + '\'' +
+                ", receiptId=" + receiptId +
+                ", paid=" + paid +
+                '}';
+    }
 }

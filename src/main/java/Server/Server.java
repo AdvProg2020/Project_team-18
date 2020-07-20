@@ -562,6 +562,8 @@ public class Server {
                     try {
                         System.out.println(charge);
                         String token = getTokenFromBank(charge);
+                        if (token.equals(""))
+                            return new ServerMessage(MessageType.ERROR, "username/password is invalid");
                         int receipt = withdraw(token, (double) clientMessage.getParameters().get(0),
                                 customer.getWallet().getAccountId(), "charging_wallet");
                         boolean wasPaid = pay(receipt);
@@ -614,7 +616,10 @@ public class Server {
             try {
                 server.bankDataOutputStream.writeUTF(info);
                 server.bankDataOutputStream.flush();
-                return server.bankDataInputStream.readUTF();
+                String token = server.bankDataInputStream.readUTF();
+                if (token.equals("Username is wrong") || token.equals("Password is wrong"))
+                    return "";
+                else return token;
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }

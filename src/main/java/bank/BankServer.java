@@ -31,7 +31,7 @@ public class BankServer {
                         System.out.println("client accepted");
                         DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
                         DataInputStream inputStream = new DataInputStream(clientSocket.getInputStream());
-                        new ClientHandler(outputStream, inputStream).start();
+                        new ClientHandler(outputStream, inputStream , clientSocket).start();
                     } catch (Exception e) {
                         System.err.println("Error in accepting client!");
                         break;
@@ -46,6 +46,7 @@ public class BankServer {
     private static class ClientHandler extends Thread {
         DataOutputStream outputStream;
         DataInputStream inputStream;
+        Socket clientSocket;
         HashMap<String, String> allAccounts;
         HashMap<String, LocalDateTime> validTokens;
         HashMap<String,String> tokenPerAccount;
@@ -53,9 +54,10 @@ public class BankServer {
         private static final SecureRandom secureRandom = new SecureRandom(); //threadsafe
         private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder(); //threadsafe
 
-        public ClientHandler(DataOutputStream outputStream, DataInputStream inputStream) {
+        public ClientHandler(DataOutputStream outputStream, DataInputStream inputStream , Socket clientSocket) {
             this.outputStream = outputStream;
             this.inputStream = inputStream;
+            this.clientSocket = clientSocket;
             allAccounts = new HashMap<>();
             validTokens = new HashMap<>();
             tokenPerAccount = new HashMap<>();
@@ -77,7 +79,6 @@ public class BankServer {
                         String repeatedPassword = inputs[5];
                         createAccount(firstName, lastName, username, password, repeatedPassword);
                     } else if (input.startsWith("get_token")) {
-                        System.out.println("in bank server");
                         String[] inputs = input.split("\\s");
                         String username = inputs[1];
                         String password = inputs[2];
@@ -105,9 +106,11 @@ public class BankServer {
                         String token = inputs[1];
                         getBalanceByToken(token);
                     } else if (input.startsWith("exit")) {
-
-                    } else {
-
+                        outputStream.writeUTF("Successfully Logged out!");
+                        outputStream.flush();
+                        clientSocket.close();
+                        System.out.println("Connection closed!!!");
+                        break;
                     }
                 }
             } catch (Exception e) {
@@ -166,12 +169,23 @@ public class BankServer {
         }
 
         private void interpret(String token, String type, String money, String source, String dest, String description){
-            if(type.equals("deposit"))
-                deposit(token,money,source,dest,description);
-            else if (type.equals("withdraw"))
-                withdraw(token,money,source,dest,description);
-            else if (type.equals("move"))
-                move(token,money,source,dest,description);
+            if(type.equals("deposit")) {
+                if (!isMoneyValidInteger(money)) {
+                    try {
+                        outputStream.writeUTF("Invalid money");
+                        outputStream.flush();
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+                deposit(token, money, source, dest, description);
+            }
+            else if (type.equals("withdraw")) {
+                withdraw(token, money, source, dest, description);
+            }
+            else if (type.equals("move")) {
+                move(token, money, source, dest, description);
+            }
             else {
                 try{
                     outputStream.writeUTF("Invalid receipt type");
@@ -179,6 +193,18 @@ public class BankServer {
                 }catch (Exception e){
                     System.out.println(e.getMessage());
                 }
+            }
+        }
+
+        private boolean isMoneyValidInteger (String input) {
+            try
+            {
+                Integer.parseInt(input);
+                return true;
+            }
+            catch (NumberFormatException e)
+            {
+               return false;
             }
         }
 
@@ -234,7 +260,10 @@ public class BankServer {
                 } else if (isTokenExpired(token)) {
                      outputStream.writeUTF("token expired");
                      outputStream.flush();
-                 } else {
+                 } else if (source.equals(dest)){
+                     outputStream.writeUTF("equal source and dest account");
+                     outputStream.flush();
+                } else {
                      Receipt receipt = new Receipt(token,"move",source,dest,money,description);
                      String id = Integer.toString(receipt.getReceiptId());
                      outputStream.writeUTF(id);
@@ -272,6 +301,19 @@ public class BankServer {
             Receipt receipt = new Receipt(null,null,null,null,null,null);
             BankAccount bankAccount = new BankAccount(null,null,null,null);
             Receipt toBePaid = receipt.getReceiptById(Integer.parseInt(receiptId));
+                try {
+                    if (toBePaid == null) {
+                        outputStream.writeUTF("invalid receipt id");
+                        outputStream.flush();
+                        return;
+                    } else if (toBePaid.isPaid()) {
+                        outputStream.writeUTF("receipt is paid before");
+                        outputStream.flush();
+                        return;
+                    }
+                } catch (IOException ex) {
+                    System.out.println(ex.getMessage());
+                }
             if (toBePaid.getReceiptType().equals("deposit"))
                 performDepositPayment(toBePaid,bankAccount);
             else if (toBePaid.getReceiptType().equals("withdraw"))
@@ -285,6 +327,7 @@ public class BankServer {
             BankAccount destination = bankAccount.getAccountById(dest);
             destination.setValue(destination.getValue() + Double.parseDouble(receipt.getMoney()));
             destination.addDepositTransaction(receipt);
+            receipt.setPaid(true);
             try {
                 outputStream.writeUTF("done deposit payment ");
                 outputStream.flush();
@@ -296,13 +339,23 @@ public class BankServer {
         private void performWithdrawPayment(Receipt receipt , BankAccount bankAccount) {
             int src = Integer.parseInt(receipt.getSourceAccountID());
             BankAccount source = bankAccount.getAccountById(src);
-            source.setValue(source.getValue() - Double.parseDouble(receipt.getMoney()));
-            source.addWithdrawalTransaction(receipt);
-            try {
-                outputStream.writeUTF("done withdraw payment ");
-                outputStream.flush();
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
+            if (source.getValue() > Double.parseDouble(receipt.getMoney())) {
+                source.setValue(source.getValue() - Double.parseDouble(receipt.getMoney()));
+                source.addWithdrawalTransaction(receipt);
+                receipt.setPaid(true);
+                try {
+                    outputStream.writeUTF("done withdraw payment ");
+                    outputStream.flush();
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
+                }
+            } else {
+                try {
+                    outputStream.writeUTF("not enough money in source account");
+                    outputStream.flush();
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
+                }
             }
         }
 
@@ -311,15 +364,25 @@ public class BankServer {
             int src = Integer.parseInt(receipt.getSourceAccountID());
             BankAccount destination = bankAccount.getAccountById(dest);
             BankAccount source = bankAccount.getAccountById(src);
-            source.setValue(source.getValue() - Double.parseDouble(receipt.getMoney()));
-            destination.setValue(destination.getValue() + Double.parseDouble(receipt.getMoney()));
-            source.addWithdrawalTransaction(receipt);
-            destination.addDepositTransaction(receipt);
-            try {
-                outputStream.writeUTF("done move payment ");
-                outputStream.flush();
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
+            if (source.getValue() > Double.parseDouble(receipt.getMoney())) {
+                source.setValue(source.getValue() - Double.parseDouble(receipt.getMoney()));
+                destination.setValue(destination.getValue() + Double.parseDouble(receipt.getMoney()));
+                source.addWithdrawalTransaction(receipt);
+                destination.addDepositTransaction(receipt);
+                receipt.setPaid(true);
+                try {
+                    outputStream.writeUTF("done move payment ");
+                    outputStream.flush();
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
+                }
+            } else {
+                try {
+                    outputStream.writeUTF("not enough money in source account");
+                    outputStream.flush();
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
+                }
             }
         }
 
@@ -336,6 +399,19 @@ public class BankServer {
         }
 
         private void getTransactions (String token, String type) {
+            try {
+                if (!validTokens.containsKey(token)) {
+                    outputStream.writeUTF("token is invalid");
+                    outputStream.flush();
+                    return;
+                } else if (isTokenExpired(token)) {
+                    outputStream.writeUTF("token expired");
+                    outputStream.flush();
+                    return;
+                }
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+            }
             String username = tokenPerAccount.get(token);
             BankAccount temp = new BankAccount(null,null,null,null);
             Receipt receipt = new Receipt(null,null,null,null,null,null);
@@ -354,8 +430,14 @@ public class BankServer {
                     outputStream.flush();
                 }
                 else {
-                    outputStream.writeUTF(receipt.getReceiptById(Integer.parseInt(type)).toString());
-                    outputStream.flush();
+                    Receipt desiredReceipt = receipt.getReceiptById(Integer.parseInt(type));
+                    if (desiredReceipt == null) {
+                        outputStream.writeUTF("invalid receipt id");
+                        outputStream.flush();
+                    } else {
+                        outputStream.writeUTF(desiredReceipt.toString());
+                        outputStream.flush();
+                    }
                 }
             } catch (IOException e){
                 e.getMessage();
