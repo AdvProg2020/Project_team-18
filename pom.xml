@@ -6,6 +6,7 @@
 
     <groupId>org.example</groupId>
     <artifactId>Project_Team_18</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
 
     <build>
@@ -20,6 +21,9 @@
             </plugin>
         </plugins>
     </build>
+    <modules>
+        <module>java.xml.bind</module>
+    </modules>
 
 
     <dependencies>
@@ -65,6 +69,12 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-media</artifactId>
             <version>11</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.0</version>
         </dependency>
 
     </dependencies>
