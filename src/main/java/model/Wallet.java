@@ -6,12 +6,14 @@ public class Wallet {
     private String bankAccountUsername;
     private String bankAccountPassword;
     private String currentBankToken;
+    private int accountId;
 
-    public Wallet(double money, String bankAccountUsername, String bankAccountPassword, String currentBankToken) {
+    public Wallet(double money, String bankAccountUsername, String bankAccountPassword, int id, String currentBankToken) {
         this.money = money;
         this.bankAccountUsername = bankAccountUsername;
         this.bankAccountPassword = bankAccountPassword;
         this.currentBankToken = currentBankToken;
+        this.accountId = id;
     }
 
     public double getMoney() {
@@ -28,5 +30,13 @@ public class Wallet {
 
     public String getCurrentBankToken() {
         return currentBankToken;
+    }
+
+    public int getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
     }
 }

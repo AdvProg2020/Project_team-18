@@ -40,4 +40,36 @@ public class Receipt {
     public int getReceiptId() {
         return receiptId;
     }
+
+    public Receipt getReceiptById (int id) {
+        for (Receipt receipt : allReceipts) {
+            if(receipt.getReceiptId() == id)
+                return receipt;
+        }
+        return null;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public String getSourceAccount() {
+        return sourceAccount;
+    }
+
+    public String getDestAccount() {
+        return destAccount;
+    }
+
+    public String getMoney() {
+        return money;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }

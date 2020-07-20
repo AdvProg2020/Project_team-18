@@ -540,8 +540,13 @@ public class Server {
                             customer.getWallet().getBankAccountPassword();
                     try {
                         System.out.println(charge);
-                        getTokenFromBank(charge);
-                        //System.out.println(server.bankDataInputStream.readUTF());
+                        String token = getTokenFromBank(charge);
+                        int receipt = withdraw(token , (double) clientMessage.getParameters().get(0) ,
+                                customer.getWallet().getAccountId() ,"charging_wallet");
+                        boolean wasPaid = pay(receipt);
+                        if (wasPaid) {
+                            customer.setBalance(customer.getBalance() + (double) clientMessage.getParameters().get(0));
+                        }
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
@@ -561,8 +566,8 @@ public class Server {
                     server.bankDataOutputStream.flush();
                     String result = server.bankDataInputStream.readUTF();
                     System.out.println(result);
-                    if (result.equals("Done"))
-                        setWallet(information,username,password);
+                    if (result.startsWith("Done"))
+                        setWallet(information,username,password,result.substring(result.indexOf(" ")+1));
                     else if (result.equals("Passwords do not match"))
                         throw new Exception ("Passwords do not match");
                     else if (result.equals("Username is not available"))
@@ -573,21 +578,54 @@ public class Server {
             }
         }
 
-        private void setWallet(HashMap<String,String> information , String accountUsername , String accountPassword){
+        private void setWallet(HashMap<String,String> information , String accountUsername , String accountPassword , String id){
+            int accountId = Integer.parseInt(id);
             Person person = storage.getUserByUsername(information.get("username"));
             if (information.get("role").equals("seller"))
-                ((Seller) person).setWallet(new Wallet(50.0 , accountUsername , accountPassword , ""));
+                ((Seller) person).setWallet(new Wallet(50.0 , accountUsername , accountPassword , accountId, ""));
             if (information.get("role").equals("customer"))
-                ((Customer) person).setWallet(new Wallet(50.0 , accountUsername , accountPassword , ""));
+                ((Customer) person).setWallet(new Wallet(50.0 , accountUsername , accountPassword ,accountId, ""));
         }
 
-        private void getTokenFromBank(String info) {
+        private String getTokenFromBank(String info) {
             try {
                 server.bankDataOutputStream.writeUTF(info);
                 server.bankDataOutputStream.flush();
+                return server.bankDataInputStream.readUTF();
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
+            return null;
+        }
+
+        private int withdraw(String token, double money, int srcId, String description){
+            String request = "create_receipt " + token + " withdraw " + money + " " + srcId + " -1 " + description;
+            System.out.println(request);
+            try {
+                server.bankDataOutputStream.writeUTF(request);
+                server.bankDataOutputStream.flush();
+                int id = Integer.parseInt(server.bankDataInputStream.readUTF());
+                System.out.println(id);
+                return id;
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+            return 0;
+        }
+
+        private boolean pay(int id){
+            try {
+                server.bankDataOutputStream.writeUTF("pay " + id);
+                server.bankDataOutputStream.flush();
+                String result = server.bankDataInputStream.readUTF();
+                System.out.println(result);
+                if (result.startsWith("done"))
+                    return true;
+                else return false;
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+            return false;
         }
 
         @Override
