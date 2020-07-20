@@ -13,13 +13,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
-public class AuctionsMenu extends Menu {
+public class AddAuctionMenu extends Menu {
 
     private ClientSellerManager sellerManager;
 
 
-    public AuctionsMenu(Menu previousMenu) {
+    public AddAuctionMenu(Menu previousMenu, ClientSellerManager sellerManager) {
         super(previousMenu, "src/main/java/graphics/fxml/AddAuctionMenu.fxml");
+        this.sellerManager = sellerManager;
     }
 
 
@@ -28,23 +29,23 @@ public class AuctionsMenu extends Menu {
     @FXML
     private TextField endDateField;
     @FXML
-    private TextField amountOfOffField;
+    private TextField initialPrice;
 
     private ArrayList<Product> productsInSale = new ArrayList<>();
 
-    public void addOff() {
+    public void addAuction() {
         HashMap<String, String> productInformation = new HashMap<>();
         String beginDate = beginDateField.getText();
         String endDate = endDateField.getText();
-        String amountOfOff = amountOfOffField.getText();
-        if (checkPriceValidity(amountOfOff) && checkDateValidity(beginDate, "begin") && checkDateValidity(endDate, "end")) {
+        String initialPriceText = initialPrice.getText();
+        if (checkPriceValidity(initialPriceText) && checkDateValidity(beginDate, "begin") && checkDateValidity(endDate, "end")) {
             productInformation.put("beginDate", beginDate);
             productInformation.put("endDate", endDate);
-            productInformation.put("amountOfSale", amountOfOff);
+            productInformation.put("price", initialPriceText);
             try {
-                sellerManager.addOff(productInformation, productsInSale,person.getUsername());
+                sellerManager.addOff(productInformation, productsInSale, person.getUsername());
             } catch (Exception e) {
-                showError(e.getMessage(),20);
+                showError(e.getMessage(), 20);
             }
             showMessage();
             back();
@@ -98,8 +99,8 @@ public class AuctionsMenu extends Menu {
                         productsInSale.add(sellerManager.getProductById(Integer.parseInt(productId)));
                     }
                 }
-            } catch (Exception e){
-                showError(e.getMessage() , 20);
+            } catch (Exception e) {
+                showError(e.getMessage(), 20);
             }
         }
     }

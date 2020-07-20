@@ -224,6 +224,8 @@ public class AdminManager extends Manager {
                 return;
             case REMOVE_PRODUCT_FROM_SALE:
                 removeProductFromSaleRequest(request);
+            case ADD_AUCTION:
+                addAuction(request);
         }
     }
 
@@ -320,5 +322,17 @@ public class AdminManager extends Manager {
             throw new Exception("There is not a buyLog with this Id!!");
         else
             storage.getBuyLogByCode(buyCode).sendPurchase();
+    }
+
+    public void addAuction(Request request){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy,MM,dd,HH,mm");
+        LocalDateTime beginDate = LocalDateTime.parse(request.getInformation().get("beginDate"),formatter);
+        LocalDateTime endDate = LocalDateTime.parse(request.getInformation().get("endDate"),formatter);
+        double initialPrice = Integer.parseInt(request.getInformation().get("price"));
+        Product product1 = storage.getProductById(request.getInformation().get("productId"));
+        Seller seller = (Seller) storage.getUserByUsername(request.getInformation().get("seller"));
+        Auction auction = new Auction(beginDate, endDate, product1, initialPrice, seller);
+        storage.addAuction(auction);
+        seller.addAuction(auction);
     }
 }

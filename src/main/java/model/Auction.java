@@ -12,7 +12,7 @@ public class Auction implements Idable<Auction> {
     private Double price;
     private Seller seller;
     private Customer customer;
-    private ArrayList<Auction> allAuctions = new ArrayList<>();
+    private transient static ArrayList<Auction> allAuctions = new ArrayList<>();
 
     public Auction(LocalDateTime beginDate, LocalDateTime endDate, Product product, Double price, Seller seller) {
         this.auctionId = idSetter();
@@ -99,7 +99,7 @@ public class Auction implements Idable<Auction> {
         return this.customer;
     }
 
-    public ArrayList<Auction> getAllAuctions() {
+    public static ArrayList<Auction> getAllAuctions() {
         return allAuctions;
     }
 }

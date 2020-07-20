@@ -524,6 +524,10 @@ public class SellerRequestMenu extends Menu implements Initializable {
         return categoryName;
     }
 
+    public void addAuction(){
+
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ArrayList<Request> sellerReq = new ArrayList<>();

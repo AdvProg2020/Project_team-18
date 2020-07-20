@@ -531,7 +531,7 @@ public class SellerMenu extends Menu implements Initializable {
 //        }
 //    }
 //
-//    public void addOff() {
+//    public void addAuction() {
 //        AddOffPage addOffPage = new AddOffPage(this, this.sellerManager);
 //        addOffPage.run();
 //    }

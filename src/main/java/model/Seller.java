@@ -9,6 +9,7 @@ public class Seller extends Person {
     private ArrayList<Product> productsToSell;
     private ArrayList<Sale> saleList;
     private Wallet wallet;
+    private ArrayList<Auction> thisSellerAuctions;
     private transient static ArrayList<Person> allSellers = new ArrayList<>();
 
     public static ArrayList<Person> getAllSellers() {
@@ -18,6 +19,7 @@ public class Seller extends Person {
         super(information);
         this.company = information.get("company");
         this.productsToSell = new ArrayList<>();
+        this.thisSellerAuctions = new ArrayList<>();
         this.saleList = new ArrayList<>();
     }
 
@@ -42,6 +44,10 @@ public class Seller extends Person {
         return productsToSell;
     }
 
+    public ArrayList<Auction> getThisSellerAuctions(){
+        return this.thisSellerAuctions;
+    }
+
     public ArrayList<Sale> getSaleList() {
         return saleList;
     }
@@ -52,6 +58,10 @@ public class Seller extends Person {
 
     public void addProduct(Product newProduct) {
         productsToSell.add(newProduct);
+    }
+
+    public void addAuction(Auction auction){
+        this.thisSellerAuctions.add(auction);
     }
 
     public void removeProduct(Product specificProduct) {
@@ -78,4 +88,5 @@ public class Seller extends Person {
     public void addBalance(double amountToBeAdded) {
         this.setBalance(this.getBalance() + amountToBeAdded);
     }
+
 }
