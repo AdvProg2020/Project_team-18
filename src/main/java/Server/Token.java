@@ -30,7 +30,6 @@ public class Token {
         String jws = null;
         if (validPeriod>0){
         long nowMillis = System.currentTimeMillis();
-        Date now = new Date(nowMillis);
             long expMillis = nowMillis + validPeriod;
            Date exp = new Date(expMillis);
 
@@ -41,7 +40,6 @@ public class Token {
                        .setExpiration(exp)
                        .signWith(
                                signatureAlgorithm,"secret".getBytes("UTF-8")
-                               //TextCodec.BASE64.decode("Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=")
                        )
                        .compact();
             } catch (UnsupportedEncodingException e) {
@@ -49,14 +47,18 @@ public class Token {
             }
         }
         else {
-            jws = Jwts.builder()
-                    .setSubject("authenticationToken")
-                    .setId("id")
-                    .signWith(
-                            signatureAlgorithm,
-                            TextCodec.BASE64.decode("Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=")
-                    )
-                    .compact();
+            try {
+                jws = Jwts.builder()
+                        .setSubject("authenticationToken")
+                        .setId("id")
+                        .signWith(
+                                signatureAlgorithm,
+                                "secret".getBytes("UTF-8")
+                        )
+                        .compact();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         }
 
         return jws;
