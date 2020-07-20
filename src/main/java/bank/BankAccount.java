@@ -1,5 +1,7 @@
 package bank;
 
+import com.gilecode.yagson.com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -11,6 +13,9 @@ public class BankAccount {
     Double value;
     int accountId;
     static ArrayList<BankAccount> allAccounts = new ArrayList<>();
+    ArrayList<Receipt> withdrawalTransactions;
+    ArrayList<Receipt> depositTransactions;
+    ArrayList<Receipt> allTransactions;
 
     public BankAccount(String firstName, String lastName, String userName, String passWord) {
         this.firstName = firstName;
@@ -19,7 +24,11 @@ public class BankAccount {
         this.passWord = passWord;
         value = 50.0;
         this.accountId = idSetter();
-        allAccounts.add(this);
+        if(firstName != null)
+            allAccounts.add(this);
+        withdrawalTransactions = new ArrayList<>();
+        depositTransactions = new ArrayList<>();
+        allTransactions = new ArrayList<>();
     }
 
     private int idSetter (){
@@ -64,5 +73,45 @@ public class BankAccount {
                 return account.getValue();
         }
         return 0.0;
+    }
+
+    public void addWithdrawalTransaction (Receipt receipt) {
+        this.withdrawalTransactions.add(receipt);
+        this.allTransactions.add(receipt);
+    }
+
+    public void addDepositTransaction (Receipt receipt) {
+        this.depositTransactions.add(receipt);
+        this.allTransactions.add(receipt);
+    }
+
+    public BankAccount getAccountByUsername (String username) {
+        for (BankAccount account : allAccounts) {
+            if (account.getUserName().equals(username))
+                return account ;
+        }
+        return null ;
+    }
+
+    public String getAllDepositTransactions() {
+        return convertArrayListToGsonString(this.depositTransactions);
+    }
+
+    public String getAllWithdrawalTransactions() {
+        return convertArrayListToGsonString(this.withdrawalTransactions);
+    }
+
+    public String getAllTransactions() {
+        return convertArrayListToGsonString(this.allTransactions);
+    }
+
+    private String convertArrayListToGsonString (ArrayList<Receipt> receipts) {
+        Gson gson = new Gson();
+        String json = "";
+        for (Receipt receipt : receipts) {
+             json += gson.toJson(receipt);
+             json += "*";
+        }
+        return json;
     }
 }

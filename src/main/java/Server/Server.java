@@ -546,6 +546,8 @@ public class Server {
                         boolean wasPaid = pay(receipt);
                         if (wasPaid) {
                             customer.setBalance(customer.getBalance() + (double) clientMessage.getParameters().get(0));
+                            server.bankDataOutputStream.writeUTF("get_transactions " + token + " -");
+                            System.out.println(server.bankDataInputStream.readUTF());
                         }
                     } catch (Exception e) {
                         System.out.println(e.getMessage());

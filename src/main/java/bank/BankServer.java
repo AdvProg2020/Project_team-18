@@ -92,7 +92,10 @@ public class BankServer {
                         String description = inputs[6];
                         interpret(token,receiptType,money,sourceID,destID,description);
                     } else if (input.startsWith("get_transaction")) {
-
+                        String[] inputs = input.split("\\s");
+                        String token = inputs[1];
+                        String type = inputs[2];
+                        getTransactions(token,type);
                     } else if (input.startsWith("pay")) {
                         String[] inputs = input.split("\\s");
                         String receiptId = inputs[1];
@@ -269,18 +272,19 @@ public class BankServer {
             Receipt receipt = new Receipt(null,null,null,null,null,null);
             BankAccount bankAccount = new BankAccount(null,null,null,null);
             Receipt toBePaid = receipt.getReceiptById(Integer.parseInt(receiptId));
-            if (toBePaid.getType().equals("deposit"))
+            if (toBePaid.getReceiptType().equals("deposit"))
                 performDepositPayment(toBePaid,bankAccount);
-            else if (toBePaid.getType().equals("withdraw"))
+            else if (toBePaid.getReceiptType().equals("withdraw"))
                 performWithdrawPayment(toBePaid,bankAccount);
             else
                 performMovePayment(toBePaid,bankAccount);
         }
 
         private void performDepositPayment(Receipt receipt , BankAccount bankAccount) {
-            int dest = Integer.parseInt(receipt.getDestAccount());
+            int dest = Integer.parseInt(receipt.getDestAccountID());
             BankAccount destination = bankAccount.getAccountById(dest);
             destination.setValue(destination.getValue() + Double.parseDouble(receipt.getMoney()));
+            destination.addDepositTransaction(receipt);
             try {
                 outputStream.writeUTF("done deposit payment ");
                 outputStream.flush();
@@ -290,9 +294,10 @@ public class BankServer {
         }
 
         private void performWithdrawPayment(Receipt receipt , BankAccount bankAccount) {
-            int src = Integer.parseInt(receipt.getSourceAccount());
+            int src = Integer.parseInt(receipt.getSourceAccountID());
             BankAccount source = bankAccount.getAccountById(src);
             source.setValue(source.getValue() - Double.parseDouble(receipt.getMoney()));
+            source.addWithdrawalTransaction(receipt);
             try {
                 outputStream.writeUTF("done withdraw payment ");
                 outputStream.flush();
@@ -302,12 +307,14 @@ public class BankServer {
         }
 
         private void performMovePayment(Receipt receipt, BankAccount bankAccount) {
-            int dest = Integer.parseInt(receipt.getDestAccount());
-            int src = Integer.parseInt(receipt.getSourceAccount());
+            int dest = Integer.parseInt(receipt.getDestAccountID());
+            int src = Integer.parseInt(receipt.getSourceAccountID());
             BankAccount destination = bankAccount.getAccountById(dest);
             BankAccount source = bankAccount.getAccountById(src);
             source.setValue(source.getValue() - Double.parseDouble(receipt.getMoney()));
             destination.setValue(destination.getValue() + Double.parseDouble(receipt.getMoney()));
+            source.addWithdrawalTransaction(receipt);
+            destination.addDepositTransaction(receipt);
             try {
                 outputStream.writeUTF("done move payment ");
                 outputStream.flush();
@@ -325,6 +332,33 @@ public class BankServer {
                 outputStream.flush();
             } catch (IOException e) {
                 System.out.println(e.getMessage());
+            }
+        }
+
+        private void getTransactions (String token, String type) {
+            String username = tokenPerAccount.get(token);
+            BankAccount temp = new BankAccount(null,null,null,null);
+            Receipt receipt = new Receipt(null,null,null,null,null,null);
+            BankAccount account = temp.getAccountByUsername(username);
+            try {
+                if (type.equals("+")) {
+                    outputStream.writeUTF(account.getAllDepositTransactions());
+                    outputStream.flush();
+                }
+                else if (type.equals("-")) {
+                    outputStream.writeUTF(account.getAllWithdrawalTransactions());
+                    outputStream.flush();
+                }
+                else if (type.equals("*")) {
+                    outputStream.writeUTF(account.getAllTransactions());
+                    outputStream.flush();
+                }
+                else {
+                    outputStream.writeUTF(receipt.getReceiptById(Integer.parseInt(type)).toString());
+                    outputStream.flush();
+                }
+            } catch (IOException e){
+                e.getMessage();
             }
         }
     }
