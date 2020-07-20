@@ -15,6 +15,7 @@ public class Auction implements Idable<Auction> {
     private transient static ArrayList<Auction> allAuctions = new ArrayList<>();
 
     public Auction(LocalDateTime beginDate, LocalDateTime endDate, Product product, Double price, Seller seller) {
+        System.out.println("in constructor");
         this.auctionId = idSetter();
         this.beginDate = beginDate;
         this.endDate = endDate;

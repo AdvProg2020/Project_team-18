@@ -48,14 +48,14 @@
                     </font></Label>
                 <TextField fx:id="beginDateField" prefHeight="43.0" prefWidth="182.0" promptText="yyyy,MM,dd,HH,mm" GridPane.columnIndex="1" />
                 <TextField fx:id="endDateField" prefHeight="43.0" prefWidth="182.0" promptText="yyyy,MM,dd,HH,mm" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <TextField fx:id="initialPrice" prefHeight="43.0" prefWidth="182.0" promptText="Amount Of Off" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField prefHeight="43.0" prefWidth="182.0" promptText="ProductId" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <TextField fx:id="initialPrice" prefHeight="43.0" prefWidth="182.0" promptText="Initial Price" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="productToBeAuctioned" prefHeight="43.0" prefWidth="182.0" promptText="ProductId" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             </children>
         </GridPane>
         <Button layoutX="176.0" layoutY="361.0" mnemonicParsing="false" onAction="#addAuction" onMousePressed="#buttonSound" prefHeight="26.0" prefWidth="109.0" text="Send Request" />
         <Button layoutX="316.0" layoutY="361.0" mnemonicParsing="false" onAction="#back" onMousePressed="#buttonSound" prefHeight="26.0" prefWidth="110.0" text="Cancel" />
         <Button layoutX="6.0" layoutY="7.0" mnemonicParsing="false" onAction="#back" onMousePressed="#buttonSound" text="back" />
-        <Label layoutX="137.0" layoutY="53.0" text="PLEASE ENTER NEW OFF'S INFORMATION BELOW">
+        <Label layoutX="137.0" layoutY="53.0" text="PLEASE ENTER NEW AUCTION'S INFORMATION BELOW">
             <font>
                 <Font name="Andalus" size="16.0" />
             </font></Label>

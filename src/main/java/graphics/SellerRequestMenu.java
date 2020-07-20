@@ -74,7 +74,7 @@ public class SellerRequestMenu extends Menu implements Initializable {
         Optional<ButtonType> result = dialog.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             if (!productId.getText().matches("\\d+")) {
-                showError("Off Id is an integer!", 100);
+                showError("Product Id is an integer!", 100);
             } else {
                 if (sellerManager.getProductById(Integer.parseInt(productId.getText())) == null) {
                     showError("There's not such product!", 100);
@@ -525,7 +525,8 @@ public class SellerRequestMenu extends Menu implements Initializable {
     }
 
     public void addAuction(){
-
+        AddAuctionMenu addAuctionMenu = new AddAuctionMenu(this, this.sellerManager);
+        addAuctionMenu.run();
     }
 
     @Override

@@ -493,6 +493,7 @@ public class Server {
                     }
                 case ACCEPT_REQUEST:
                     try {
+                        System.out.println("in server");
                         adminManager.acceptRequest((String) clientMessage.getParameters().get(0));
                         break;
                     } catch (Exception e) {
@@ -530,6 +531,9 @@ public class Server {
                 case CHAT_MESSAGE:
                     ChatClient client = new ChatClient((String)clientMessage.getParameters().get(0));
                     return new ServerMessage(MessageType.CHAT_MESSAGE, client);
+                case ADD_AUCTION:
+                    sellerManager.addAuction((HashMap<String, String>) clientMessage.getParameters().get(0));
+                    break;
                 case TERMINATE:
                     manager.terminate();
                     break;

@@ -169,6 +169,7 @@ public class AdminManager extends Manager {
     }
 
     public void acceptRequest (String requestId) throws Exception {
+        System.out.println("in accept request method");
         if(storage.getRequestById(Integer.parseInt(requestId)) == null)
             throw new Exception("There is not a request with this Id!!");
         else {
@@ -178,6 +179,7 @@ public class AdminManager extends Manager {
     }
 
     public void declineRequest (String requestId) throws Exception {
+        System.out.println("in adminManager accept request");
         if(storage.getRequestById(Integer.parseInt(requestId)) == null)
             throw new Exception("There is not a request with this Id!!");
         else
@@ -225,7 +227,9 @@ public class AdminManager extends Manager {
             case REMOVE_PRODUCT_FROM_SALE:
                 removeProductFromSaleRequest(request);
             case ADD_AUCTION:
+                System.out.println("before adding");
                 addAuction(request);
+                System.out.println("helloooo");
         }
     }
 
@@ -327,10 +331,15 @@ public class AdminManager extends Manager {
     public void addAuction(Request request){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy,MM,dd,HH,mm");
         LocalDateTime beginDate = LocalDateTime.parse(request.getInformation().get("beginDate"),formatter);
+        System.out.println(beginDate);
         LocalDateTime endDate = LocalDateTime.parse(request.getInformation().get("endDate"),formatter);
+        System.out.println(endDate);
         double initialPrice = Integer.parseInt(request.getInformation().get("price"));
-        Product product1 = storage.getProductById(request.getInformation().get("productId"));
+        System.out.println(initialPrice);
+        Product product1 = storage.getProductById(Integer.parseInt(request.getInformation().get("productId")));
+        System.out.println(product1.getName() + " " + product1.getProductId());
         Seller seller = (Seller) storage.getUserByUsername(request.getInformation().get("seller"));
+        System.out.println(seller.getUsername());
         Auction auction = new Auction(beginDate, endDate, product1, initialPrice, seller);
         storage.addAuction(auction);
         seller.addAuction(auction);

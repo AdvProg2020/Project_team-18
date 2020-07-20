@@ -24,6 +24,11 @@ public class Storage {
     private ArrayList<Sort> allSorts;
     private ArrayList<Cart> allCarts;
     private ArrayList<Person> allSupporters;
+
+    public ArrayList<Auction> getAllAuctions() {
+        return allAuctions;
+    }
+
     private ArrayList<Auction> allAuctions;
 
     public Storage() {

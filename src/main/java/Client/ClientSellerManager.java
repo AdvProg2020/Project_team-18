@@ -29,6 +29,16 @@ public class ClientSellerManager extends ClientManager {
         }
     }
 
+    public void addAuction(HashMap<String, String> info) throws Exception {
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(info);
+        ClientMessage clientMessage = new ClientMessage(MessageType.ADD_AUCTION, params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if(serverMessage != null && serverMessage.getMessageType() == MessageType.ERROR){
+            throw (Exception)serverMessage.getResult();
+        }
+    }
+
     public void removeProduct(int productId , String username) throws Exception {
         ArrayList<Object> params = new ArrayList<>();
         params.add(username);

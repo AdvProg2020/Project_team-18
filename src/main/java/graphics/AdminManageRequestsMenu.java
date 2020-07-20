@@ -26,17 +26,22 @@ public class AdminManageRequestsMenu extends Menu implements Initializable {
 
     @FXML
     TableView<Request> requestsTable = new TableView<>();
-    @FXML TableColumn<Request, Integer> idColumn = new TableColumn<>();
-    @FXML TableColumn<Request, String> statusColumn = new TableColumn<>();
-    @FXML TableColumn<Request, String> typeColumn = new TableColumn<>();
-    @FXML TableColumn<Request, Void> respondColumn = new TableColumn<>();
-    @FXML TableColumn<Request, Void> viewMoreColumn = new TableColumn<>();
+    @FXML
+    TableColumn<Request, Integer> idColumn = new TableColumn<>();
+    @FXML
+    TableColumn<Request, String> statusColumn = new TableColumn<>();
+    @FXML
+    TableColumn<Request, String> typeColumn = new TableColumn<>();
+    @FXML
+    TableColumn<Request, Void> respondColumn = new TableColumn<>();
+    @FXML
+    TableColumn<Request, Void> viewMoreColumn = new TableColumn<>();
 
     public AdminManageRequestsMenu(Menu previousMenu) {
         super(previousMenu, "src/main/java/graphics/fxml/AdminManageRequestsMenu.fxml");
     }
 
-    private void updateShownRequests(ArrayList<Request> shownRequests){
+    private void updateShownRequests(ArrayList<Request> shownRequests) {
         final ObservableList<Request> data = FXCollections.observableArrayList(
                 shownRequests
         );
@@ -82,7 +87,7 @@ public class AdminManageRequestsMenu extends Menu implements Initializable {
 
     }
 
-    private void respond(Request request){
+    private void respond(Request request) {
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Respond Request");
         dialog.setHeaderText(null);
@@ -95,12 +100,12 @@ public class AdminManageRequestsMenu extends Menu implements Initializable {
                 adminManager.acceptRequest(Integer.toString(request.getRequestId()));
                 ArrayList<Request> newRequests = new ArrayList<>();
                 for (Request request1 : adminManager.viewAllRequests()) {
-                    if(request1.getStateOfRequest() == StateType.PROCESSING)
+                    if (request1.getStateOfRequest() == StateType.PROCESSING)
                         newRequests.add(request1);
                 }
                 updateShownRequests(newRequests);
             } catch (Exception ex) {
-                showError(ex.getMessage(),20);
+                showError(ex.getMessage(), 20);
             }
         });
         Button decline = new Button("decline");
@@ -109,17 +114,17 @@ public class AdminManageRequestsMenu extends Menu implements Initializable {
                 adminManager.declineRequest(Integer.toString(request.getRequestId()));
                 ArrayList<Request> newRequests = new ArrayList<>();
                 for (Request request2 : adminManager.viewAllRequests()) {
-                    if(request2.getStateOfRequest() == StateType.PROCESSING)
+                    if (request2.getStateOfRequest() == StateType.PROCESSING)
                         newRequests.add(request2);
                 }
                 updateShownRequests(newRequests);
             } catch (Exception ex) {
-                showError(ex.getMessage(),20);
+                showError(ex.getMessage(), 20);
             }
         });
         Button takeNoAction = new Button("Take No Action");
         takeNoAction.setOnAction(e -> back());
-        content.getChildren().addAll(accept,decline,takeNoAction,userInfo);
+        content.getChildren().addAll(accept, decline, takeNoAction, userInfo);
         content.setAlignment(Pos.CENTER_LEFT);
         content.setSpacing(10);
         dialog.getDialogPane().setContent(content);
@@ -160,13 +165,13 @@ public class AdminManageRequestsMenu extends Menu implements Initializable {
 
     }
 
-    private void viewMore(Request request){
+    private void viewMore(Request request) {
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Respond Request");
         dialog.setHeaderText(null);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
         Label moreInfo = new Label();
-        HashMap<String,String> info = request.getInformation();
+        HashMap<String, String> info = request.getInformation();
         moreInfo.setText(info.toString());
         VBox content = new VBox();
         content.getChildren().addAll(moreInfo);
@@ -180,7 +185,7 @@ public class AdminManageRequestsMenu extends Menu implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ArrayList<Request> newRequests = new ArrayList<>();
         for (Request request : adminManager.viewAllRequests()) {
-            if(request.getStateOfRequest() == StateType.PROCESSING)
+            if (request.getStateOfRequest() == StateType.PROCESSING)
                 newRequests.add(request);
         }
         updateShownRequests(newRequests);
