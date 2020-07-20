@@ -68,22 +68,22 @@ public class SellerMenu extends Menu implements Initializable {
         dialog.setTitle("Change Personal Information");
         dialog.setHeaderText(null);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-            PasswordField passwordField = new PasswordField();
-            HBox content = new HBox();
-            content.setAlignment(Pos.CENTER_LEFT);
-            content.setSpacing(10);
-            content.getChildren().addAll(new Label("Enter your new password :"), passwordField);
-            dialog.getDialogPane().setContent(content);
-            Optional<ButtonType> result = dialog.showAndWait();
-            if (result.isPresent() && result.get() == ButtonType.OK) {
-                updatedVersion = passwordField.getText();
-                try {
-                    manager.editField("password", updatedVersion);
-                    viewPersonalInfo();
-                } catch (Exception e) {
-                    showError(e.getMessage(), 100);
-                }
+        PasswordField passwordField = new PasswordField();
+        HBox content = new HBox();
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setSpacing(10);
+        content.getChildren().addAll(new Label("Enter your new password :"), passwordField);
+        dialog.getDialogPane().setContent(content);
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            updatedVersion = passwordField.getText();
+            try {
+                manager.editField("password", updatedVersion);
+                viewPersonalInfo();
+            } catch (Exception e) {
+                showError(e.getMessage(), 100);
             }
+        }
     }
 
     public void editNameField() {
@@ -195,7 +195,7 @@ public class SellerMenu extends Menu implements Initializable {
         if (result.isPresent() && result.get() == ButtonType.OK) {
             updatedVersion = textField.getText();
             try {
-                sellerManager.addBalance(Double.parseDouble(updatedVersion),person.getUsername());
+                sellerManager.addBalance(Double.parseDouble(updatedVersion), person.getUsername());
                 viewPersonalInfo();
             } catch (Exception e) {
                 showError(e.getMessage(), 100);
@@ -351,6 +351,51 @@ public class SellerMenu extends Menu implements Initializable {
                                 + product.getName() + " Product Brand : " + product.getBrand()));
                     }
                 }
+            }
+        }
+        dialog.getDialogPane().setContent(content);
+        dialog.showAndWait();
+    }
+
+    public void viewAuctions() {
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Your Auctions");
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.FINISH);
+        VBox content = new VBox();
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setMinSize(300, 300);
+        ArrayList<Auction> myAuctions;
+        myAuctions = ((Seller) person).getThisSellerAuctions();
+        if (myAuctions.isEmpty()) {
+            content.getChildren().addAll(new Label("You don't have any auctions yet!"));
+        } else {
+            for (int i = 0; i < myAuctions.size(); i++) {
+                content.getChildren().addAll(new Label("AUCTION NUMBER " + (i + 1)));
+                content.getChildren().addAll(new Label("Auction Id : " + myAuctions.get(i).getId()));
+                content.getChildren().addAll(new Label("Latest Price : " + myAuctions.get(i).getPrice()));
+                content.getChildren().addAll(new Label("Begin Date : " + myAuctions.get(i).getBeginDate().getYear()
+                        + "-" + myAuctions.get(i).getBeginDate().getMonth() + "-" +
+                        myAuctions.get(i).getBeginDate().getDayOfMonth() + ", Time : "
+                        + myAuctions.get(i).getBeginDate().getHour() + ":" + myAuctions.get(i).getBeginDate().getMinute()
+                        + ":" + +myAuctions.get(i).getBeginDate().getSecond()));
+                content.getChildren().addAll(new Label("End Date : " + myAuctions.get(i).getEndDate().getYear()
+                        + "-" + myAuctions.get(i).getEndDate().getMonth() + "-" +
+                        myAuctions.get(i).getEndDate().getDayOfMonth() + ", Time : "
+                        + myAuctions.get(i).getEndDate().getHour() + ":" + myAuctions.get(i).getEndDate().getMinute()
+                        + ":" + +myAuctions.get(i).getEndDate().getSecond()));
+                Product product = myAuctions.get(i).getProduct();
+                content.getChildren().addAll(new Label("Product : \n" + "Product Id : " + product.getProductId() + " Product Name : "
+                        + product.getName() + " Product Brand : " + product.getBrand()));
+//                if (myAuctions.get(i).getProductsWithThisSale().isEmpty()) {
+//                    content.getChildren().addAll(new Label("No product with this off yet!"));
+//                } else {
+//                    content.getChildren().addAll(new Label("This off products are as followed :"));
+//                    for (Product product : myAuctions.get(i).getProductsWithThisSale()) {
+//                        content.getChildren().add(new Label("Product Id : " + product.getProductId() + " Product Name : "
+//                                + product.getName() + " Product Brand : " + product.getBrand()));
+//                    }
+//                }
             }
         }
         dialog.getDialogPane().setContent(content);
@@ -548,20 +593,20 @@ public class SellerMenu extends Menu implements Initializable {
         ArrayList<Category> categories;
         try {
             categories = sellerManager.viewAllCategories();
-        if (categories.isEmpty()) {
-            content.getChildren().addAll(new Label("There's not any categories yet!"));
-        } else {
-            for (int i = 0; i < categories.size(); i++) {
-                content.getChildren().addAll(new Label("CATEGORY NUMBER " + (i + 1)));
-                content.getChildren().addAll(new Label(categories.get(i).getCategoryName()));
-                content.getChildren().addAll(new Label("This category's attributes are as followed :"));
-                for (String property : categories.get(i).getProperties().keySet()) {
-                    content.getChildren().add(new Label(property + " : " + categories.get(i).getProperties().get(property)));
+            if (categories.isEmpty()) {
+                content.getChildren().addAll(new Label("There's not any categories yet!"));
+            } else {
+                for (int i = 0; i < categories.size(); i++) {
+                    content.getChildren().addAll(new Label("CATEGORY NUMBER " + (i + 1)));
+                    content.getChildren().addAll(new Label(categories.get(i).getCategoryName()));
+                    content.getChildren().addAll(new Label("This category's attributes are as followed :"));
+                    for (String property : categories.get(i).getProperties().keySet()) {
+                        content.getChildren().add(new Label(property + " : " + categories.get(i).getProperties().get(property)));
+                    }
                 }
             }
-        }
         } catch (Exception e) {
-            showError(e.getMessage() , 20);
+            showError(e.getMessage(), 20);
         }
         dialog.getDialogPane().setContent(content);
         dialog.showAndWait();
@@ -590,7 +635,7 @@ public class SellerMenu extends Menu implements Initializable {
         VBox content = new VBox();
         content.setAlignment(Pos.CENTER_LEFT);
         content.setSpacing(10);
-        content.getChildren().addAll(label , addBalance , withdraw);
+        content.getChildren().addAll(label, addBalance, withdraw);
         dialog.getDialogPane().setContent(content);
         dialog.showAndWait();
     }

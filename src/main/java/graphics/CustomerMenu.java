@@ -413,6 +413,11 @@ public class CustomerMenu extends Menu implements Initializable {
 
     }
 
+    public void goToAuctionsMenu(){
+        AuctionsMenu auctionsMenu = new AuctionsMenu(this);
+        auctionsMenu.run();
+    }
+
     @FXML
     private void customerRequestMenu() {
         CustomerRequestsMenu customerRequestsMenu = new CustomerRequestsMenu(this);

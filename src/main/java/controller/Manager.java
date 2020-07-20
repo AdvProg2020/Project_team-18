@@ -135,6 +135,10 @@ public class Manager {
         return storage.getAllCategories();
     }
 
+    public ArrayList<Auction> viewAllAuctions(){
+        return storage.getAllAuctions();
+    }
+
     public Category viewCategory(String name) throws Exception {
         if (storage.getCategoryByName(name) == null)
             throw new Exception("There is not such category");

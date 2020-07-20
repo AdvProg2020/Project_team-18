@@ -13,14 +13,14 @@
     </stylesheets>
     <children>
         <Button layoutY="1.0" mnemonicParsing="false" onAction="#back" onMousePressed="#buttonSound" text="back" />
-        <TableView fx:id="productTable" layoutX="50.0" layoutY="1.0" prefHeight="500.0" prefWidth="549.0">
+        <TableView fx:id="auctionsTable" layoutX="50.0" layoutY="1.0" prefHeight="500.0" prefWidth="549.0">
             <columns>
-                <TableColumn fx:id="nameColumn" prefWidth="73.0" text="Auction Id" />
-                <TableColumn fx:id="imageColumn" prefWidth="113.0" text="Product In Auction" />
+                <TableColumn fx:id="auctionId" prefWidth="73.0" text="Auction Id" />
+                <TableColumn fx:id="productColumn" prefWidth="113.0" text="Product In Auction" />
                 <TableColumn fx:id="sellerColumn" prefWidth="59.0" text="Seller" />
-            <TableColumn prefWidth="75.0" text="Begin Date" />
-            <TableColumn prefWidth="75.0" text="End Date" />
-                <TableColumn fx:id="priceColumn" prefWidth="75.39996337890625" text="Latest Price" />
+            <TableColumn fx:id="beginDate" prefWidth="75.0" text="Begin Date" />
+            <TableColumn fx:id="endDate" prefWidth="75.0" text="End Date" />
+                <TableColumn fx:id="latestPrice" prefWidth="75.39996337890625" text="Latest Price" />
                 <TableColumn fx:id="buttonColumn" prefWidth="76.60003662109375" text="View More" />
             </columns>
         </TableView>

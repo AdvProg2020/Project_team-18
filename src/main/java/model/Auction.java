@@ -2,26 +2,36 @@ package model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Auction implements Idable<Auction> {
     private int auctionId;
     private LocalDateTime beginDate;
     private LocalDateTime endDate;
     private Product product;
+    private String productName;
     private Double price;
     private Seller seller;
+    private String sellerName;
     private Customer customer;
     private transient static ArrayList<Auction> allAuctions = new ArrayList<>();
 
+    public String getProductName() {
+        return productName;
+    }
+
+    public String getSellerName() {
+        return sellerName;
+    }
+
     public Auction(LocalDateTime beginDate, LocalDateTime endDate, Product product, Double price, Seller seller) {
-        System.out.println("in constructor");
         this.auctionId = idSetter();
         this.beginDate = beginDate;
         this.endDate = endDate;
         this.product = product;
+        this.productName = product.getName();
         this.price = price;
         this.seller = seller;
+        this.sellerName = seller.getUsername();
         this.customer = null;
     }
 

@@ -1,114 +1,135 @@
 package graphics;
 
-import Client.ClientSellerManager;
+import Client.ClientAdminManager;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-import model.Product;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.util.Callback;
+import model.*;
 
+import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.ResourceBundle;
 
-public class AuctionsMenu extends Menu {
+public class AuctionsMenu extends Menu implements Initializable {
 
-    private ClientSellerManager sellerManager;
-
+    private ClientAdminManager clientAdminManager = new ClientAdminManager();
 
     public AuctionsMenu(Menu previousMenu) {
-        super(previousMenu, "src/main/java/graphics/fxml/AddAuctionMenu.fxml");
+        super(previousMenu, "src/main/java/graphics/fxml/AuctionsMenu.fxml");
     }
-
 
     @FXML
-    private TextField beginDateField;
+    TableView<Auction> auctionsTable = new TableView<>();
     @FXML
-    private TextField endDateField;
+    TableColumn<Auction, Integer> auctionId = new TableColumn<>();
     @FXML
-    private TextField amountOfOffField;
+    TableColumn<Auction, Double> latestPrice = new TableColumn<>();
+    @FXML
+    TableColumn<Auction, String> productColumn = new TableColumn<>();
+    @FXML
+    TableColumn<Auction, LocalDateTime> beginDate = new TableColumn<>();
+    @FXML
+    TableColumn<Auction, LocalDateTime> endDate = new TableColumn<>();
+//    @FXML
+//    TableColumn<Product, Image> statusColumn = new TableColumn<>();
+    @FXML
+    TableColumn<Auction, String> sellerColumn = new TableColumn<>();
+    @FXML
+    TableColumn<Auction, Void> buttonColumn = new TableColumn<>();
 
-    private ArrayList<Product> productsInSale = new ArrayList<>();
-
-    public void addOff() {
-        HashMap<String, String> productInformation = new HashMap<>();
-        String beginDate = beginDateField.getText();
-        String endDate = endDateField.getText();
-        String amountOfOff = amountOfOffField.getText();
-        if (checkPriceValidity(amountOfOff) && checkDateValidity(beginDate, "begin") && checkDateValidity(endDate, "end")) {
-            productInformation.put("beginDate", beginDate);
-            productInformation.put("endDate", endDate);
-            productInformation.put("amountOfSale", amountOfOff);
-            try {
-                sellerManager.addOff(productInformation, productsInSale,person.getUsername());
-            } catch (Exception e) {
-                showError(e.getMessage(),20);
-            }
-            showMessage();
-            back();
-        }
+    private void updateShownProducts(ArrayList<Auction> shownProducts) {
+        final ObservableList<Auction> data = FXCollections.observableArrayList(
+                shownProducts
+        );
+//        for (Product product : shownProducts) {
+//            if (product.getSupply() == 0)
+//                product.setStatusImagePath("file:src/main/java/graphics/fxml/images/finished.jpg");
+//            else if (product.getSale() == null)
+//                product.setStatusImagePath("file:src/main/java/graphics/fxml/images/available.png");
+//            else
+//                product.setStatusImagePath("file:src/main/java/graphics/fxml/images/sale.jpg");
+//        }
+        beginDate.setCellValueFactory(new PropertyValueFactory<>("beginDate"));
+        endDate.setCellValueFactory(new PropertyValueFactory<>("endDate"));
+        auctionId.setCellValueFactory(new PropertyValueFactory<>("auctionId"));
+        latestPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
+        productColumn.setCellValueFactory(new PropertyValueFactory<>("productName"));
+//        statusColumn.setCellFactory(param -> {
+//            //Set up the ImageView
+//            final ImageView imageview = new ImageView();
+//            imageview.setFitHeight(50);
+//            imageview.setFitWidth(50);
+//
+//
+//            //Set up the Table
+//            TableCell<Product, Image> cell = new TableCell<Product, Image>() {
+//                public void updateItem(Image item, boolean empty) {
+//                    if (item != null) {
+//                        imageview.setImage(item);
+//                    }
+//                }
+//            };
+//            // Attach the imageView to the cell
+//            cell.setGraphic(imageview);
+//            return cell;
+//        });
+        //statusColumn.setCellValueFactory(new PropertyValueFactory<>("statusImage"));
+        sellerColumn.setCellValueFactory(new PropertyValueFactory<>("sellerName"));
+        addButtonToTable(this);
+        auctionsTable.setItems(data);
     }
 
-    private boolean checkPriceValidity(String amount) {
-        if (amount.equals("")) {
-            showError("Please enter price!", 100);
-            return false;
-        } else if (!amount.matches("\\d+\\.?\\d+")) {
-            showError("PLease enter valid price!", 100);
-            return false;
-        } else
-            return true;
-    }
+    private void addButtonToTable(AuctionsMenu menu) {
+        Callback<TableColumn<Auction, Void>, TableCell<Auction, Void>> cellFactory =
+                new Callback<TableColumn<Auction, Void>, TableCell<Auction, Void>>() {
+                    @Override
+                    public TableCell<Auction, Void> call(final TableColumn<Auction, Void> param) {
+                        final TableCell<Auction, Void> cell = new TableCell<Auction, Void>() {
 
-    private boolean checkDateValidity(String date, String type) {
-        if (date.equals("")) {
-            showError("Please enter " + type + " date!", 100);
-            return false;
-        } else if (!date.matches("\\d\\d\\d\\d,\\d\\d,\\d\\d,\\d\\d,\\d\\d")) {
-            showError("PLease enter valid " + type + " date!", 100);
-            return false;
-        } else
-            return true;
-    }
+                            private final Button btn = new Button("MORE");
 
-    public void addProductToSale() {
-        javafx.scene.control.Dialog<ButtonType> productDialog = new javafx.scene.control.Dialog<>();
-        String productId;
-        TextField textField = new TextField();
-        productDialog.setTitle("Add product to off");
-        productDialog.setHeaderText(null);
-        productDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-        HBox content = new HBox();
-        content.getChildren().addAll(new Label("Enter productId you want to add to this off :"), textField);
-        productDialog.getDialogPane().setContent(content);
-        Optional<ButtonType> result = productDialog.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            productId = textField.getText();
-            try {
-                if (!productId.matches("\\d+")) {
-                    showError("ProductId is an integer!", 100);
-                } else {
-                    if (sellerManager.getProductById(Integer.parseInt(productId)) == null) {
-                        showError("There's not such product!", 100);
-                    } else if (!person.getUsername().equals(sellerManager.getProductById(Integer.parseInt(productId)).getSeller().getUsername())) {
-                        showError("You don't have this product!", 100);
-                    } else {
-                        productsInSale.add(sellerManager.getProductById(Integer.parseInt(productId)));
+                            {
+                                btn.setOnAction((ActionEvent event) -> {
+                                    Auction auction = getTableView().getItems().get(getIndex());
+                                    AuctionMenu auctionMenu = new AuctionMenu(auction, menu);
+                                    auctionMenu.run();
+                                });
+                            }
+
+                            @Override
+                            public void updateItem(Void item, boolean empty) {
+                                super.updateItem(item, empty);
+                                if (empty) {
+                                    setGraphic(null);
+                                } else {
+                                    setGraphic(btn);
+                                }
+                            }
+                        };
+                        return cell;
                     }
-                }
-            } catch (Exception e){
-                showError(e.getMessage() , 20);
-            }
+                };
+
+        buttonColumn.setCellFactory(cellFactory);
+
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        try {
+            updateShownProducts(clientAdminManager.viewAllAuctions());
+        } catch (Exception e) {
+            showError(e.getMessage(), 20);
         }
     }
 
-    public void showMessage() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Request Message");
-        alert.setContentText("Your Request has been Successfully sent to admin(s)!");
-        alert.setHeaderText(null);
-        alert.show();
-    }
 }

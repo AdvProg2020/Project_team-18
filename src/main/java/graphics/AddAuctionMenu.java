@@ -90,7 +90,7 @@ public class AddAuctionMenu extends Menu {
                 } else {
                     try {
                         if (!sellerManager.doesSellerHaveProduct(Integer.parseInt(productId), person.getUsername())) {
-                            showError("Oops!You don't have off with this Id!", 100);
+                            showError("Oops!You don't have product with this Id!", 100);
                             return false;
                         }
                     } catch (Exception e) {
