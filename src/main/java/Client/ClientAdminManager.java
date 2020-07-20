@@ -32,7 +32,6 @@ public class ClientAdminManager extends ClientManager {
         return (ArrayList<BuyLog>) serverMessage.getResult();
     }
 
-
     public void deleteUser(String username) throws Exception {
         ArrayList<Object> params = new ArrayList<>();
         params.add(username);
@@ -169,6 +168,7 @@ public class ClientAdminManager extends ClientManager {
     }
 
     public void acceptRequest(String requestId) throws Exception {
+        System.out.println("accept request in clientAdminManager");
         ArrayList<Object> params = new ArrayList<>();
         params.add(requestId);
         ClientMessage clientMessage = new ClientMessage(MessageType.ACCEPT_REQUEST, params);
@@ -214,4 +214,5 @@ public class ClientAdminManager extends ClientManager {
         }
         return (Category) serverMessage.getResult();
     }
+
 }

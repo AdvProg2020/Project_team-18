@@ -73,6 +73,8 @@ public class Request implements Idable<Request> {
                 return RequestType.REMOVE_PRODUCT_FROM_SALE;
             case "add comment":
                 return RequestType.ADD_COMMENT;
+            case "add auction":
+                return RequestType.ADD_AUCTION;
         }
         return null;
     }

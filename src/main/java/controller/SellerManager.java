@@ -75,6 +75,10 @@ public class SellerManager extends Manager {
         return ((Seller) person).getProductsToSell();
     }
 
+    public void addAuction(HashMap<String, String> info){
+        storage.addRequest(new Request("add auction", info));
+    }
+
     public void addOff(HashMap<String, String> information, ArrayList<Product> productsInOff) {
         Sale sale = new Sale(null, null, 0, null);
         int offId = sale.getLastSaleId();

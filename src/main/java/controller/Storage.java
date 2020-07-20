@@ -25,6 +25,12 @@ public class Storage {
     private ArrayList<Cart> allCarts;
     private ArrayList<Person> allSupporters;
 
+    public ArrayList<Auction> getAllAuctions() {
+        return allAuctions;
+    }
+
+    private ArrayList<Auction> allAuctions;
+
     public Storage() {
         newArrayLists();
     }
@@ -57,6 +63,7 @@ public class Storage {
         allSorts = Sort.getAllSorts();
         allSupporters = Supporter.getAllSupporters();
         allCarts = new ArrayList<>();
+        allAuctions = Auction.getAllAuctions();
     }
 
     public ArrayList<Person> getAllUsers() {
@@ -214,6 +221,10 @@ public class Storage {
 
     public void addProduct(Product product) {
         allProducts.add(product);
+    }
+
+    public void addAuction(Auction auction){
+        allAuctions.add(auction);
     }
 
     public void addSellLog(SellLog log) {
