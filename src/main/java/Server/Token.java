@@ -62,9 +62,13 @@ public class Token {
         return jws;
     }
     public static void readJWS(String jws){
-        Jwts.parser()
-                .setSigningKey(TextCodec.BASE64.decode("Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E="))
-                .parseClaimsJws(jws).getBody();
+        try {
+            Jwts.parser()
+                    .setSigningKey("secret".getBytes("UTF-8"))
+                    .parseClaimsJws(jws).getBody();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getJWS() {
