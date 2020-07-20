@@ -118,7 +118,7 @@ public class Server {
                     String password = (String) clientMessage.getParameters().get(1);
                     try {
                         ServerMessage serverMessage = new ServerMessage(MessageType.LOGIN, manager.login(username, password));
-                        serverMessage.setToken(new Token(10000));
+                        serverMessage.setToken(new Token(0));
                         return serverMessage;
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);

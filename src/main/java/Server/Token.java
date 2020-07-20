@@ -4,7 +4,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.TextCodec;
 
-//import javax.xml.bind.DatatypeConverter;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
+import java.security.Key;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,6 +21,9 @@ public class Token {
         this.JWS = createJWS(validPeriod);
     }
     private static SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
+    private static final String SECRET_KEY = "Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=";
+    private static byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECRET_KEY);
+    private static Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
     public static String createJWS(long validPeriod){
         String jws = null;
         if (validPeriod>0){
@@ -31,8 +37,8 @@ public class Token {
                 .setId("id")
                 .setExpiration(exp)
                 .signWith(
-                        signatureAlgorithm,
-                        TextCodec.BASE64.decode("Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=")
+                        signatureAlgorithm,signingKey
+                        //TextCodec.BASE64.decode("Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=")
                 )
                 .compact();}
         else {
