@@ -192,9 +192,15 @@ public class AdminManager extends Manager {
                 return;
             case ADD_PRODUCT:
                 Seller seller = (Seller) storage.getUserByUsername(request.getInformation().get("seller"));
-                Product product = new Product(request.getInformation(),seller);
-                storage.addProduct(product);
-                seller.addProduct(product);
+                if (request.getInformation().get("categoryName").equals("file")){
+                    FileProduct fileProduct = new FileProduct(request.getInformation(),seller);
+                    storage.addProduct(fileProduct);
+                    seller.addProduct(fileProduct);
+                }else {
+                    Product product = new Product(request.getInformation(),seller);
+                    storage.addProduct(product);
+                    seller.addProduct(product);
+                }
                 return;
             case ADD_SALE:
                 addSaleRequest(request);

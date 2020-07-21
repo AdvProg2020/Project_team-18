@@ -76,5 +76,15 @@
       "properties": {}
     }
   },
-  "@root.0.thisCategoryProducts.0.seller.productsToSell.0.category"
+  "@root.0.thisCategoryProducts.0.seller.productsToSell.0.category",
+  {
+    "@type": "model.Category",
+    "@val": {
+      "id": 0,
+      "categoryName": "file",
+      "imagePath": "file:src/main/java/graphics/fxml/images/FileIcon.png",
+      "thisCategoryProducts": [],
+      "properties": {}
+    }
+  }
 ]
