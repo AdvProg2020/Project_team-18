@@ -18,7 +18,7 @@ public class ClientPurchasingManager extends ClientManager {
     public ClientPurchasingManager() {
     }
 
-    public void performPayment(HashMap<String, String> receiverInformation, double totalPrice, double discountPercentage,
+    public Cart performPayment(HashMap<String, String> receiverInformation, double totalPrice, double discountPercentage,
                                String discountUsed , String username , Cart cart) throws Exception {
         ArrayList<Object> params = new ArrayList<>();
         params.add(username);
@@ -32,6 +32,7 @@ public class ClientPurchasingManager extends ClientManager {
         if (serverMessage!= null && serverMessage.getMessageType()==MessageType.ERROR){
             throw (Exception)serverMessage.getResult();
         }
+        return (Cart)serverMessage.getResult();
     }
 
     public void performPaymentWithBankAccount (HashMap<String, String> receiverInformation, double totalPrice, double discountPercentage,

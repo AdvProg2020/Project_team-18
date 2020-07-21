@@ -114,12 +114,13 @@ public class PurchasingMenu extends Menu {
                 receivedInfo.put("receiverName", name.getText());
                 receivedInfo.put("address", address.getText());
                 receivedInfo.put("phoneNumber", name.getText());
-                purchasingManager.performPayment(receivedInfo, finalPrice,
+                Cart result = purchasingManager.performPayment(receivedInfo, finalPrice,
                         purchasingManager.getDiscountPercentage(discountCodeField.getText()), discountCodeField.getText(),
                         person.getUsername() ,currentCart);
                 if (!discountCodeField.getText().equals("")) {
                     purchasingManager.updateDiscountUsagePerPerson(discountCodeField.getText() , person.getUsername());
                 }
+                currentCart = result;
                 showMessage();
                 back();
             }

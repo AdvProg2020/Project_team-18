@@ -251,8 +251,8 @@ public class Server {
                     try {
                         System.out.println("I'm here!");
                         customerManager.setCart((Cart) clientMessage.getParameters().get(0));
-                        customerManager.increaseProduct((String) clientMessage.getParameters().get(1));
-                        System.out.println("done!");
+                        Cart resultCart = customerManager.increaseProduct((String) clientMessage.getParameters().get(1));
+                        return new ServerMessage(MessageType.INCREASE_PRODUCT,resultCart);
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
@@ -335,12 +335,11 @@ public class Server {
                         moveToShopAccount(token,(0.1 * moneyToTransfer),customer.getWallet().getAccountId(),"payment with wallet");
                         purchasingManager.setPerson(thisPerson);
                         purchasingManager.setCart((Cart) clientMessage.getParameters().get(1));
-                        purchasingManager.performPayment(receiverInformation, totalPrice, percentage, discountUsed);
-                        System.out.println("Im in server");
+                        Cart result = purchasingManager.performPayment(receiverInformation, totalPrice, percentage, discountUsed);
+                        return new ServerMessage(MessageType.PERFORM_PAYMENT,result);
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
-                    break;
                 case CALCULATE_TOTAL_PRICE_WITH_DISCOUNT:
                     discountCode = (String) clientMessage.getParameters().get(0);
                     try {

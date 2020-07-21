@@ -42,7 +42,7 @@ public class CustomerManager extends Manager {
         System.out.println("after function");
     }
 
-    public void increaseProduct(String productId) throws Exception {
+    public Cart increaseProduct(String productId) throws Exception {
         System.out.println("in function");
         if (storage.getProductById(Integer.parseInt(productId)) == null) {
             System.out.println("not such product");
@@ -56,11 +56,11 @@ public class CustomerManager extends Manager {
             if (product.equals(storage.getProductById(Integer.parseInt(productId)))) {
                 cart.addNumberOfProductInTheCart(storage.getProductById(Integer.parseInt(productId)));
                 System.out.println("proper!");
-                return;
             }
         }
         cart.addProductToCart(storage.getProductById(Integer.parseInt(productId)));
         System.out.println("again proper!");
+        return cart;
     }
 
     public void decreaseProduct(String productId) throws Exception {

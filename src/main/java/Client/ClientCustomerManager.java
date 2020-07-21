@@ -65,7 +65,7 @@ public class ClientCustomerManager extends ClientManager {
         }
     }
 
-    public void increaseProduct(Cart cart, String productId) throws Exception {
+    public Cart increaseProduct(Cart cart, String productId) throws Exception {
         ArrayList<Object> params = new ArrayList<>();
         params.add(cart);
         params.add(productId);
@@ -74,6 +74,7 @@ public class ClientCustomerManager extends ClientManager {
         if (serverMessage != null && serverMessage.getMessageType()==MessageType.ERROR){
             throw  (Exception)serverMessage.getResult();
         }
+        return (Cart) serverMessage.getResult();
     }
 
     public void decreaseProduct(String productId) throws Exception {

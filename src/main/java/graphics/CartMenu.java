@@ -54,7 +54,8 @@ public class CartMenu extends Menu implements Initializable {
     public void increaseProduct(){
         String id = productTextField.getText();
         try {
-            customerManager.increaseProduct(currentCart, id);
+            currentCart = customerManager.increaseProduct(currentCart, id);
+            System.out.println(currentCart.getProductsInCart().keySet().toString());
             updateTable();
         }catch (Exception e){
             showError(e.getMessage(), 200);

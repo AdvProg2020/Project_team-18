@@ -15,7 +15,7 @@ public class PurchasingManager extends Manager {
     public PurchasingManager() {
     }
 
-    public void performPayment(HashMap<String, String> receiverInformation, double totalPrice, double discountPercentage, String discountUsed)
+    public Cart performPayment(HashMap<String, String> receiverInformation, double totalPrice, double discountPercentage, String discountUsed)
             throws Exception {
         double moneyToTransfer = totalPrice - totalPrice * (1.0 * discountPercentage / 100);
         person.setBalance(person.getBalance() - moneyToTransfer);
@@ -34,6 +34,7 @@ public class PurchasingManager extends Manager {
         }
         cart.isPurchased();
         cart.emptyCart();
+        return cart;
     }
 
     public void performPaymentWithBankAccount (HashMap<String, String> receiverInformation, double totalPrice,
