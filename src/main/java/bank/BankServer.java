@@ -23,7 +23,8 @@ public class BankServer {
         private void run() {
             try {
                 ServerSocket serverSocket = new ServerSocket(8787);
-                new BankAccount("shop","shop","shop","shop");
+                BankAccount shop = new BankAccount("shop","shop","shop","shop");
+                System.out.println("initializing shop account with id " + shop.getAccountId());
 
                 while (true) {
                     Socket clientSocket;
@@ -32,7 +33,7 @@ public class BankServer {
                         System.out.println("client accepted");
                         DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
                         DataInputStream inputStream = new DataInputStream(clientSocket.getInputStream());
-                        new ClientHandler(outputStream, inputStream , clientSocket).start();
+                        new ClientHandler(outputStream, inputStream , clientSocket , shop).start();
                     } catch (Exception e) {
                         System.err.println("Error in accepting client!");
                         break;
@@ -47,6 +48,7 @@ public class BankServer {
     private static class ClientHandler extends Thread {
         DataOutputStream outputStream;
         DataInputStream inputStream;
+        BankAccount shoppingCenter;
         Socket clientSocket;
         HashMap<String, String> allAccounts;
         HashMap<String, LocalDateTime> validTokens;
@@ -55,14 +57,16 @@ public class BankServer {
         private static final SecureRandom secureRandom = new SecureRandom(); //threadsafe
         private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder(); //threadsafe
 
-        public ClientHandler(DataOutputStream outputStream, DataInputStream inputStream , Socket clientSocket) {
+        public ClientHandler(DataOutputStream outputStream, DataInputStream inputStream , Socket clientSocket , BankAccount shop) {
             this.outputStream = outputStream;
             this.inputStream = inputStream;
             this.clientSocket = clientSocket;
+            this.shoppingCenter = shop;
             allAccounts = new HashMap<>();
             validTokens = new HashMap<>();
             tokenPerAccount = new HashMap<>();
             allAccountIds = new ArrayList<>();
+            allAccounts.put("shop","shop");
         }
 
         private void handleClient() {
@@ -102,6 +106,7 @@ public class BankServer {
                         String[] inputs = input.split("\\s");
                         String receiptId = inputs[1];
                         performPayment(receiptId);
+                        System.out.println(shoppingCenter.getValue());
                     } else if (input.startsWith("get_balance")) {
                         String[] inputs = input.split("\\s");
                         String token = inputs[1];
