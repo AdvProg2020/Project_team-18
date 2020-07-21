@@ -189,4 +189,26 @@ public class ClientSellerManager extends ClientManager {
         }
         return (SellLog) serverMessage.getResult();
     }
+
+    public void chargeWallet(double money, String username) throws Exception{
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(money);
+        params.add(username);
+        ClientMessage clientMessage = new ClientMessage(MessageType.CHARGE_WALLET, params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage != null && serverMessage.getMessageType()==MessageType.ERROR){
+            throw  (Exception)serverMessage.getResult();
+        }
+    }
+
+    public void withdrawFromWallet(double money, String username) throws Exception{
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(money);
+        params.add(username);
+        ClientMessage clientMessage = new ClientMessage(MessageType.WITHDRAW_WALLET, params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage != null && serverMessage.getMessageType()==MessageType.ERROR){
+            throw  (Exception)serverMessage.getResult();
+        }
+    }
 }

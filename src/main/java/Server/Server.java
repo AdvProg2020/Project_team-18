@@ -326,7 +326,14 @@ public class Server {
                     double percentage = (double) clientMessage.getParameters().get(4);
                     String discountUsed = (String) clientMessage.getParameters().get(5);
                     try {
-                        purchasingManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(0)));
+                        double moneyToTransfer = totalPrice - totalPrice * (1.0 * percentage / 100);
+                        Person thisPerson = storage.getUserByUsername((String) clientMessage.getParameters().get(0));
+                        Customer customer = (Customer) thisPerson;
+                        String charge = "get_token " + customer.getWallet().getBankAccountUsername() + " " +
+                                customer.getWallet().getBankAccountPassword();
+                        String token = getTokenFromBank(charge);
+                        moveToShopAccount(token,(0.1 * moneyToTransfer),customer.getWallet().getAccountId(),"payment with wallet");
+                        purchasingManager.setPerson(thisPerson);
                         purchasingManager.setCart((Cart) clientMessage.getParameters().get(1));
                         purchasingManager.performPayment(receiverInformation, totalPrice, percentage, discountUsed);
                         System.out.println("Im in server");
@@ -568,28 +575,106 @@ public class Server {
                     break;
                 case CHARGE_WALLET:
                     Person person = storage.getUserByUsername((String) clientMessage.getParameters().get(1));
-                    Customer customer = (Customer) person;
-                    String charge = "get_token " + customer.getWallet().getBankAccountUsername() + " " +
-                            customer.getWallet().getBankAccountPassword();
+                    if (person instanceof Customer) {
+                        Customer customer = (Customer) person;
+                        String charge = "get_token " + customer.getWallet().getBankAccountUsername() + " " +
+                                customer.getWallet().getBankAccountPassword();
+                        try {
+                            System.out.println(charge);
+                            String token = getTokenFromBank(charge);
+                            if (token.equals(""))
+                                return new ServerMessage(MessageType.ERROR, "username/password is invalid");
+                            int receipt = moveToShopAccount(token, (double) clientMessage.getParameters().get(0),
+                                    customer.getWallet().getAccountId(), "charging_wallet");
+                            boolean wasPaid = pay(receipt);
+                            if (wasPaid) {
+                                customer.setBalance(customer.getBalance() + (double) clientMessage.getParameters().get(0));
+                            }
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
+                        break;
+                    } else if (person instanceof Seller) {
+                        Seller seller = (Seller) person;
+                        String charge = "get_token " + seller.getWallet().getBankAccountUsername() + " " +
+                                seller.getWallet().getBankAccountPassword();
+                        try {
+                            System.out.println(charge);
+                            String token = getTokenFromBank(charge);
+                            if (token.equals(""))
+                                return new ServerMessage(MessageType.ERROR, "username/password is invalid");
+                            int receipt = moveToShopAccount(token, (double) clientMessage.getParameters().get(0),
+                                    seller.getWallet().getAccountId(), "charging_wallet");
+                            boolean wasPaid = pay(receipt);
+                            if (wasPaid) {
+                                seller.setBalance(seller.getBalance() + (double) clientMessage.getParameters().get(0));
+                            }
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
+                        break;
+                    }
+                case WITHDRAW_WALLET:
+                    Person person1 = storage.getUserByUsername((String) clientMessage.getParameters().get(1));
+                    Seller seller = (Seller) person1;
+                    String withdraw = "get_token " + seller.getWallet().getBankAccountUsername() + " " +
+                            seller.getWallet().getBankAccountPassword();
                     try {
-                        System.out.println(charge);
-                        String token = getTokenFromBank(charge);
+                        System.out.println(withdraw);
+                        String token = getTokenFromBank(withdraw);
                         if (token.equals(""))
                             return new ServerMessage(MessageType.ERROR, "username/password is invalid");
-                        int receipt = withdraw(token, (double) clientMessage.getParameters().get(0),
-                                customer.getWallet().getAccountId(), "charging_wallet");
+                        int receipt = moveFromShopAccount(token, (double) clientMessage.getParameters().get(0),
+                                seller.getWallet().getAccountId(), "withdrawing_from_wallet");
                         boolean wasPaid = pay(receipt);
                         if (wasPaid) {
-                            customer.setBalance(customer.getBalance() + (double) clientMessage.getParameters().get(0));
-                            server.bankDataOutputStream.writeUTF("get_transactions " + token + " -");
-                            System.out.println(server.bankDataInputStream.readUTF());
+                            seller.setBalance(seller.getBalance() - (double) clientMessage.getParameters().get(0));
                         }
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
                     break;
+                case PERFORM_PAYMENT_WiTH_BANK_ACCOUNT:
+                    HashMap<String, String> receiverInformation1 = (HashMap<String, String>) clientMessage.getParameters().get(2);
+                    double totalPrice1 = (double) clientMessage.getParameters().get(3);
+                    double percentage2 = (double) clientMessage.getParameters().get(4);
+                    String discountUsed1 = (String) clientMessage.getParameters().get(5);
+                    try {
+                        Person person2 = storage.getUserByUsername((String) clientMessage.getParameters().get(0));
+                        boolean wasSuccessful = performPaymentWithBank(receiverInformation1, totalPrice1, percentage2, discountUsed1,person2);
+                        if (wasSuccessful) {
+                            purchasingManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(0)));
+                            purchasingManager.setCart((Cart) clientMessage.getParameters().get(1));
+                            purchasingManager.performPaymentWithBankAccount(receiverInformation1, totalPrice1, percentage2, discountUsed1);
+                        }
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR, e);
+                    }
+                    break;
+
             }
             return null;
+        }
+
+        private boolean performPaymentWithBank (HashMap<String,String> information, double totalPrice,
+                                             double percentage, String discountCode, Person person) {
+            double moneyToTransfer = totalPrice - totalPrice * (1.0 * percentage / 100);
+            try {
+                Customer customer = (Customer) person;
+                String charge = "get_token " + customer.getWallet().getBankAccountUsername() + " " +
+                        customer.getWallet().getBankAccountPassword();
+                String token = getTokenFromBank(charge);
+                if (token.equals(""))
+                    throw new Exception("username/password is invalid");
+                int receipt = moveToShopAccount(token,moneyToTransfer, customer.getWallet().getAccountId(), "payment");
+                boolean wasPaid = pay(receipt);
+                if (wasPaid) {
+                    return true;
+                } else return false;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+            return false;
         }
 
         private void createBankAccount(HashMap<String, String> information) throws Exception {
@@ -638,8 +723,8 @@ public class Server {
             return null;
         }
 
-        private int withdraw(String token, double money, int srcId, String description) {
-            String request = "create_receipt " + token + " withdraw " + money + " " + srcId + " -1 " + description;
+        private int moveToShopAccount(String token, double money, int srcId, String description) {
+            String request = "create_receipt " + token + " move " + money + " " + srcId + " 1 " + description;
             System.out.println(request);
             try {
                 server.bankDataOutputStream.writeUTF(request);
@@ -666,6 +751,21 @@ public class Server {
                 System.out.println(e.getMessage());
             }
             return false;
+        }
+
+        private int moveFromShopAccount (String token, double money, int destId, String description) {
+            String request = "create_receipt " + token + " move " + money + " 1 " + destId + " " + description;
+            System.out.println(request);
+            try {
+                server.bankDataOutputStream.writeUTF(request);
+                server.bankDataOutputStream.flush();
+                int id = Integer.parseInt(server.bankDataInputStream.readUTF());
+                System.out.println(id);
+                return id;
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+            return 0;
         }
 
         @Override

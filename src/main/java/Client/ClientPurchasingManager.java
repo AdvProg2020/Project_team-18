@@ -34,6 +34,22 @@ public class ClientPurchasingManager extends ClientManager {
         }
     }
 
+    public void performPaymentWithBankAccount (HashMap<String, String> receiverInformation, double totalPrice, double discountPercentage,
+                                               String discountUsed , String username , Cart cart) throws Exception {
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(username);
+        params.add(cart);
+        params.add(receiverInformation);
+        params.add(totalPrice);
+        params.add(discountPercentage);
+        params.add(discountUsed);
+        ClientMessage clientMessage = new ClientMessage(MessageType.PERFORM_PAYMENT_WiTH_BANK_ACCOUNT,params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage!= null && serverMessage.getMessageType()==MessageType.ERROR){
+            throw (Exception)serverMessage.getResult();
+        }
+    }
+
     public void checkDiscountValidity(String discountCode) throws Exception {
         ArrayList <Object> params = new ArrayList<>();
         params.add(discountCode);
