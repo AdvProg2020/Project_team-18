@@ -556,6 +556,13 @@ public class Server {
                     break;
                 case VIEW_ALL_AUCTIONS:
                     return new ServerMessage(MessageType.VIEW_ALL_AUCTIONS, adminManager.viewAllAuctions());
+                case BIDDING:
+                    Auction auction = (Auction) clientMessage.getParameters().get(0);
+                    Double newPrice = Double.parseDouble((String) clientMessage.getParameters().get(1));
+                    Customer newCustomer = (Customer) storage.getUserByUsername((String) clientMessage.getParameters().get(2));
+                    auction.setPrice(newPrice);
+                    auction.setCustomer(newCustomer);
+                    break;
                 case TERMINATE:
                     manager.terminate();
                     break;
