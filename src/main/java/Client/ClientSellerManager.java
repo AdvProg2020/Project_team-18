@@ -214,4 +214,11 @@ public class ClientSellerManager extends ClientManager {
             throw  (Exception)serverMessage.getResult();
         }
     }
+    public ArrayList<FileProduct> getSoldFileProducts(String username){
+        ArrayList <Object> params = new ArrayList<>();
+        params.add(username);
+        ClientMessage clientMessage = new ClientMessage(MessageType.GET_SOLD_FILE_PRODUCTS,params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        return (ArrayList<FileProduct>)serverMessage.getResult();
+    }
 }

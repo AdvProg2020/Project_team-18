@@ -654,7 +654,12 @@ public class Server {
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
-                    break;
+                case GET_SOLD_FILE_PRODUCTS:
+                    seller = (Seller) storage.getUserByUsername((String) clientMessage.getParameters().get(0));
+                    return new ServerMessage(MessageType.GET_SOLD_FILE_PRODUCTS,seller.getSoldFileProducts());
+                case GET_PAYED_FILE_PRODUCTS:
+                    newCustomer = (Customer) storage.getUserByUsername((String) clientMessage.getParameters().get(0));
+                    return new ServerMessage(MessageType.GET_PAYED_FILE_PRODUCTS,newCustomer.getPayedFileProducts());
 
             }
             return null;

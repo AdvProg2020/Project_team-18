@@ -7,4 +7,12 @@ public class FileProduct extends Product {
     public FileProduct(HashMap<String, String> information, Seller seller) {
         super(information, seller);
     }
+
+    public FileState getFileState() {
+        return fileState;
+    }
+
+    public void setFileState(FileState fileState) {
+        this.fileState = fileState;
+    }
 }
