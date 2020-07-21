@@ -41,6 +41,8 @@ public class CustomerMenu extends Menu implements Initializable {
     private Label roleLabel;
     @FXML
     private Label balanceLabel;
+    @FXML
+    private Label avaLabel;
 
     public CustomerMenu(Menu previousMenu) {
         super(previousMenu, "src/main/java/graphics/fxml/CustomerMenu.fxml");
@@ -60,6 +62,7 @@ public class CustomerMenu extends Menu implements Initializable {
         numberLabel.setText(person.getNumber());
         balanceLabel.setText(Double.toString(person.getBalance()));
         roleLabel.setText("customer");
+        avaLabel.setText(person.getAvailability().toString());
     }
 
     public void editPasswordField() {
@@ -426,6 +429,7 @@ public class CustomerMenu extends Menu implements Initializable {
     public void logout(ActionEvent actionEvent) {
         ClientView.setToken(null);
         MainMenu mainMenu = new MainMenu(null);
+        person.makeOffline();
         person = null;
         mainMenu.run();
     }

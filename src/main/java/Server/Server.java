@@ -1,5 +1,6 @@
 package Server;
 
+import bank.BankAccount;
 import com.gilecode.yagson.YaGson;
 import controller.*;
 import javafx.scene.media.MediaPlayer;
@@ -651,6 +652,7 @@ public class Server {
                             purchasingManager.setCart((Cart) clientMessage.getParameters().get(1));
                             purchasingManager.performPaymentWithBankAccount(receiverInformation1, totalPrice1, percentage2, discountUsed1);
                         }
+                        break;
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
@@ -734,12 +736,10 @@ public class Server {
 
         private int moveToShopAccount(String token, double money, int srcId, String description) {
             String request = "create_receipt " + token + " move " + money + " " + srcId + " 1 " + description;
-            System.out.println(request);
             try {
                 server.bankDataOutputStream.writeUTF(request);
                 server.bankDataOutputStream.flush();
                 int id = Integer.parseInt(server.bankDataInputStream.readUTF());
-                System.out.println(id);
                 return id;
             } catch (IOException e) {
                 System.out.println(e.getMessage());

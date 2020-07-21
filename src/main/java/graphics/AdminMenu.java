@@ -40,7 +40,7 @@ public class AdminMenu extends Menu implements Initializable {
     }
 
     public void viewPersonalInfo() {
-        System.out.println("****"+person);
+        System.out.println("****" + person);
         usernameLabel.setText(person.getUsername());
         passwordLabel.setText(person.getPassword());
         nameLabel.setText(person.getName());
@@ -251,6 +251,7 @@ public class AdminMenu extends Menu implements Initializable {
     public void logout(ActionEvent actionEvent) {
         ClientView.setToken(null);
         MainMenu mainMenu = new MainMenu(null);
+        person.makeOffline();
         person = null;
         mainMenu.run();
     }
@@ -260,8 +261,8 @@ public class AdminMenu extends Menu implements Initializable {
         mainMenu.run();
     }
 
-    public void goToManageBuyLogs(){
-        AdminManageBuyLogs adminManageBuyLogs =new AdminManageBuyLogs(this);
+    public void goToManageBuyLogs() {
+        AdminManageBuyLogs adminManageBuyLogs = new AdminManageBuyLogs(this);
         adminManageBuyLogs.run();
     }
 }

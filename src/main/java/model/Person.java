@@ -14,6 +14,7 @@ public class Person implements Idable<Person> {
     private String number;
     private double balance;
     private Role role;
+    private Availability availability;
     private transient static ArrayList<Person>allPeople = new ArrayList<>();
 
     public static ArrayList<Person> getAllPeople() {
@@ -32,6 +33,7 @@ public class Person implements Idable<Person> {
         this.number = information.get("number");
         this.balance = 0;
         this.role = roleFinder(information.get("role"));
+        this.availability = Availability.OFFLINE;
         this.id = idSetter();
         allPeople.add(this);
     }
@@ -114,6 +116,18 @@ public class Person implements Idable<Person> {
             return Role.SUPPORTER;
         }
         return null;
+    }
+
+    public Availability getAvailability(){
+        return this.availability;
+    }
+
+    public void makeOnline(){
+        this.availability = Availability.ONLINE;
+    }
+
+    public void makeOffline(){
+        this.availability = Availability.OFFLINE;
     }
 
     @Override
