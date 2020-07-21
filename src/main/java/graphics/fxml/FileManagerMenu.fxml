@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="600.0" prefWidth="484.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphics.FileManagerMenu">
+<stylesheets>
+    <URL value="@cssSheets/BasicStyle.css" />
+</stylesheets>
+<stylesheets>
+    <URL value="@cssSheets/BackGround.css" />
+</stylesheets>
+<stylesheets>
+    <URL value="@cssSheets/AddProduct.css" />
+</stylesheets>
+<children>
+    <Button layoutX="6.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" onMousePressed="#buttonSound" text="back" />
+    <TableView fx:id="userTable" layoutX="66.0" prefHeight="524.0" prefWidth="366.0">
+        <columns>
+            <TableColumn fx:id="fileNameColumn" prefWidth="97.00001525878906" text="File name" />
+            <TableColumn fx:id="sellerNameColumn" prefWidth="82.99996948242188" text="Seller" />
+            <TableColumn fx:id="stateColumn" prefWidth="101.0" text="State" />
+            <TableColumn fx:id="buttonColumn" prefWidth="82.0" text="action" />
+        </columns>
+    </TableView>
+</children>
+</AnchorPane>
