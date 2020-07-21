@@ -65,5 +65,22 @@
         "offId": "1"
       }
     }
+  },
+  {
+    "@type": "model.Request",
+    "@val": {
+      "requestId": 5,
+      "typeOfRequest": "ADD_PRODUCT",
+      "stateOfRequest": "ACCEPTED",
+      "information": {
+        "seller": "s1",
+        "price": "30",
+        "name": "a.pdf",
+        "explanation": "pdf file",
+        "brand": "ebook",
+        "supply": "1",
+        "categoryName": "file"
+      }
+    }
   }
 ]
