@@ -426,8 +426,10 @@ public class Server {
                     return new ServerMessage(MessageType.GET_BUY_LOG_BY_CODE, storage.getBuyLogByCode((String) clientMessage.getParameters().get(0)));
                 case REGISTER:
                     try {
-                        manager.register((HashMap<String, String>) clientMessage.getParameters().get(0));
-                        createBankAccount((HashMap<String, String>) clientMessage.getParameters().get(0));
+                        HashMap<String,String> registerInfo = (HashMap<String, String>) clientMessage.getParameters().get(0);
+                        manager.register(registerInfo);
+                        if (!registerInfo.get("role").equals("seller"))
+                            createBankAccount(registerInfo);
                         break;
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
@@ -521,7 +523,12 @@ public class Server {
                 case ACCEPT_REQUEST:
                     try {
                         System.out.println("in server");
-                        adminManager.acceptRequest((String) clientMessage.getParameters().get(0));
+                        String requestId = (String) clientMessage.getParameters().get(0);
+                        adminManager.acceptRequest(requestId);
+                        Request request = storage.getRequestById(Integer.parseInt(requestId));
+                        if(request.getTypeOfRequest().equals(RequestType.REGISTER_SELLER)) {
+                            createBankAccount(request.getInformation());
+                        }
                         break;
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);

@@ -628,7 +628,7 @@ public class SellerMenu extends Menu implements Initializable {
         Button addBalance = new Button("Add Balance");
         addBalance.setOnAction(e -> addBalanceToWallet());
         Button withdraw = new Button("Withdraw from wallet");
-        addBalance.setOnAction(e -> withdrawFromWallet());
+        withdraw.setOnAction(e -> withdrawFromWallet());
         dialog.setTitle("Managing your wallet");
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.FINISH);
         Label label = new Label("Your wallet's balance is : " + person.getBalance());
