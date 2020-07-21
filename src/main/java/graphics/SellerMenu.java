@@ -628,7 +628,7 @@ public class SellerMenu extends Menu implements Initializable {
         Button addBalance = new Button("Add Balance");
         addBalance.setOnAction(e -> addBalanceToWallet());
         Button withdraw = new Button("Withdraw from wallet");
-        addBalance.setOnAction(e -> withdrawFromWallet());
+        withdraw.setOnAction(e -> withdrawFromWallet());
         dialog.setTitle("Managing your wallet");
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.FINISH);
         Label label = new Label("Your wallet's balance is : " + person.getBalance());
@@ -641,11 +641,49 @@ public class SellerMenu extends Menu implements Initializable {
     }
 
     public void addBalanceToWallet() {
-
+        Dialog<ButtonType> dialog = new Dialog<>();
+        String updatedVersion;
+        dialog.setTitle("Change Personal Information");
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        TextField textField = new TextField();
+        HBox content = new HBox();
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setSpacing(10);
+        content.getChildren().addAll(new Label("Enter amount of money you want to add to you account :"), textField);
+        dialog.getDialogPane().setContent(content);
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            updatedVersion = textField.getText();
+            try {
+                sellerManager.chargeWallet(Double.parseDouble(updatedVersion), person.getUsername());
+            } catch (Exception e) {
+                showError(e.getMessage(), 100);
+            }
+        }
     }
 
     public void withdrawFromWallet() {
-
+        Dialog<ButtonType> dialog = new Dialog<>();
+        String updatedVersion;
+        dialog.setTitle("Change Personal Information");
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        TextField textField = new TextField();
+        HBox content = new HBox();
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setSpacing(10);
+        content.getChildren().addAll(new Label("Enter amount of money you want to add to you account :"), textField);
+        dialog.getDialogPane().setContent(content);
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            updatedVersion = textField.getText();
+            try {
+                sellerManager.withdrawFromWallet(Double.parseDouble(updatedVersion), person.getUsername());
+            } catch (Exception e) {
+                showError(e.getMessage(), 100);
+            }
+        }
     }
 
     public void logout(ActionEvent actionEvent) {

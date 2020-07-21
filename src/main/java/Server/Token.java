@@ -6,7 +6,6 @@ import io.jsonwebtoken.impl.TextCodec;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
 import java.io.UnsupportedEncodingException;
 import java.security.Key;
 import java.time.Instant;

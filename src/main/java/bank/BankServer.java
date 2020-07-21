@@ -23,6 +23,7 @@ public class BankServer {
         private void run() {
             try {
                 ServerSocket serverSocket = new ServerSocket(8787);
+                new BankAccount("shop","shop","shop","shop");
 
                 while (true) {
                     Socket clientSocket;

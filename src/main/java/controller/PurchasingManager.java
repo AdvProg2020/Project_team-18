@@ -29,7 +29,27 @@ public class PurchasingManager extends Manager {
         addCustomerToProductsBuyers();
         for (Seller seller : findDistinctSellers(super.cart)) {
             double totalPricePerSeller = calculateEachSellerMoneyTransfer(sellerProductsInCart(super.cart, seller));
-            seller.addBalance(totalPricePerSeller);
+            seller.addBalance(totalPricePerSeller * 0.9);
+            createSellLog(seller, totalPricePerSeller, discountPercentage);
+        }
+        cart.isPurchased();
+        cart.emptyCart();
+    }
+
+    public void performPaymentWithBankAccount (HashMap<String, String> receiverInformation, double totalPrice,
+                                               double discountPercentage, String discountUsed) throws Exception{
+        double moneyToTransfer = totalPrice - totalPrice * (1.0 * discountPercentage / 100);
+        ((Customer)person).addAmountOfAllPurchasing(moneyToTransfer);
+        if(((Customer)person).getAmountOfAllPurchasing() > 100){
+            adminManager.getDiscountAwarded();
+            ((Customer)person).setAmountOfAllPurchasing(0);
+        }
+        adminManager.createRandomDiscounts();
+        createBuyLog(receiverInformation, totalPrice, discountPercentage, discountUsed);
+        addCustomerToProductsBuyers();
+        for (Seller seller : findDistinctSellers(super.cart)) {
+            double totalPricePerSeller = calculateEachSellerMoneyTransfer(sellerProductsInCart(super.cart, seller));
+            seller.addBalance(totalPricePerSeller * 0.9);
             createSellLog(seller, totalPricePerSeller, discountPercentage);
         }
         cart.isPurchased();

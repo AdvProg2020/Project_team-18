@@ -28,5 +28,6 @@
         <Button layoutX="14.0" layoutY="279.0" mnemonicParsing="false" onAction="#removeProduct" onMousePressed="#buttonSound" prefHeight="56.0" prefWidth="184.0" text="Request Remove Product" />
         <Button layoutX="14.0" layoutY="360.0" mnemonicParsing="false" onAction="#addOff" onMousePressed="#buttonSound" prefHeight="56.0" prefWidth="184.0" text="Request Add Off" />
         <Button layoutX="14.0" layoutY="441.0" mnemonicParsing="false" onAction="#editOff" onMousePressed="#buttonSound" prefHeight="56.0" prefWidth="184.0" text="Request Edit Off" />
+      <Button layoutX="14.0" layoutY="521.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="184.0" text="Request Add Auction" />
     </children>
 </AnchorPane>

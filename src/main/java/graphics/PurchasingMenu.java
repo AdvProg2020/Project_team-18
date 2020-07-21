@@ -93,7 +93,7 @@ public class PurchasingMenu extends Menu {
         }
     }
 
-    public void checkInputsValidity() throws Exception {
+    public void paymentWithWallet() throws Exception {
         if (!checkName()) {
             return;
         } else if (!checkAddress()) {
@@ -109,7 +109,7 @@ public class PurchasingMenu extends Menu {
         boolean discountCodeValidity = checkValidityOfDiscountCode();
         if (nameValidity && addressValidity && numberValidity && discountCodeValidity) {
             if (!purchasingManager.doesCustomerHaveEnoughMoney(finalPrice,person.getUsername())) {
-                showError("Oops!You don't have enough money in your account!", 100);
+                showError("Oops!You don't have enough money in your wallet!", 100);
             } else {
                 receivedInfo.put("receiverName", name.getText());
                 receivedInfo.put("address", address.getText());
@@ -123,6 +123,35 @@ public class PurchasingMenu extends Menu {
                 showMessage();
                 back();
             }
+        }
+    }
+
+    public void paymentWithAccount() throws Exception{
+        if (!checkName()) {
+            return;
+        } else if (!checkAddress()) {
+            return;
+        } else if (!checkNumber()) {
+            return;
+        } else if (!checkValidityOfDiscountCode()) {
+            return;
+        }
+        boolean nameValidity = checkName();
+        boolean addressValidity = checkAddress();
+        boolean numberValidity = checkNumber();
+        boolean discountCodeValidity = checkValidityOfDiscountCode();
+        if (nameValidity && addressValidity && numberValidity && discountCodeValidity) {
+                receivedInfo.put("receiverName", name.getText());
+                receivedInfo.put("address", address.getText());
+                receivedInfo.put("phoneNumber", name.getText());
+                purchasingManager.performPaymentWithBankAccount(receivedInfo, finalPrice,
+                        purchasingManager.getDiscountPercentage(discountCodeField.getText()), discountCodeField.getText(),
+                        person.getUsername() ,currentCart);
+                if (!discountCodeField.getText().equals("")) {
+                    purchasingManager.updateDiscountUsagePerPerson(discountCodeField.getText() , person.getUsername());
+                }
+                showMessage();
+                back();
         }
     }
 
