@@ -24,6 +24,7 @@ public class Manager {
         storage.addCart(cart);
 
     }
+
     public boolean doesAnyAdminExist(){
         if (storage.getAllAdmins().isEmpty())
             return false;
@@ -167,7 +168,7 @@ public class Manager {
         person = person1;
     }
 
-    protected Person getPerson(){
+    public Person getPerson(){
         return person;
     }
 

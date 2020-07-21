@@ -19,6 +19,9 @@ public class Category implements Idable<Category> {
         this.thisCategoryProducts = new ArrayList<>();
         this.properties = new HashMap<>();
         switch (imageOption){
+            case "-1":
+                this.imagePath = "file:src/main/java/graphics/fxml/images/FileIcon.png";
+                return;
             case "1":
                 this.imagePath = "file:src/main/java/graphics/fxml/images/clothing.jpg";
                 return;

@@ -3,6 +3,7 @@ package Client;
 import Server.ClientMessage;
 import Server.MessageType;
 import Server.ServerMessage;
+import graphics.Menu;
 import model.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -156,6 +157,8 @@ public class ClientSellerManager extends ClientManager {
         if (serverMessage != null && serverMessage.getMessageType()==MessageType.ERROR){
             throw  (Exception)serverMessage.getResult();
         }
+        setPerson((Person)serverMessage.getResult());
+        Menu.setPerson((Person)serverMessage.getResult());
     }
 
     public boolean doesSellerHasThisSellLog(int sellLogCode , String username) throws Exception{

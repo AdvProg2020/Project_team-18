@@ -19,10 +19,10 @@ public class PurchasingManager extends Manager {
             throws Exception {
         double moneyToTransfer = totalPrice - totalPrice * (1.0 * discountPercentage / 100);
         person.setBalance(person.getBalance() - moneyToTransfer);
-        ((Customer)person).addAmountOfAllPurchasing(moneyToTransfer);
-        if(((Customer)person).getAmountOfAllPurchasing() > 100){
+        ((Customer) person).addAmountOfAllPurchasing(moneyToTransfer);
+        if (((Customer) person).getAmountOfAllPurchasing() > 100) {
             adminManager.getDiscountAwarded();
-            ((Customer)person).setAmountOfAllPurchasing(0);
+            ((Customer) person).setAmountOfAllPurchasing(0);
         }
         adminManager.createRandomDiscounts();
         createBuyLog(receiverInformation, totalPrice, discountPercentage, discountUsed);
@@ -37,13 +37,13 @@ public class PurchasingManager extends Manager {
         return cart;
     }
 
-    public void performPaymentWithBankAccount (HashMap<String, String> receiverInformation, double totalPrice,
-                                               double discountPercentage, String discountUsed) throws Exception{
+    public void performPaymentWithBankAccount(HashMap<String, String> receiverInformation, double totalPrice,
+                                              double discountPercentage, String discountUsed) throws Exception {
         double moneyToTransfer = totalPrice - totalPrice * (1.0 * discountPercentage / 100);
-        ((Customer)person).addAmountOfAllPurchasing(moneyToTransfer);
-        if(((Customer)person).getAmountOfAllPurchasing() > 100){
+        ((Customer) person).addAmountOfAllPurchasing(moneyToTransfer);
+        if (((Customer) person).getAmountOfAllPurchasing() > 100) {
             adminManager.getDiscountAwarded();
-            ((Customer)person).setAmountOfAllPurchasing(0);
+            ((Customer) person).setAmountOfAllPurchasing(0);
         }
         adminManager.createRandomDiscounts();
         createBuyLog(receiverInformation, totalPrice, discountPercentage, discountUsed);
@@ -82,7 +82,7 @@ public class PurchasingManager extends Manager {
     }
 
     public void createSellLog(Seller seller, double totalPrice, double saleAmount) {
-        SellLog sellLog = new SellLog(LocalDateTime.now(), totalPrice, saleAmount, (Customer) person , sellerProductsInCart(super.cart,seller));
+        SellLog sellLog = new SellLog(LocalDateTime.now(), totalPrice, saleAmount, (Customer) person, sellerProductsInCart(super.cart, seller));
         storage.addSellLog(sellLog);
         seller.addToSellLogs(sellLog);
     }
@@ -109,7 +109,7 @@ public class PurchasingManager extends Manager {
             throw new Exception("This discount is expired!");
         else if (storage.getDiscountByCode(discountCode).getBeginDate().isAfter(LocalDateTime.now()))
             throw new Exception("You can't use a discount which is not available yet!");
-        else if(storage.getDiscountByCode(discountCode).getUsagePerCustomer() == 0)
+        else if (storage.getDiscountByCode(discountCode).getUsagePerCustomer() == 0)
             throw new Exception("You used this discount before and it's not available anymore!");
     }
 
@@ -140,7 +140,7 @@ public class PurchasingManager extends Manager {
 
     public void updateDiscountUsagePerPerson(String discountCode) {
         storage.getDiscountByCode(discountCode).setUsageCount(storage.getDiscountByCode(discountCode).getUsagePerCustomer() - 1);
-        if (storage.getDiscountByCode(discountCode).getUsagePerCustomer() == 0){
+        if (storage.getDiscountByCode(discountCode).getUsagePerCustomer() == 0) {
             ((Customer) person).getAllDiscounts().remove(storage.getDiscountByCode(discountCode));
         }
     }

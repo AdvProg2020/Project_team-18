@@ -33,6 +33,7 @@ public class AuctionMenu extends Menu implements Initializable {
     private Label latestPriceLabel;
     @FXML
     private Label latestCustomerLabel;
+
     public AuctionMenu(Auction auction, Menu previousMenu) {
         super(previousMenu, "src/main/java/graphics/fxml/AuctionMenu.fxml");
         this.auction = auction;
@@ -50,7 +51,7 @@ public class AuctionMenu extends Menu implements Initializable {
     }
 
     @FXML
-    private void makeAnOffer(){
+    private void makeAnOffer() {
         Dialog<ButtonType> dialog = new Dialog<>();
         String updatedVersion;
         dialog.setTitle("Make An Offer");

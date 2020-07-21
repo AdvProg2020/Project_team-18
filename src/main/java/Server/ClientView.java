@@ -60,7 +60,7 @@ public class ClientView extends Application {
         MainMenu mainMenu = new MainMenu(null);
         stage.setTitle("TEAM-18");
         //commented temporarily!
-      /* stage.setOnCloseRequest(event -> {
+    /*   stage.setOnCloseRequest(event -> {
            ClientManager clientManager = new ClientManager();
            clientManager.terminate();
         });*/

@@ -47,7 +47,30 @@
                 "salePercent": 0.0,
                 "numberOfSeen": 0
               },
-              "@root.0.thisCategoryProducts.0"
+              "@root.0.thisCategoryProducts.0",
+              {
+                "@type": "model.FileProduct",
+                "@val": {
+                  "imagePath": "file:src/main/java/graphics/fxml/images/FileIcon.png",
+                  "productId": 3,
+                  "name": "a.pdf",
+                  "brand": "ebook",
+                  "price": 30.0,
+                  "numberInCart": 0,
+                  "seller": "@root.0.thisCategoryProducts.0.seller",
+                  "supply": 1,
+                  "category": "@root.0",
+                  "categoryName": "file",
+                  "sellerName": "s1",
+                  "explanation": "pdf file",
+                  "averageRate": 0.0,
+                  "comments": [],
+                  "rates": [],
+                  "thisProductsBuyers": [],
+                  "salePercent": 0.0,
+                  "numberOfSeen": 0
+                }
+              }
             ],
             "saleList": [],
             "id": 2,
@@ -76,5 +99,17 @@
       "properties": {}
     }
   },
-  "@root.0.thisCategoryProducts.0.seller.productsToSell.0.category"
+  "@root.0.thisCategoryProducts.0.seller.productsToSell.0.category",
+  {
+    "@type": "model.Category",
+    "@val": {
+      "id": 0,
+      "categoryName": "file",
+      "imagePath": "file:src/main/java/graphics/fxml/images/FileIcon.png",
+      "thisCategoryProducts": [
+        "@root.0.thisCategoryProducts.0.seller.productsToSell.2"
+      ],
+      "properties": {}
+    }
+  }
 ]
