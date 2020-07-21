@@ -24,8 +24,9 @@ public class Server {
     }
 
     private static class ServerImpl {
-        DataInputStream bankDataInputStream ;
+        DataInputStream bankDataInputStream;
         DataOutputStream bankDataOutputStream;
+
         private void run() {
             try {
                 Socket bankSocket = new Socket("127.0.0.1", 8787);
@@ -180,7 +181,7 @@ public class Server {
                     ArrayList<Product> productsInOff = (ArrayList<Product>) clientMessage.getParameters().get(2);
                     try {
                         sellerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(0)));
-                        sellerManager.addOff(informationOFF,productsInOff);
+                        sellerManager.addOff(informationOFF, productsInOff);
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
@@ -244,14 +245,14 @@ public class Server {
                     Double totalCartPrice = customerManager.getCartTotalPrice();
                     return new ServerMessage(MessageType.GET_CART_PRICE, totalCartPrice);
                 case ADD_RATE:
-                    int idOfProduct =  (Integer) clientMessage.getParameters().get(0);
+                    int idOfProduct = (Integer) clientMessage.getParameters().get(0);
                     double rate = (Double) clientMessage.getParameters().get(1);
                     String userId = (String) clientMessage.getParameters().get(2);
                     try {
                         customerManager.rateProduct(idOfProduct, rate, userId);
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
-                }
+                    }
                     break;
                 case GET_ALL_BUY_LOGS:
                     ArrayList<BuyLog> buyLogs = customerManager.getCustomerBuyLogs((String) clientMessage.getParameters().get(0));
@@ -278,7 +279,7 @@ public class Server {
                     }
                     break;
                 case GET_DISCOUNT_PERCENTAGE:
-                     discountCode = (String) clientMessage.getParameters().get(0);
+                    discountCode = (String) clientMessage.getParameters().get(0);
                     try {
                         return new ServerMessage(MessageType.GET_DISCOUNT_PERCENTAGE, purchasingManager.getDiscountPercentage(discountCode));
                     } catch (Exception e) {
@@ -287,7 +288,7 @@ public class Server {
                 case DOES_CUSTOMER_HAVE_MONEY:
                     double price = (double) clientMessage.getParameters().get(0);
                     try {
-                        purchasingManager.setPerson(storage.getUserByUsername((String)clientMessage.getParameters().get(1)));
+                        purchasingManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(1)));
                         return new ServerMessage(MessageType.DOES_CUSTOMER_HAVE_MONEY, purchasingManager.doesCustomerHaveEnoughMoney(price));
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
@@ -295,7 +296,7 @@ public class Server {
                 case CHECK_DISCOUNT_VALIDITY:
                     discountCode = (String) clientMessage.getParameters().get(0);
                     try {
-                       purchasingManager.checkDiscountValidity(discountCode);
+                        purchasingManager.checkDiscountValidity(discountCode);
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
@@ -308,7 +309,7 @@ public class Server {
                     try {
                         purchasingManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(0)));
                         purchasingManager.setCart((Cart) clientMessage.getParameters().get(1));
-                        purchasingManager.performPayment(receiverInformation,totalPrice,percentage,discountUsed);
+                        purchasingManager.performPayment(receiverInformation, totalPrice, percentage, discountUsed);
                         System.out.println("Im in server");
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
@@ -339,7 +340,7 @@ public class Server {
                     String filterTag = (String) clientMessage.getParameters().get(0);
                     String info = (String) clientMessage.getParameters().get(1);
                     try {
-                        return new ServerMessage(MessageType.PERFORM_FILTER, searchingManager.performFilter(filterTag,info));
+                        return new ServerMessage(MessageType.PERFORM_FILTER, searchingManager.performFilter(filterTag, info));
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
@@ -351,15 +352,15 @@ public class Server {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case DISABLE_FILTER:
-                     filterTag = (String) clientMessage.getParameters().get(0);
-                     info = (String) clientMessage.getParameters().get(1);
+                    filterTag = (String) clientMessage.getParameters().get(0);
+                    info = (String) clientMessage.getParameters().get(1);
                     try {
-                        return new ServerMessage(MessageType.DISABLE_FILTER, searchingManager.disableFilter(filterTag,info));
+                        return new ServerMessage(MessageType.DISABLE_FILTER, searchingManager.disableFilter(filterTag, info));
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case DISABLE_SORT:
-                     sortTag = (String) clientMessage.getParameters().get(0);
+                    sortTag = (String) clientMessage.getParameters().get(0);
                     try {
                         return new ServerMessage(MessageType.DISABLE_SORT, searchingManager.disableSort(sortTag));
                     } catch (Exception e) {
@@ -394,30 +395,30 @@ public class Server {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case GET_SELL_LOG_BY_CODE:
-                        return new ServerMessage(MessageType.GET_SELL_LOG_BY_CODE, storage.getSellLogByCode((String)clientMessage.getParameters().get(0)));
+                    return new ServerMessage(MessageType.GET_SELL_LOG_BY_CODE, storage.getSellLogByCode((String) clientMessage.getParameters().get(0)));
                 case GET_BUY_LOG_BY_CODE:
-                    return new ServerMessage(MessageType.GET_BUY_LOG_BY_CODE, storage.getBuyLogByCode((String)clientMessage.getParameters().get(0)));
+                    return new ServerMessage(MessageType.GET_BUY_LOG_BY_CODE, storage.getBuyLogByCode((String) clientMessage.getParameters().get(0)));
                 case REGISTER:
                     try {
-                        manager.register((HashMap<String, String>)clientMessage.getParameters().get(0));
-                        createBankAccount((HashMap<String, String>)clientMessage.getParameters().get(0));
+                        manager.register((HashMap<String, String>) clientMessage.getParameters().get(0));
+                        createBankAccount((HashMap<String, String>) clientMessage.getParameters().get(0));
                         break;
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case DOES_ANY_ADMIN_EXIST:
-                    return new ServerMessage(MessageType.DOES_ANY_ADMIN_EXIST,manager.doesAnyAdminExist());
+                    return new ServerMessage(MessageType.DOES_ANY_ADMIN_EXIST, manager.doesAnyAdminExist());
                 case EDIT_FIELD:
-                    field = (String)clientMessage.getParameters().get(0);
-                    updatedVersion = (String)clientMessage.getParameters().get(1);
+                    field = (String) clientMessage.getParameters().get(0);
+                    updatedVersion = (String) clientMessage.getParameters().get(1);
                     try {
-                        manager.editField(field,updatedVersion);
+                        manager.editField(field, updatedVersion);
                         break;
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case GET_ALL_USERS:
-                    return new ServerMessage(MessageType.GET_ALL_USERS,adminManager.viewAllUsers());
+                    return new ServerMessage(MessageType.GET_ALL_USERS, adminManager.viewAllUsers());
                 case DELETE_USER:
                     try {
                         adminManager.deleteUser((String) clientMessage.getParameters().get(0));
@@ -435,15 +436,15 @@ public class Server {
                 case ADD_CATEGORY:
 
                     try {
-                        adminManager.addCategory((String) clientMessage.getParameters().get(0),(String) clientMessage.getParameters().get(1));
+                        adminManager.addCategory((String) clientMessage.getParameters().get(0), (String) clientMessage.getParameters().get(1));
                         break;
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case VIEW_ALL_DISCOUNT_CODES:
-                    return new ServerMessage(MessageType.VIEW_ALL_DISCOUNT_CODES,adminManager.viewAllDiscountCodes());
+                    return new ServerMessage(MessageType.VIEW_ALL_DISCOUNT_CODES, adminManager.viewAllDiscountCodes());
                 case VIEW_ALL_REQUESTS:
-                    return new ServerMessage(MessageType.VIEW_ALL_REQUESTS,adminManager.viewAllRequests());
+                    return new ServerMessage(MessageType.VIEW_ALL_REQUESTS, adminManager.viewAllRequests());
                 case VIEW_DISCOUNT_CODE:
                     try {
                         adminManager.viewDiscountCode((String) clientMessage.getParameters().get(0));
@@ -453,29 +454,29 @@ public class Server {
                     }
                 case ADD_CUSTOMER_TO_DISCOUNT:
                     try {
-                        adminManager.addCustomerToDiscount((String) clientMessage.getParameters().get(0),(Discount) clientMessage.getParameters().get(1));
+                        adminManager.addCustomerToDiscount((String) clientMessage.getParameters().get(0), (Discount) clientMessage.getParameters().get(1));
                         break;
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case REMOVE_CUSTOMER_FROM_DISCOUNT:
                     try {
-                        adminManager.removeCustomerFromDiscount((Discount) clientMessage.getParameters().get(0),(String) clientMessage.getParameters().get(1));
+                        adminManager.removeCustomerFromDiscount((Discount) clientMessage.getParameters().get(0), (String) clientMessage.getParameters().get(1));
                         break;
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case EDIT_DISCOUNT_FIELD:
-                    adminManager.editDiscountField((Discount) clientMessage.getParameters().get(0),(String) clientMessage.getParameters().get(1),(String) clientMessage.getParameters().get(2));
+                    adminManager.editDiscountField((Discount) clientMessage.getParameters().get(0), (String) clientMessage.getParameters().get(1), (String) clientMessage.getParameters().get(2));
                     break;
                 case CREATE_DISCOUNT_CODE:
-                    String code =(String) clientMessage.getParameters().get(0);
-                    LocalDateTime startDate = (LocalDateTime)clientMessage.getParameters().get(1);
-                    LocalDateTime endDate = (LocalDateTime)clientMessage.getParameters().get(2);
-                    int percentage1 = (int)clientMessage.getParameters().get(3);
-                    int usagePerCustomer = (int)clientMessage.getParameters().get(4);
-                    double maxAmount = (double)clientMessage.getParameters().get(5);
-                    adminManager.createDiscountCode(code,startDate,endDate,percentage1,usagePerCustomer,maxAmount);
+                    String code = (String) clientMessage.getParameters().get(0);
+                    LocalDateTime startDate = (LocalDateTime) clientMessage.getParameters().get(1);
+                    LocalDateTime endDate = (LocalDateTime) clientMessage.getParameters().get(2);
+                    int percentage1 = (int) clientMessage.getParameters().get(3);
+                    int usagePerCustomer = (int) clientMessage.getParameters().get(4);
+                    double maxAmount = (double) clientMessage.getParameters().get(5);
+                    adminManager.createDiscountCode(code, startDate, endDate, percentage1, usagePerCustomer, maxAmount);
                     break;
                 case REMOVE_DISCOUNT_CODE:
                     try {
@@ -507,14 +508,14 @@ public class Server {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case EDIT_CATEGORY_BY_NAME:
-                        adminManager.editCategoryByName((String) clientMessage.getParameters().get(0),(String) clientMessage.getParameters().get(1));
-                        break;
+                    adminManager.editCategoryByName((String) clientMessage.getParameters().get(0), (String) clientMessage.getParameters().get(1));
+                    break;
                 case EDIT_CATEGORY_BY_PROPERTIES:
-                        adminManager.editCategoryByProperties((Category) clientMessage.getParameters().get(0),(String) clientMessage.getParameters().get(1),(String) clientMessage.getParameters().get(2));
-                        break;
+                    adminManager.editCategoryByProperties((Category) clientMessage.getParameters().get(0), (String) clientMessage.getParameters().get(1), (String) clientMessage.getParameters().get(2));
+                    break;
                 case VIEW_CATEGORY:
                     try {
-                        return new ServerMessage(MessageType.VIEW_CATEGORY,adminManager.viewCategory((String) clientMessage.getParameters().get(0)));
+                        return new ServerMessage(MessageType.VIEW_CATEGORY, adminManager.viewCategory((String) clientMessage.getParameters().get(0)));
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
@@ -529,11 +530,13 @@ public class Server {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case CHAT_MESSAGE:
-                    ChatClient client = new ChatClient((String)clientMessage.getParameters().get(0));
+                    ChatClient client = new ChatClient((String) clientMessage.getParameters().get(0));
                     return new ServerMessage(MessageType.CHAT_MESSAGE, client);
                 case ADD_AUCTION:
                     sellerManager.addAuction((HashMap<String, String>) clientMessage.getParameters().get(0));
                     break;
+                case VIEW_ALL_AUCTIONS:
+                    return new ServerMessage(MessageType.VIEW_ALL_AUCTIONS, adminManager.viewAllAuctions());
                 case TERMINATE:
                     manager.terminate();
                     break;
@@ -545,8 +548,8 @@ public class Server {
                     try {
                         System.out.println(charge);
                         String token = getTokenFromBank(charge);
-                        int receipt = withdraw(token , (double) clientMessage.getParameters().get(0) ,
-                                customer.getWallet().getAccountId() ,"charging_wallet");
+                        int receipt = withdraw(token, (double) clientMessage.getParameters().get(0),
+                                customer.getWallet().getAccountId(), "charging_wallet");
                         boolean wasPaid = pay(receipt);
                         if (wasPaid) {
                             customer.setBalance(customer.getBalance() + (double) clientMessage.getParameters().get(0));
@@ -561,8 +564,8 @@ public class Server {
             return null;
         }
 
-        private void createBankAccount(HashMap<String, String>information) throws Exception{
-            if(!information.get("role").equals("admin")) {
+        private void createBankAccount(HashMap<String, String> information) throws Exception {
+            if (!information.get("role").equals("admin")) {
                 String username = information.get("username") + information.get("role");
                 String password = "im" + information.get("username");
                 String string = "create_account " + information.get("name") + " " + information.get("familyName") +
@@ -573,9 +576,9 @@ public class Server {
                     String result = server.bankDataInputStream.readUTF();
                     System.out.println(result);
                     if (result.startsWith("Done"))
-                        setWallet(information,username,password,result.substring(result.indexOf(" ")+1));
+                        setWallet(information, username, password, result.substring(result.indexOf(" ") + 1));
                     else if (result.equals("Passwords do not match"))
-                        throw new Exception ("Passwords do not match");
+                        throw new Exception("Passwords do not match");
                     else if (result.equals("Username is not available"))
                         throw new Exception("Username is not available");
                 } catch (IOException e) {
@@ -584,13 +587,13 @@ public class Server {
             }
         }
 
-        private void setWallet(HashMap<String,String> information , String accountUsername , String accountPassword , String id){
+        private void setWallet(HashMap<String, String> information, String accountUsername, String accountPassword, String id) {
             int accountId = Integer.parseInt(id);
             Person person = storage.getUserByUsername(information.get("username"));
             if (information.get("role").equals("seller"))
-                ((Seller) person).setWallet(new Wallet(50.0 , accountUsername , accountPassword , accountId, ""));
+                ((Seller) person).setWallet(new Wallet(50.0, accountUsername, accountPassword, accountId, ""));
             if (information.get("role").equals("customer"))
-                ((Customer) person).setWallet(new Wallet(50.0 , accountUsername , accountPassword ,accountId, ""));
+                ((Customer) person).setWallet(new Wallet(50.0, accountUsername, accountPassword, accountId, ""));
         }
 
         private String getTokenFromBank(String info) {
@@ -604,7 +607,7 @@ public class Server {
             return null;
         }
 
-        private int withdraw(String token, double money, int srcId, String description){
+        private int withdraw(String token, double money, int srcId, String description) {
             String request = "create_receipt " + token + " withdraw " + money + " " + srcId + " -1 " + description;
             System.out.println(request);
             try {
@@ -619,7 +622,7 @@ public class Server {
             return 0;
         }
 
-        private boolean pay(int id){
+        private boolean pay(int id) {
             try {
                 server.bankDataOutputStream.writeUTF("pay " + id);
                 server.bankDataOutputStream.flush();

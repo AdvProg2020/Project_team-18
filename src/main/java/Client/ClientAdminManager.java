@@ -215,4 +215,9 @@ public class ClientAdminManager extends ClientManager {
         return (Category) serverMessage.getResult();
     }
 
+    public ArrayList<Auction> viewAllAuctions(){
+        ClientMessage clientMessage = new ClientMessage(MessageType.VIEW_ALL_AUCTIONS, null);
+        return (ArrayList<Auction>) clientMessage.sendAndReceive().getResult();
+    }
+
 }
