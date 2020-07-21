@@ -1,9 +1,12 @@
 package model;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import controller.Storage;
 
-public class Auction implements Idable<Auction> {
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.*;
+
+public class Auction extends TimerTask implements Idable<Auction> {
     private int auctionId;
     private LocalDateTime beginDate;
     private LocalDateTime endDate;
@@ -14,6 +17,7 @@ public class Auction implements Idable<Auction> {
     private String sellerName;
     private Customer customer;
     private transient static ArrayList<Auction> allAuctions = new ArrayList<>();
+    private Storage storage = new Storage();
 
     public String getProductName() {
         return productName;
@@ -23,11 +27,15 @@ public class Auction implements Idable<Auction> {
         return sellerName;
     }
 
+    public Auction() {
+    }
+
     public Auction(LocalDateTime beginDate, LocalDateTime endDate, Product product, Double price, Seller seller) {
         this.auctionId = idSetter();
         this.beginDate = beginDate;
         this.endDate = endDate;
         this.product = product;
+        this.product.setSupply(this.product.getSupply() - 1);
         this.productName = product.getName();
         this.price = price;
         this.seller = seller;
@@ -82,7 +90,7 @@ public class Auction implements Idable<Auction> {
         this.seller = seller;
     }
 
-    public void setCustomer(Customer customer){
+    public void setCustomer(Customer customer) {
         this.customer = customer;
     }
 
@@ -106,11 +114,51 @@ public class Auction implements Idable<Auction> {
         return seller;
     }
 
-    public Customer getCustomer(){
+    public Customer getCustomer() {
         return this.customer;
     }
 
     public static ArrayList<Auction> getAllAuctions() {
         return allAuctions;
+    }
+
+    public void finishAuction() {
+        Timer timer = new Timer();
+        TimerTask task = new Auction();
+        Date date = Date.from(this.getEndDate().atZone(ZoneId.systemDefault()).toInstant());
+        try {
+            timer.schedule(task, date);
+        } catch (Exception e){
+            timer.cancel();
+            this.getProduct().setSupply(this.getProduct().getSupply() + 1);
+        }
+    }
+
+    @Override
+    public void run() {
+        if (this.getCustomer() == null){
+            try {
+                throw new Exception("No Customer!");
+            } catch (Exception e) {
+                System.out.println("Error Occurred!");
+            }
+        } else {
+            this.getCustomer().setBalance(this.getCustomer().getBalance() - this.getPrice());
+            this.getSeller().addBalance(this.getPrice() * 0.9);
+            ArrayList<Seller> sellers = new ArrayList<>();
+            sellers.add(this.getSeller());
+            HashMap<String, String> info = new HashMap<>();
+            info.put("receiverName", this.getCustomer().getName());
+            info.put("address", "No address defined!");
+            info.put("phoneNumber", this.getCustomer().getNumber());
+            HashMap<Product, Integer> product = new HashMap<>();
+            product.put(this.getProduct(), 1);
+            BuyLog buyLog = new BuyLog(this.getEndDate(), this.getPrice(), 0, sellers, info, product, "");
+            storage.addBuyLog(buyLog);
+            (this.getCustomer()).addToBuyLogs(buyLog);
+            SellLog sellLog = new SellLog(this.getEndDate(), this.getPrice(), 0, this.getCustomer(), product);
+            storage.addSellLog(sellLog);
+            seller.addToSellLogs(sellLog);
+        }
     }
 }
