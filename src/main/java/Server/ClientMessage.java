@@ -22,6 +22,10 @@ public class ClientMessage implements Serializable {
     }
 
     public synchronized ServerMessage sendAndReceive() {
+        if (token ==null){
+            this.token = ClientView.getToken();
+        }
+        this.token = ClientView.getToken();
         Formatter formatter = new Formatter(ClientView.getOutputStream());
         formatter.format(yaGson.toJson(this)+"\n");
         formatter.flush();
@@ -36,5 +40,13 @@ public class ClientMessage implements Serializable {
 
     public ArrayList<Object> getParameters() {
         return parameters;
+    }
+
+    public Token getToken() {
+        return token;
+    }
+
+    public void setToken(Token token) {
+        this.token = token;
     }
 }

@@ -1,6 +1,7 @@
 package graphics;
 
 import Client.ClientSellerManager;
+import Server.ClientView;
 import controller.SellerManager;
 import controller.Storage;
 import javafx.event.ActionEvent;
@@ -648,6 +649,7 @@ public class SellerMenu extends Menu implements Initializable {
     }
 
     public void logout(ActionEvent actionEvent) {
+        ClientView.setToken(null);
         MainMenu mainMenu = new MainMenu(null);
         person = null;
         mainMenu.run();

@@ -18,6 +18,15 @@ public class ClientView extends Application {
     protected static Socket socket;
     private static OutputStream outputStream;
     private static InputStream inputStream;
+    private static Token token;
+
+    public static Token getToken() {
+        return token;
+    }
+
+    public static void setToken(Token token) {
+        ClientView.token = token;
+    }
 
     public static Stage mainStage;
 

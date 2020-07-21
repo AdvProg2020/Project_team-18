@@ -8,6 +8,7 @@ import controller.SellerManager;
 import controller.Storage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -541,5 +542,8 @@ public class SellerRequestMenu extends Menu implements Initializable {
             }
         }
         updateShownRequests(sellerReq);
+    }
+
+    public void addFile(ActionEvent actionEvent) {
     }
 }

@@ -1,6 +1,7 @@
 package Client;
 
 import Server.ClientMessage;
+import Server.ClientView;
 import Server.MessageType;
 import Server.ServerMessage;
 import controller.FileSaver;
@@ -46,6 +47,7 @@ public class ClientManager {
         if (serverMessage!=null && serverMessage.getMessageType()==MessageType.ERROR){
            throw  (Exception)serverMessage.getResult();
         }
+        ClientView.setToken(serverMessage.getToken());
         return (Person)serverMessage.getResult();
     }
 

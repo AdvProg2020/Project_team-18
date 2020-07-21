@@ -23,11 +23,10 @@
                 <TableColumn fx:id="statusColumn" prefWidth="138.0" text="Status" />
             </columns>
         </TableView>
-        <Button layoutX="14.0" layoutY="89.0" mnemonicParsing="false" onAction="#editProduct" onMousePressed="#buttonSound" prefHeight="56.0" prefWidth="184.0" text="Request Edit Product" />
-        <Button layoutX="14.0" layoutY="167.0" mnemonicParsing="false" onAction="#addProduct" onMousePressed="#buttonSound" prefHeight="56.0" prefWidth="184.0" text="Request Add Product" />
-        <Button layoutX="14.0" layoutY="245.0" mnemonicParsing="false" onAction="#removeProduct" onMousePressed="#buttonSound" prefHeight="56.0" prefWidth="184.0" text="Request Remove Product" />
-        <Button layoutX="14.0" layoutY="322.0" mnemonicParsing="false" onAction="#addOff" onMousePressed="#buttonSound" prefHeight="56.0" prefWidth="184.0" text="Request Add Off" />
-        <Button layoutX="14.0" layoutY="400.0" mnemonicParsing="false" onAction="#editOff" onMousePressed="#buttonSound" prefHeight="56.0" prefWidth="184.0" text="Request Edit Off" />
-      <Button layoutX="14.0" layoutY="481.0" mnemonicParsing="false" onAction="#addAuction" prefHeight="56.0" prefWidth="184.0" text="Request Add Auction" />
+        <Button layoutX="14.0" layoutY="135.0" mnemonicParsing="false" onAction="#editProduct" onMousePressed="#buttonSound" prefHeight="56.0" prefWidth="184.0" text="Request Edit Product" />
+        <Button layoutX="14.0" layoutY="207.0" mnemonicParsing="false" onAction="#addProduct" onMousePressed="#buttonSound" prefHeight="56.0" prefWidth="184.0" text="Request Add Product" />
+        <Button layoutX="14.0" layoutY="279.0" mnemonicParsing="false" onAction="#removeProduct" onMousePressed="#buttonSound" prefHeight="56.0" prefWidth="184.0" text="Request Remove Product" />
+        <Button layoutX="14.0" layoutY="360.0" mnemonicParsing="false" onAction="#addOff" onMousePressed="#buttonSound" prefHeight="56.0" prefWidth="184.0" text="Request Add Off" />
+        <Button layoutX="14.0" layoutY="441.0" mnemonicParsing="false" onAction="#editOff" onMousePressed="#buttonSound" prefHeight="56.0" prefWidth="184.0" text="Request Edit Off" />
     </children>
 </AnchorPane>
