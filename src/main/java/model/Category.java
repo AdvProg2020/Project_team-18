@@ -10,6 +10,9 @@ public class Category implements Idable<Category> {
     private ArrayList<Product> thisCategoryProducts;
     private HashMap<String, String> properties;
     private transient static ArrayList<Category> allCategories = new ArrayList<>();
+    static {
+        allCategories.add(new Category("File","-1"));
+    }
 
     public Category() {
     }
@@ -19,6 +22,8 @@ public class Category implements Idable<Category> {
         this.thisCategoryProducts = new ArrayList<>();
         this.properties = new HashMap<>();
         switch (imageOption){
+            case "-1":
+                this.imagePath = "file:src/main/java/graphics/fxml/images/FileIcon.png";
             case "1":
                 this.imagePath = "file:src/main/java/graphics/fxml/images/clothing.jpg";
                 return;
