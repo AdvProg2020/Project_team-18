@@ -10,9 +10,6 @@ public class Category implements Idable<Category> {
     private ArrayList<Product> thisCategoryProducts;
     private HashMap<String, String> properties;
     private transient static ArrayList<Category> allCategories = new ArrayList<>();
-    static {
-        allCategories.add(new Category("File","-1"));
-    }
 
     public Category() {
     }
