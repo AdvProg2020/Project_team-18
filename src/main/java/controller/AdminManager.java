@@ -169,7 +169,6 @@ public class AdminManager extends Manager {
     }
 
     public void acceptRequest (String requestId) throws Exception {
-        System.out.println("in accept request method");
         if(storage.getRequestById(Integer.parseInt(requestId)) == null)
             throw new Exception("There is not a request with this Id!!");
         else {

@@ -67,7 +67,6 @@ public class Product implements Comparable<Product>, Idable<Product> {
         this.supply = Integer.parseInt(information.get("supply"));
         this.category = storage.getCategoryByName(information.get("categoryName"));
         this.imagePath = this.category.getImagePath();
-        this.image = new Image(imagePath);
         this.explanation = information.get("explanation");
         this.averageRate = 0;
         this.comments = new ArrayList<>();

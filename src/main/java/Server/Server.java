@@ -522,10 +522,9 @@ public class Server {
                     }
                 case ACCEPT_REQUEST:
                     try {
-                        System.out.println("in server");
                         String requestId = (String) clientMessage.getParameters().get(0);
-                        adminManager.acceptRequest(requestId);
                         Request request = storage.getRequestById(Integer.parseInt(requestId));
+                        adminManager.acceptRequest(requestId);
                         if(request.getTypeOfRequest().equals(RequestType.REGISTER_SELLER)) {
                             createBankAccount(request.getInformation());
                         }
