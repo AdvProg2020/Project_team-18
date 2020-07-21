@@ -4,6 +4,7 @@ import Server.ClientMessage;
 import Server.MessageType;
 import Server.ServerMessage;
 import controller.AdminManager;
+import graphics.Menu;
 import javafx.fxml.Initializable;
 import model.*;
 
@@ -49,7 +50,9 @@ public class ClientCustomerManager extends ClientManager {
         params.add(money);
         params.add(username);
         ClientMessage clientMessage = new ClientMessage(MessageType.ADD_BALANCE, params);
-        clientMessage.sendAndReceive();
+        ServerMessage serverMessage=clientMessage.sendAndReceive();
+        setPerson((Person)serverMessage.getResult());
+        Menu.setPerson((Person)serverMessage.getResult());
         //return (boolean)clientMessage.sendAndReceive().getResult();
         // person.setBalance(person.getBalance() + money);
     }

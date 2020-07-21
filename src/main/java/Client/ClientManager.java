@@ -62,6 +62,8 @@ public class ClientManager {
         if (serverMessage!=null && serverMessage.getMessageType()==MessageType.ERROR){
             throw  (Exception)serverMessage.getResult();
         }
+        setPerson((Person)serverMessage.getResult());
+        Menu.setPerson((Person)serverMessage.getResult());
 
     }
 

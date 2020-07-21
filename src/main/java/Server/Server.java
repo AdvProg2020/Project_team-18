@@ -128,10 +128,10 @@ public class Server {
                     try {
                         sellerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(1)));
                         sellerManager.addBalance(amount);
+                        return new ServerMessage(MessageType.SELLER_ADD_BALANCE,sellerManager.getPerson());
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
-                    break;
                 case DOES_SELLER_HAVE_LOG:
                     int sellLogCode = (int) clientMessage.getParameters().get(0);
                     try {
@@ -237,7 +237,7 @@ public class Server {
                     Double money = (Double) clientMessage.getParameters().get(0);
                     customerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(1)));
                     customerManager.addBalance(money);
-                    break;
+                    return new ServerMessage(MessageType.ADD_BALANCE,customerManager.getPerson());
                 case DECREASE_PRODUCT:
                     String productId1 = (String) clientMessage.getParameters().get(0);
                     try {
@@ -440,7 +440,7 @@ public class Server {
                     updatedVersion = (String) clientMessage.getParameters().get(1);
                     try {
                         manager.editField(field, updatedVersion);
-                        break;
+                        return new ServerMessage(MessageType.EDIT_FIELD,manager.getPerson());
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
