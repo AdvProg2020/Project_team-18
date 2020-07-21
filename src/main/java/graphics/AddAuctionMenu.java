@@ -11,6 +11,7 @@ import model.Product;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Optional;
 
 public class AddAuctionMenu extends Menu {
@@ -92,6 +93,11 @@ public class AddAuctionMenu extends Menu {
                         if (!sellerManager.doesSellerHaveProduct(Integer.parseInt(productId), person.getUsername())) {
                             showError("Oops!You don't have product with this Id!", 100);
                             return false;
+                        } else {
+                            if (!doesProductHaveSupply(productId)){
+                                showError("Oops!This product doesn't have enough supply!", 30);
+                                return false;
+                            }
                         }
                     } catch (Exception e) {
                         showError(e.getMessage(), 20);
@@ -104,6 +110,18 @@ public class AddAuctionMenu extends Menu {
             }
             return true;
         }
+    }
+
+    private boolean doesProductHaveSupply(String productId){
+        try {
+            if (sellerManager.getProductById(Integer.parseInt(productId)).getSupply() == 0) {
+                return false;
+            }
+        } catch (Exception e) {
+            showError("Oops!Something went wrong!", 30);
+            return false;
+        }
+        return true;
     }
 
     public void showMessage() {
