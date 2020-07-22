@@ -103,13 +103,12 @@ public class ClientManager {
     public void terminate(String username) {
         ArrayList<Object> params = new ArrayList<>();
         if (username.equals("")) {
-            ClientMessage clientMessage = new ClientMessage(MessageType.TERMINATE, null);
-            ServerMessage serverMessage = clientMessage.sendAndReceive();
+            params.add("no user!");
         } else {
             params.add(username);
-            ClientMessage clientMessage = new ClientMessage(MessageType.TERMINATE, params);
-            ServerMessage serverMessage = clientMessage.sendAndReceive();
         }
+        ClientMessage clientMessage = new ClientMessage(MessageType.TERMINATE, params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
     }
 
     public double getShopAccountBalance() {
