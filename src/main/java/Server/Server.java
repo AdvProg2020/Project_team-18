@@ -640,7 +640,7 @@ public class Server {
                         try {
                             String token = getTokenFromBank(withdraw);
                             if (token.equals(""))
-                                return new ServerMessage(MessageType.ERROR, "username/password is invalid");
+                                return new ServerMessage(MessageType.ERROR, new Exception("username/password is invalid"));
                             int receipt = moveFromShopAccount(token, (double) clientMessage.getParameters().get(0),
                                     seller.getWallet().getAccountId(), "withdrawing_from_wallet");
                             boolean wasPaid = pay(receipt);
@@ -652,7 +652,7 @@ public class Server {
                         }
                         break;
                     } else {
-                        return new ServerMessage(MessageType.ERROR,"not valid withdrawal");
+                        return new ServerMessage(MessageType.ERROR,new Exception("not valid withdrawal"));
                     }
                 case PERFORM_PAYMENT_WiTH_BANK_ACCOUNT:
                     HashMap<String, String> receiverInformation1 = (HashMap<String, String>) clientMessage.getParameters().get(2);

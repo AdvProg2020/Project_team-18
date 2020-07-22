@@ -681,6 +681,7 @@ public class SellerMenu extends Menu implements Initializable {
             try {
                 sellerManager.withdrawFromWallet(Double.parseDouble(updatedVersion), person.getUsername());
             } catch (Exception e) {
+                System.out.println(e.getMessage());
                 showError(e.getMessage(), 100);
             }
         }
