@@ -334,14 +334,7 @@ public class Server {
                     double percentage = (double) clientMessage.getParameters().get(4);
                     String discountUsed = (String) clientMessage.getParameters().get(5);
                     try {
-                        double moneyToTransfer = totalPrice - totalPrice * (1.0 * percentage / 100);
                         Person thisPerson = storage.getUserByUsername((String) clientMessage.getParameters().get(0));
-                        Customer customer = (Customer) thisPerson;
-                        String charge = "get_token " + customer.getWallet().getBankAccountUsername() + " " +
-                                customer.getWallet().getBankAccountPassword();
-                        String token = getTokenFromBank(charge);
-                        int wage = purchasingManager.getWage();
-                        moveToShopAccount(token,(((double) wage/100) * moneyToTransfer),customer.getWallet().getAccountId(),"payment with wallet");
                         purchasingManager.setPerson(thisPerson);
                         purchasingManager.setCart((Cart) clientMessage.getParameters().get(1));
                         Cart result = purchasingManager.performPayment(receiverInformation, totalPrice, percentage, discountUsed);
