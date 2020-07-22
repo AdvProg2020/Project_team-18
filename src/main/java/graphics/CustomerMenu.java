@@ -358,25 +358,27 @@ public class CustomerMenu extends Menu implements Initializable {
     }
 
     public void goToChatRoom() {
-        ArrayList<Object> params = new ArrayList<>();
-        params.add(person.getUsername());
-        ClientMessage clientMessage = new ClientMessage(MessageType.CHAT_MESSAGE, params);
-        ChatClient client = ((ChatClient) clientMessage.sendAndReceive().getResult());
-        StackPane root = new StackPane();
-        UI ui = new UI(person.getUsername(), false);
-        if (!client.connect()) {
-            JOptionPane.showMessageDialog(null,
-                    "Connection to " + "localhost" + " failed.",
-                    "Chat",
-                    JOptionPane.ERROR_MESSAGE);
-            //Platform.exit();
-        }
-        ui.setClient(client);
-        Thread clientThread = new Thread(client);
-        clientThread.setDaemon(true);
-        clientThread.start();
-        root.getChildren().add(ui);
-        stage.setScene(new Scene(root));
+        SupportersTable supportersTable = new SupportersTable(this);
+        supportersTable.run();
+//        ArrayList<Object> params = new ArrayList<>();
+//        params.add(person.getUsername());
+//        ClientMessage clientMessage = new ClientMessage(MessageType.CHAT_MESSAGE, params);
+//        ChatClient client = ((ChatClient) clientMessage.sendAndReceive().getResult());
+//        StackPane root = new StackPane();
+//        UI ui = new UI(person.getUsername(), false);
+//        if (!client.connect()) {
+//            JOptionPane.showMessageDialog(null,
+//                    "Connection to " + "localhost" + " failed.",
+//                    "Chat",
+//                    JOptionPane.ERROR_MESSAGE);
+//            //Platform.exit();
+//        }
+//        ui.setClient(client);
+//        Thread clientThread = new Thread(client);
+//        clientThread.setDaemon(true);
+//        clientThread.start();
+//        root.getChildren().add(ui);
+//        stage.setScene(new Scene(root));
         /*Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Online Supporters");
         dialog.setHeaderText(null);

@@ -220,4 +220,10 @@ public class ClientAdminManager extends ClientManager {
         return (ArrayList<Auction>) clientMessage.sendAndReceive().getResult();
     }
 
+    public ArrayList<Supporter> viewOnlineSupporters() {
+        ClientMessage clientMessage = new ClientMessage(MessageType.VIEW_ONLINE_SUPPORTERS, null);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        return (ArrayList<Supporter>) serverMessage.getResult();
+    }
+
 }

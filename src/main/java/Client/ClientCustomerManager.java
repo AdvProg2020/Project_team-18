@@ -2,10 +2,10 @@ package Client;
 
 import Server.ClientMessage;
 import Server.MessageType;
+import Server.Server;
 import Server.ServerMessage;
 import controller.AdminManager;
 import graphics.Menu;
-import javafx.fxml.Initializable;
 import model.*;
 
 import java.util.ArrayList;
@@ -50,21 +50,21 @@ public class ClientCustomerManager extends ClientManager {
         params.add(money);
         params.add(username);
         ClientMessage clientMessage = new ClientMessage(MessageType.ADD_BALANCE, params);
-        ServerMessage serverMessage=clientMessage.sendAndReceive();
-        setPerson((Person)serverMessage.getResult());
-        Menu.setPerson((Person)serverMessage.getResult());
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        setPerson((Person) serverMessage.getResult());
+        Menu.setPerson((Person) serverMessage.getResult());
         //return (boolean)clientMessage.sendAndReceive().getResult();
         // person.setBalance(person.getBalance() + money);
     }
 
-    public void chargeWallet(double money, String person) throws Exception{
+    public void chargeWallet(double money, String person) throws Exception {
         ArrayList<Object> params = new ArrayList<>();
         params.add(money);
         params.add(person);
         ClientMessage clientMessage = new ClientMessage(MessageType.CHARGE_WALLET, params);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
-        if (serverMessage != null && serverMessage.getMessageType()==MessageType.ERROR){
-            throw  (Exception)serverMessage.getResult();
+        if (serverMessage != null && serverMessage.getMessageType() == MessageType.ERROR) {
+            throw (Exception) serverMessage.getResult();
         }
     }
 
@@ -74,8 +74,8 @@ public class ClientCustomerManager extends ClientManager {
         params.add(productId);
         ClientMessage clientMessage = new ClientMessage(MessageType.INCREASE_PRODUCT, params);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
-        if (serverMessage != null && serverMessage.getMessageType()==MessageType.ERROR){
-            throw  (Exception)serverMessage.getResult();
+        if (serverMessage != null && serverMessage.getMessageType() == MessageType.ERROR) {
+            throw (Exception) serverMessage.getResult();
         }
         Cart cart1 = (Cart) serverMessage.getResult();
         return cart1;
@@ -86,8 +86,8 @@ public class ClientCustomerManager extends ClientManager {
         params.add(productId);
         ClientMessage clientMessage = new ClientMessage(MessageType.DECREASE_PRODUCT, params);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
-        if (serverMessage != null && serverMessage.getMessageType()==MessageType.ERROR){
-            throw  (Exception)serverMessage.getResult();
+        if (serverMessage != null && serverMessage.getMessageType() == MessageType.ERROR) {
+            throw (Exception) serverMessage.getResult();
         }
     }
 
@@ -113,8 +113,8 @@ public class ClientCustomerManager extends ClientManager {
         params.add(username);
         ClientMessage clientMessage = new ClientMessage(MessageType.ADD_RATE, params);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
-        if (serverMessage != null && serverMessage.getMessageType()==MessageType.ERROR){
-            throw  (Exception)serverMessage.getResult();
+        if (serverMessage != null && serverMessage.getMessageType() == MessageType.ERROR) {
+            throw (Exception) serverMessage.getResult();
         }
     }
 
@@ -133,13 +133,13 @@ public class ClientCustomerManager extends ClientManager {
         return (boolean) clientMessage.sendAndReceive().getResult();
     }
 
-    public BuyLog getBuyLogByCode (String code) throws Exception{
-        ArrayList <Object> params = new ArrayList<>();
+    public BuyLog getBuyLogByCode(String code) throws Exception {
+        ArrayList<Object> params = new ArrayList<>();
         params.add(code);
-        ClientMessage clientMessage = new ClientMessage(MessageType.GET_BUY_LOG_BY_CODE,params);
+        ClientMessage clientMessage = new ClientMessage(MessageType.GET_BUY_LOG_BY_CODE, params);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
-        if (serverMessage.getMessageType()==MessageType.ERROR){
-            throw  (Exception)serverMessage.getResult();
+        if (serverMessage.getMessageType() == MessageType.ERROR) {
+            throw (Exception) serverMessage.getResult();
         }
         return (BuyLog) serverMessage.getResult();
     }
@@ -151,16 +151,36 @@ public class ClientCustomerManager extends ClientManager {
         params.add(username);
         ClientMessage clientMessage = new ClientMessage(MessageType.BIDDING, params);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
-        if (serverMessage.getMessageType()==MessageType.ERROR){
-            throw  (Exception)serverMessage.getResult();
+        if (serverMessage.getMessageType() == MessageType.ERROR) {
+            throw (Exception) serverMessage.getResult();
         }
     }
-    public ArrayList<FileProduct> getPayedFileProducts(String username){
-        ArrayList <Object> params = new ArrayList<>();
+
+    public ArrayList<FileProduct> getPayedFileProducts(String username) {
+        ArrayList<Object> params = new ArrayList<>();
         params.add(username);
-        ClientMessage clientMessage = new ClientMessage(MessageType.GET_PAYED_FILE_PRODUCTS,params);
+        ClientMessage clientMessage = new ClientMessage(MessageType.GET_PAYED_FILE_PRODUCTS, params);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
-        return (ArrayList<FileProduct>)serverMessage.getResult();
+        return (ArrayList<FileProduct>) serverMessage.getResult();
     }
 
+    public void sendMessage(String sender, String receiver, String message1, String message2) {
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(sender);
+        params.add(receiver);
+        params.add(message1);
+        params.add(message2);
+        System.out.println(message1);
+        ClientMessage clientMessage = new ClientMessage(MessageType.SEND_MESSAGE_FROM_CUSTOMER, params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+    }
+
+    public void sendMessageFromSupporter(String sender, String receiver, String message) {
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(sender);
+        params.add(receiver);
+        params.add(message);
+        ClientMessage clientMessage = new ClientMessage(MessageType.SENT_MESSAGE_FROM_SUPPORTER, params);
+        clientMessage.sendAndReceive();
+    }
 }
