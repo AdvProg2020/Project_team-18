@@ -268,6 +268,7 @@ public class Server {
                     HashMap<Product, Integer> products = customerManager.getProductsInCart();
                     return new ServerMessage(MessageType.GET_CART, products);
                 case GET_CART_PRICE:
+                    customerManager.setCart((Cart) clientMessage.getParameters().get(0));
                     Double totalCartPrice = customerManager.getCartTotalPrice();
                     return new ServerMessage(MessageType.GET_CART_PRICE, totalCartPrice);
                 case ADD_RATE:
@@ -702,6 +703,8 @@ public class Server {
                     double min = (double) clientMessage.getParameters().get(0);
                     sellerManager.setMinBalance(min);
                     break;
+                case GET_PERSON_BY_USERNAME:
+                    return new ServerMessage(MessageType.GET_PERSON_BY_USERNAME,manager.getPersonByUsername((String)clientMessage.getParameters().get(0)));
             }
             return null;
         }

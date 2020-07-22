@@ -77,7 +77,8 @@ public class ClientCustomerManager extends ClientManager {
         if (serverMessage != null && serverMessage.getMessageType()==MessageType.ERROR){
             throw  (Exception)serverMessage.getResult();
         }
-        return (Cart) serverMessage.getResult();
+        Cart cart1 = (Cart) serverMessage.getResult();
+        return cart1;
     }
 
     public void decreaseProduct(String productId) throws Exception {
@@ -90,8 +91,9 @@ public class ClientCustomerManager extends ClientManager {
         }
     }
 
-    public double getCartTotalPrice() {
+    public double getCartTotalPrice(Cart cart) {
         ArrayList<Object> params = new ArrayList<>();
+        params.add(cart);
         ClientMessage clientMessage = new ClientMessage(MessageType.GET_CART_PRICE, params);
         return (Double) clientMessage.sendAndReceive().getResult();
     }

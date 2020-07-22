@@ -176,4 +176,11 @@ public class Manager {
         return this.cart;
     }
 
+    public Person getPersonByUsername(String username) {
+        for (Person person : storage.getAllUsers()){
+            if (person.getUsername().equals(username))
+                return person;
+        }
+        return null;
+    }
 }
