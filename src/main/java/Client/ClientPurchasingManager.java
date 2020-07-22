@@ -32,7 +32,8 @@ public class ClientPurchasingManager extends ClientManager {
         if (serverMessage!= null && serverMessage.getMessageType()==MessageType.ERROR){
             throw (Exception)serverMessage.getResult();
         }
-        return (Cart)serverMessage.getResult();
+        Cart cart1= (Cart)serverMessage.getResult();
+        return cart1;
     }
 
     public void performPaymentWithBankAccount (HashMap<String, String> receiverInformation, double totalPrice, double discountPercentage,

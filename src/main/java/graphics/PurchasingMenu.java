@@ -122,6 +122,7 @@ public class PurchasingMenu extends Menu {
                 }
                 currentCart = result;
                 showMessage();
+                //new CartMenu(this).run();
                 back();
             }
         }
