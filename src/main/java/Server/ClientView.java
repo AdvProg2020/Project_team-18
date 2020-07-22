@@ -59,16 +59,18 @@ public class ClientView extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        String username = "";
         MainMenu mainMenu = new MainMenu(null);
         if (Menu.getPerson() != null) {
-            String username = Menu.getPerson().getUsername();
+             username = Menu.getPerson().getUsername();
         }
         stage.setTitle("TEAM-18");
         //commented temporarily!
-     /*  stage.setOnCloseRequest(event -> {
+        /*String finalUsername = username;
+        stage.setOnCloseRequest(event -> {
            ClientManager clientManager = new ClientManager();
            if (Menu.getPerson() != null) {
-           clientManager.terminate(username);
+           clientManager.terminate(finalUsername);
         }
            clientManager.terminate("");
         });*/
