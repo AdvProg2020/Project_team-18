@@ -35,6 +35,7 @@ public class BankServer {
                         DataInputStream inputStream = new DataInputStream(clientSocket.getInputStream());
                         new ClientHandler(outputStream, inputStream , clientSocket , shop).start();
                     } catch (Exception e) {
+                        System.out.println(e.getMessage());
                         System.err.println("Error in accepting client!");
                         break;
                     }
@@ -65,16 +66,17 @@ public class BankServer {
             allAccounts = new HashMap<>();
             validTokens = new HashMap<>();
             tokenPerAccount = new HashMap<>();
-            allAccountIds = new ArrayList<>();;
+            allAccountIds = new ArrayList<>();
             BankFileSavor bankFileSavor = new BankFileSavor(allAccounts,allAccountIds);
-            allAccountIds = bankFileSavor.readAllAccountIds();
-            allAccounts = bankFileSavor.readAllAccounts();
-            System.out.println(allAccounts.toString());
-            System.out.println(allAccountIds.toString());
-            if(!allAccounts.containsKey("shop")) {
+            if (bankFileSavor.readAllAccountIds() != null ) {
+                allAccountIds = bankFileSavor.readAllAccountIds();
+                allAccounts = bankFileSavor.readAllAccounts();
+            } else {
                 allAccounts.put("shop", "shop");
                 allAccountIds.add(1);
             }
+            System.out.println(allAccountIds.toString());
+            System.out.println(allAccounts.toString());
         }
 
         private void handleClient() {

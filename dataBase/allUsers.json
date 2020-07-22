@@ -1,0 +1,164 @@
+[
+  {
+    "@type": "model.Admin",
+    "@val": {
+      "allRequests": [],
+      "id": 1,
+      "username": "a1",
+      "password": "a1",
+      "name": "a1",
+      "familyName": "a1",
+      "email": "a1@a1",
+      "number": "22",
+      "balance": 0.0,
+      "role": "ADMIN",
+      "availability": "OFFLINE"
+    }
+  },
+  {
+    "@type": "model.Customer",
+    "@val": {
+      "buyHistory": [],
+      "allDiscounts": [],
+      "amountOfAllPurchasing": 0.0,
+      "wallet": {
+        "money": 50.0,
+        "bankAccountUsername": "c1customer",
+        "bankAccountPassword": "imc1",
+        "currentBankToken": "",
+        "accountId": 2
+      },
+      "payedFileProducts": [],
+      "supportersSender": [],
+      "inbox": [],
+      "sentMessages": [],
+      "combinedMessages": [],
+      "id": 2,
+      "username": "c1",
+      "password": "c1",
+      "name": "c1",
+      "familyName": "c1",
+      "email": "c1@c1",
+      "number": "22",
+      "balance": 50.0,
+      "role": "CUSTOMER",
+      "availability": "OFFLINE"
+    }
+  },
+  {
+    "@type": "model.Seller",
+    "@val": {
+      "company": "s1",
+      "sellHistory": [],
+      "productsToSell": [
+        {
+          "imagePath": "file:src/main/java/graphics/fxml/images/clothing.jpg",
+          "productId": 1,
+          "name": "cloth",
+          "brand": "cloth",
+          "price": 10.0,
+          "numberInCart": 0,
+          "seller": "@root.2",
+          "supply": 4,
+          "category": {
+            "id": 0,
+            "categoryName": "clothing",
+            "imagePath": "file:src/main/java/graphics/fxml/images/clothing.jpg",
+            "thisCategoryProducts": [
+              "@root.2.productsToSell.0"
+            ],
+            "properties": {}
+          },
+          "categoryName": "clothing",
+          "sellerName": "s1",
+          "explanation": "hot",
+          "averageRate": 0.0,
+          "comments": [],
+          "rates": [],
+          "thisProductsBuyers": [],
+          "salePercent": 0.0,
+          "numberOfSeen": 0
+        },
+        {
+          "imagePath": "file:src/main/java/graphics/fxml/images/electronics.jpg",
+          "productId": 2,
+          "name": "elec",
+          "brand": "apple",
+          "price": 30.0,
+          "numberInCart": 0,
+          "seller": "@root.2",
+          "supply": 3,
+          "category": {
+            "id": 0,
+            "categoryName": "electronics",
+            "imagePath": "file:src/main/java/graphics/fxml/images/electronics.jpg",
+            "thisCategoryProducts": [
+              "@root.2.productsToSell.1"
+            ],
+            "properties": {}
+          },
+          "categoryName": "electronics",
+          "sellerName": "s1",
+          "explanation": "mac",
+          "averageRate": 0.0,
+          "comments": [],
+          "rates": [],
+          "thisProductsBuyers": [],
+          "salePercent": 0.0,
+          "numberOfSeen": 0
+        },
+        {
+          "@type": "model.FileProduct",
+          "@val": {
+            "imagePath": "file:src/main/java/graphics/fxml/images/FileIcon.png",
+            "productId": 3,
+            "name": "file",
+            "brand": "file",
+            "price": 20.0,
+            "numberInCart": 0,
+            "seller": "@root.2",
+            "supply": 5,
+            "category": {
+              "id": 0,
+              "categoryName": "file",
+              "imagePath": "file:src/main/java/graphics/fxml/images/FileIcon.png",
+              "thisCategoryProducts": [
+                "@root.2.productsToSell.2"
+              ],
+              "properties": {}
+            },
+            "categoryName": "file",
+            "sellerName": "s1",
+            "explanation": "file",
+            "averageRate": 0.0,
+            "comments": [],
+            "rates": [],
+            "thisProductsBuyers": [],
+            "salePercent": 0.0,
+            "numberOfSeen": 0
+          }
+        }
+      ],
+      "saleList": [],
+      "wallet": {
+        "money": 50.0,
+        "bankAccountUsername": "s1seller",
+        "bankAccountPassword": "ims1",
+        "currentBankToken": "",
+        "accountId": 3
+      },
+      "thisSellerAuctions": [],
+      "soldFileProducts": [],
+      "id": 3,
+      "username": "s1",
+      "password": "s1",
+      "name": "s1",
+      "familyName": "s1",
+      "email": "s1@s1",
+      "number": "22",
+      "balance": 50.0,
+      "role": "SELLER",
+      "availability": "OFFLINE"
+    }
+  }
+]

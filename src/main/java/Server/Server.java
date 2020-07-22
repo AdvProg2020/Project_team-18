@@ -600,17 +600,17 @@ public class Server {
                 case VIEW_ONLINE_SUPPORTERS:
                     return new ServerMessage(MessageType.VIEW_ONLINE_SUPPORTERS, adminManager.viewOnlineSupporters());
                 case TERMINATE:
+                    try {
+                        server.bankDataOutputStream.writeUTF("terminate");
+                        server.bankDataOutputStream.flush();
+                    } catch (IOException e) {
+                        System.out.println(e.getMessage());
+                    }
                     String name = (String) clientMessage.getParameters().get(0);
                     if (name.equals("no user!")){
                         manager.terminate();
                         break;
                     } else {
-                        try {
-                            server.bankDataOutputStream.writeUTF("terminate");
-                            server.bankDataOutputStream.flush();
-                        } catch (IOException e) {
-                            System.out.println(e.getMessage());
-                        }
                         manager.setPerson(storage.getUserByUsername(name));
                         manager.getPerson().makeOffline();
                         manager.terminate();
