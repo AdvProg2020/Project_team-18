@@ -11,9 +11,14 @@ public class LoginMenu extends Menu {
     public LoginMenu(Menu previousMenu) {
         super(previousMenu, "src/main/java/graphics/fxml/LoginMenu.fxml");
     }
-    @FXML public TextField username;
-    @FXML public Label message;
-    @FXML public PasswordField password;
+
+    @FXML
+    public TextField username;
+    @FXML
+    public Label message;
+    @FXML
+    public PasswordField password;
+
     public void goToRegisterMenu(ActionEvent actionEvent) {
         RegisterMenu registerMenu = new RegisterMenu(this);
         registerMenu.run();
@@ -38,34 +43,32 @@ public class LoginMenu extends Menu {
         }
     }
 
-    private void goToAccount(Person person){
+    private void goToAccount(Person person) {
         if (person == null) {
             System.out.println("You need to login to access account menu.");
             LoginMenu loginRegisterMenu = new LoginMenu(this.getPreviousMenu());
             loginRegisterMenu.run();
         } else if (person instanceof Admin) {
-            System.out.println(person.getAvailability());
-            person.makeOnline();
-            System.out.println(person.getAvailability());
+//            System.out.println(person.getAvailability());
+//            person.makeOnline();
+//            System.out.println(person.getAvailability());
             AdminMenu adminMenu = new AdminMenu(this.getPreviousMenu());
             adminMenu.run();
         } else if (person instanceof Seller) {
-            System.out.println(person.getAvailability());
-            person.makeOnline();
-            System.out.println(person.getAvailability());
+//            System.out.println(person.getAvailability());
+//            person.makeOnline();
+//            System.out.println(person.getAvailability());
             SellerMenu sellerMenu = new SellerMenu(this.getPreviousMenu());
             sellerMenu.run();
-        } else if (person instanceof Supporter){
-            System.out.println(person.getAvailability());
-            person.makeOnline();
-            System.out.println(person.getAvailability());
+        } else if (person instanceof Supporter) {
+//            System.out.println(person.getAvailability());
+//            person.makeOnline();
+//            System.out.println(person.getAvailability());
             SupporterMenu supporterMenu = new SupporterMenu(this.getPreviousMenu());
             supporterMenu.run();
-        }
-        else {
-            System.out.println(person.getAvailability());
-            person.makeOnline();
-            System.out.println(person.getAvailability());
+        } else {
+//            System.out.println(person.getAvailability());
+//            System.out.println(person.getAvailability());
             CustomerMenu customerMenu = new CustomerMenu(this.getPreviousMenu());
             customerMenu.run();
         }

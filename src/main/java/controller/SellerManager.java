@@ -8,6 +8,7 @@ import model.*;
 public class SellerManager extends Manager {
 
     private static HashMap<Integer, ArrayList<Product>> savedProductsInSale = new HashMap<>();
+    private double minBalance;
 
     public SellerManager() {
     }
@@ -185,5 +186,13 @@ public class SellerManager extends Manager {
                 return true;
         }
         return false;
+    }
+
+    public double getMinBalance() {
+        return minBalance;
+    }
+
+    public void setMinBalance(double minBalance) {
+        this.minBalance = minBalance;
     }
 }

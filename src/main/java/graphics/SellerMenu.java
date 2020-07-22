@@ -681,6 +681,7 @@ public class SellerMenu extends Menu implements Initializable {
             try {
                 sellerManager.withdrawFromWallet(Double.parseDouble(updatedVersion), person.getUsername());
             } catch (Exception e) {
+                System.out.println(e.getMessage());
                 showError(e.getMessage(), 100);
             }
         }
@@ -689,8 +690,11 @@ public class SellerMenu extends Menu implements Initializable {
     public void logout(ActionEvent actionEvent) {
         ClientView.setToken(null);
         MainMenu mainMenu = new MainMenu(null);
-        person.makeOffline();
-        person = null;
+        try {
+            sellerManager.logout(person.getUsername());
+        } catch (Exception e) {
+            showError("Something went wrong", 30);
+        }        person = null;
         mainMenu.run();
     }
 

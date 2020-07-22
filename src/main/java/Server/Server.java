@@ -120,10 +120,17 @@ public class Server {
                     try {
                         ServerMessage serverMessage = new ServerMessage(MessageType.LOGIN, manager.login(username, password));
                         serverMessage.setToken(new Token(0));
+                        manager.setPerson(storage.getUserByUsername(username));
+                        manager.getPerson().makeOnline();
                         return serverMessage;
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
+                case LOGOUT:
+                    String user = (String) clientMessage.getParameters().get(0);
+                    manager.setPerson(storage.getUserByUsername(user));
+                    manager.getPerson().makeOffline();
+                    break;
                 case SELLER_ADD_BALANCE:
                     double amount = (double) clientMessage.getParameters().get(0);
                     try {
@@ -332,7 +339,8 @@ public class Server {
                         String charge = "get_token " + customer.getWallet().getBankAccountUsername() + " " +
                                 customer.getWallet().getBankAccountPassword();
                         String token = getTokenFromBank(charge);
-                        moveToShopAccount(token,(0.1 * moneyToTransfer),customer.getWallet().getAccountId(),"payment with wallet");
+                        int wage = purchasingManager.getWage();
+                        moveToShopAccount(token,((double)(wage/100) * moneyToTransfer),customer.getWallet().getAccountId(),"payment with wallet");
                         purchasingManager.setPerson(thisPerson);
                         purchasingManager.setCart((Cart) clientMessage.getParameters().get(1));
                         Cart result = purchasingManager.performPayment(receiverInformation, totalPrice, percentage, discountUsed);
@@ -576,6 +584,9 @@ public class Server {
                     auction.setCustomer(newCustomer);
                     break;
                 case TERMINATE:
+                    String name = (String) clientMessage.getParameters().get(0);
+                    manager.setPerson(storage.getUserByUsername(name));
+                    manager.getPerson().makeOffline();
                     manager.terminate();
                     break;
                 case CHARGE_WALLET:
@@ -624,21 +635,25 @@ public class Server {
                     Seller seller = (Seller) person1;
                     String withdraw = "get_token " + seller.getWallet().getBankAccountUsername() + " " +
                             seller.getWallet().getBankAccountPassword();
-                    try {
-                        System.out.println(withdraw);
-                        String token = getTokenFromBank(withdraw);
-                        if (token.equals(""))
-                            return new ServerMessage(MessageType.ERROR, "username/password is invalid");
-                        int receipt = moveFromShopAccount(token, (double) clientMessage.getParameters().get(0),
-                                seller.getWallet().getAccountId(), "withdrawing_from_wallet");
-                        boolean wasPaid = pay(receipt);
-                        if (wasPaid) {
-                            seller.setBalance(seller.getBalance() - (double) clientMessage.getParameters().get(0));
+                    double minBalanceInWallet = sellerManager.getMinBalance();
+                    if (isValidWithdrawal(minBalanceInWallet, seller,(double) clientMessage.getParameters().get(0))) {
+                        try {
+                            String token = getTokenFromBank(withdraw);
+                            if (token.equals(""))
+                                return new ServerMessage(MessageType.ERROR, new Exception("username/password is invalid"));
+                            int receipt = moveFromShopAccount(token, (double) clientMessage.getParameters().get(0),
+                                    seller.getWallet().getAccountId(), "withdrawing_from_wallet");
+                            boolean wasPaid = pay(receipt);
+                            if (wasPaid) {
+                                seller.setBalance(seller.getBalance() - (double) clientMessage.getParameters().get(0));
+                            }
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
                         }
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
+                        break;
+                    } else {
+                        return new ServerMessage(MessageType.ERROR,new Exception("not valid withdrawal"));
                     }
-                    break;
                 case PERFORM_PAYMENT_WiTH_BANK_ACCOUNT:
                     HashMap<String, String> receiverInformation1 = (HashMap<String, String>) clientMessage.getParameters().get(2);
                     double totalPrice1 = (double) clientMessage.getParameters().get(3);
@@ -662,7 +677,26 @@ public class Server {
                 case GET_PAYED_FILE_PRODUCTS:
                     newCustomer = (Customer) storage.getUserByUsername((String) clientMessage.getParameters().get(0));
                     return new ServerMessage(MessageType.GET_PAYED_FILE_PRODUCTS,newCustomer.getPayedFileProducts());
+                case GET_SHOP_BALANCE:
 
+                    try {
+                        String charge = "get_token shop shop";
+                        String token = getTokenFromBank(charge);
+                        server.bankDataOutputStream.writeUTF("get_balance " + token);
+                        server.bankDataOutputStream.flush();
+                        String balanceToReturn = server.bankDataInputStream.readUTF();
+                        return new ServerMessage(MessageType.GET_SHOP_BALANCE,balanceToReturn);
+                    } catch (IOException e) {
+                        return new ServerMessage(MessageType.ERROR,e.getMessage());
+                    }
+                case SET_WAGE:
+                    int wagePercentage = (int) clientMessage.getParameters().get(0);
+                    purchasingManager.setWage(wagePercentage);
+                    break;
+                case SET_MIN_BALANCE:
+                    double min = (double) clientMessage.getParameters().get(0);
+                    sellerManager.setMinBalance(min);
+                    break;
             }
             return null;
         }
@@ -775,6 +809,21 @@ public class Server {
                 System.out.println(e.getMessage());
             }
             return 0;
+        }
+
+        private boolean isValidWithdrawal(double min, Seller seller,double toWithdraw) {
+            try {
+                String info = "get_token " + seller.getWallet().getBankAccountUsername() + " " +
+                        seller.getWallet().getBankAccountPassword();
+                String token = getTokenFromBank(info);
+                server.bankDataOutputStream.writeUTF("get_balance " + token);
+                server.bankDataOutputStream.flush();
+                double balance = Double.parseDouble(server.bankDataInputStream.readUTF());
+                return (balance - toWithdraw) > min;
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+            return false;
         }
 
         @Override

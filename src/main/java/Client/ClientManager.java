@@ -22,18 +22,18 @@ public class ClientManager {
     protected static ArrayList<Filter> currentFilters = new ArrayList<>();
     protected static ArrayList<Sort> currentSorts = new ArrayList<>();
 
-    public boolean doesAnyAdminExist(){
-        ClientMessage clientMessage = new ClientMessage(MessageType.DOES_ANY_ADMIN_EXIST,null);
-        return (boolean)clientMessage.sendAndReceive().getResult();
+    public boolean doesAnyAdminExist() {
+        ClientMessage clientMessage = new ClientMessage(MessageType.DOES_ANY_ADMIN_EXIST, null);
+        return (boolean) clientMessage.sendAndReceive().getResult();
     }
 
     public void register(HashMap<String, String> information) throws Exception {
         ArrayList<Object> params = new ArrayList<>();
         params.add(information);
-        ClientMessage clientMessage = new ClientMessage(MessageType.REGISTER,params);
+        ClientMessage clientMessage = new ClientMessage(MessageType.REGISTER, params);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
-        if (serverMessage!=null && serverMessage.getMessageType()==MessageType.ERROR){
-            throw  (Exception)serverMessage.getResult();
+        if (serverMessage != null && serverMessage.getMessageType() == MessageType.ERROR) {
+            throw (Exception) serverMessage.getResult();
         }
 
     }
@@ -42,28 +42,27 @@ public class ClientManager {
         ArrayList<Object> params = new ArrayList<>();
         params.add(username);
         params.add(password);
-        ClientMessage clientMessage = new ClientMessage(MessageType.LOGIN,params);
+        ClientMessage clientMessage = new ClientMessage(MessageType.LOGIN, params);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
-        if (serverMessage!=null && serverMessage.getMessageType()==MessageType.ERROR){
-           throw  (Exception)serverMessage.getResult();
+        if (serverMessage != null && serverMessage.getMessageType() == MessageType.ERROR) {
+            throw (Exception) serverMessage.getResult();
         }
         ClientView.setToken(serverMessage.getToken());
-        return (Person)serverMessage.getResult();
+        return (Person) serverMessage.getResult();
     }
-
 
 
     public void editField(String field, String updatedVersion) throws Exception {
         ArrayList<Object> params = new ArrayList<>();
         params.add(field);
         params.add(updatedVersion);
-        ClientMessage clientMessage = new ClientMessage(MessageType.EDIT_FIELD,params);
+        ClientMessage clientMessage = new ClientMessage(MessageType.EDIT_FIELD, params);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
-        if (serverMessage!=null && serverMessage.getMessageType()==MessageType.ERROR){
-            throw  (Exception)serverMessage.getResult();
+        if (serverMessage != null && serverMessage.getMessageType() == MessageType.ERROR) {
+            throw (Exception) serverMessage.getResult();
         }
-        setPerson((Person)serverMessage.getResult());
-        Menu.setPerson((Person)serverMessage.getResult());
+        setPerson((Person) serverMessage.getResult());
+        Menu.setPerson((Person) serverMessage.getResult());
 
     }
 
@@ -71,27 +70,71 @@ public class ClientManager {
     public boolean doesUsernameExist(String username) {
         ArrayList<Object> params = new ArrayList<>();
         params.add(username);
-        ClientMessage clientMessage = new ClientMessage(MessageType.DOES_USERNAME_EXIST,params);
-        return (boolean)clientMessage.sendAndReceive().getResult();
+        ClientMessage clientMessage = new ClientMessage(MessageType.DOES_USERNAME_EXIST, params);
+        return (boolean) clientMessage.sendAndReceive().getResult();
 
     }
 
     public Product getProductById(int productId) throws Exception {
         ArrayList<Object> params = new ArrayList<>();
         params.add(productId);
-        ClientMessage clientMessage = new ClientMessage(MessageType.GET_PRODUCT_BY_ID,params);
+        ClientMessage clientMessage = new ClientMessage(MessageType.GET_PRODUCT_BY_ID, params);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
-        if (serverMessage!=null && serverMessage.getMessageType()==MessageType.ERROR){
-            throw  (Exception)serverMessage.getResult();
+        if (serverMessage != null && serverMessage.getMessageType() == MessageType.ERROR) {
+            throw (Exception) serverMessage.getResult();
         }
         return (Product) serverMessage.getResult();
     }
 
-    public void setPerson(Person person1){
+    public void setPerson(Person person1) {
         person = person1;
     }
-    public void terminate() {
-        ClientMessage clientMessage = new ClientMessage(MessageType.TERMINATE,null);
+
+    public void logout(String username) throws Exception {
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(username);
+        ClientMessage clientMessage = new ClientMessage(MessageType.LOGOUT, params);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage != null && serverMessage.getMessageType() == MessageType.ERROR) {
+            throw (Exception) serverMessage.getResult();
+        }
+    }
+
+    public void terminate(String username) {
+        ArrayList<Object> params = new ArrayList<>();
+        if (username.equals("")) {
+            ClientMessage clientMessage = new ClientMessage(MessageType.TERMINATE, null);
+            ServerMessage serverMessage = clientMessage.sendAndReceive();
+        } else {
+            params.add(username);
+            ClientMessage clientMessage = new ClientMessage(MessageType.TERMINATE, params);
+            ServerMessage serverMessage = clientMessage.sendAndReceive();
+        }
+    }
+
+    public double getShopAccountBalance() {
+        ClientMessage clientMessage = new ClientMessage(MessageType.GET_SHOP_BALANCE, null);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        return Double.parseDouble((String) serverMessage.getResult());
+    }
+
+    public void setWage(int percentage) throws Exception{
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(percentage);
+        ClientMessage clientMessage = new ClientMessage(MessageType.SET_WAGE, params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage != null && serverMessage.getMessageType() == MessageType.ERROR) {
+            throw (Exception) serverMessage.getResult();
+        }
+    }
+
+    public void setMinBalance (double min) throws Exception{
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(min);
+        ClientMessage clientMessage = new ClientMessage(MessageType.SET_MIN_BALANCE, params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage != null && serverMessage.getMessageType() == MessageType.ERROR) {
+            throw (Exception) serverMessage.getResult();
+        }
     }
 }

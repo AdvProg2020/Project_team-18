@@ -251,9 +251,72 @@ public class AdminMenu extends Menu implements Initializable {
     public void logout(ActionEvent actionEvent) {
         ClientView.setToken(null);
         MainMenu mainMenu = new MainMenu(null);
-        person.makeOffline();
-        person = null;
+        try {
+            manager.logout(person.getUsername());
+        } catch (Exception e) {
+            showError("Something went wrong", 30);
+        }        person = null;
         mainMenu.run();
+    }
+
+    public void confirmCenterSettings () {
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Center Settings");
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        double money = manager.getShopAccountBalance();
+        Button wage = new Button("Set the center's wage");
+        wage.setOnAction(e -> setWage());
+        Button minBalance = new Button("Set the minimum amount in wallets");
+        minBalance.setOnAction(e -> setMinBalance());
+        String shopAccountBalance = Double.toString(money);
+        Label label = new Label("Shopping Center's money in account : " + shopAccountBalance);
+        HBox content = new HBox();
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setSpacing(10);
+        content.getChildren().addAll(label, wage,minBalance);
+        dialog.getDialogPane().setContent(content);
+        dialog.showAndWait();
+    }
+
+    private void setWage() {
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Set Wage");
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        TextField textField = new TextField();
+        Label label = new Label("Enter percentage of shop's wage");
+        HBox content = new HBox();
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setSpacing(10);
+        content.getChildren().addAll(label, textField);
+        dialog.getDialogPane().setContent(content);
+        dialog.showAndWait();
+        try {
+            manager.setWage(Integer.parseInt(textField.getText()));
+        } catch (Exception e) {
+            showError(e.getMessage(),20);
+        }
+    }
+
+    private void setMinBalance() {
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Set Minimum Balance");
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        TextField textField = new TextField();
+        Label label = new Label("Enter minimum balance that must be in wallets.");
+        HBox content = new HBox();
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setSpacing(10);
+        content.getChildren().addAll(label, textField);
+        dialog.getDialogPane().setContent(content);
+        dialog.showAndWait();
+        try {
+            manager.setMinBalance(Double.parseDouble(textField.getText()));
+        } catch (Exception e) {
+            showError(e.getMessage(),20);
+        }
     }
 
     public void goToMainMenu() {

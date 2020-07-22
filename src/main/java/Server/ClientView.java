@@ -10,8 +10,10 @@ import Client.ClientManager;
 import controller.FileSaver;
 import controller.Storage;
 import graphics.MainMenu;
+import graphics.Menu;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import model.Person;
 
 
 public class ClientView extends Application {
@@ -58,11 +60,17 @@ public class ClientView extends Application {
             e.printStackTrace();
         }
         MainMenu mainMenu = new MainMenu(null);
+        if (Menu.getPerson() != null) {
+            String username = Menu.getPerson().getUsername();
+        }
         stage.setTitle("TEAM-18");
         //commented temporarily!
      /*  stage.setOnCloseRequest(event -> {
            ClientManager clientManager = new ClientManager();
-           clientManager.terminate();
+           if (Menu.getPerson() != null) {
+           clientManager.terminate(username);
+        }
+           clientManager.terminate("");
         });*/
         mainMenu.run();
         stage.show();

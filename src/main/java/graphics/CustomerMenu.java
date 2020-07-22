@@ -41,11 +41,10 @@ public class CustomerMenu extends Menu implements Initializable {
     private Label roleLabel;
     @FXML
     private Label balanceLabel;
-    @FXML
-    private Label avaLabel;
 
     public CustomerMenu(Menu previousMenu) {
         super(previousMenu, "src/main/java/graphics/fxml/CustomerMenu.fxml");
+//        person.makeOnline();
     }
 
     @Override
@@ -62,7 +61,6 @@ public class CustomerMenu extends Menu implements Initializable {
         numberLabel.setText(person.getNumber());
         balanceLabel.setText(Double.toString(person.getBalance()));
         roleLabel.setText("customer");
-        avaLabel.setText(person.getAvailability().toString());
     }
 
     public void editPasswordField() {
@@ -316,12 +314,12 @@ public class CustomerMenu extends Menu implements Initializable {
         HBox content = new HBox();
         content.setAlignment(Pos.CENTER_LEFT);
         content.setSpacing(10);
-        content.getChildren().addAll(label , addBalance);
+        content.getChildren().addAll(label, addBalance);
         dialog.getDialogPane().setContent(content);
         dialog.showAndWait();
     }
 
-    public void addBalanceToWallet () {
+    public void addBalanceToWallet() {
         Dialog<ButtonType> dialog = new Dialog<>();
         String updatedVersion;
         dialog.setTitle("Change Personal Information");
@@ -359,14 +357,14 @@ public class CustomerMenu extends Menu implements Initializable {
         thisPersonBuyLogs.run();
     }
 
-    public void goToChatRoom(){
+    public void goToChatRoom() {
         ArrayList<Object> params = new ArrayList<>();
         params.add(person.getUsername());
-        ClientMessage clientMessage = new ClientMessage(MessageType.CHAT_MESSAGE,params);
-        ChatClient client = ((ChatClient)clientMessage.sendAndReceive().getResult());
+        ClientMessage clientMessage = new ClientMessage(MessageType.CHAT_MESSAGE, params);
+        ChatClient client = ((ChatClient) clientMessage.sendAndReceive().getResult());
         StackPane root = new StackPane();
         UI ui = new UI(person.getUsername(), false);
-        if(!client.connect()) {
+        if (!client.connect()) {
             JOptionPane.showMessageDialog(null,
                     "Connection to " + "localhost" + " failed.",
                     "Chat",
@@ -415,7 +413,7 @@ public class CustomerMenu extends Menu implements Initializable {
 
     }
 
-    public void goToAuctionsMenu(){
+    public void goToAuctionsMenu() {
         AuctionsMenu auctionsMenu = new AuctionsMenu(this);
         auctionsMenu.run();
     }
@@ -429,7 +427,11 @@ public class CustomerMenu extends Menu implements Initializable {
     public void logout(ActionEvent actionEvent) {
         ClientView.setToken(null);
         MainMenu mainMenu = new MainMenu(null);
-        person.makeOffline();
+        try {
+            customerManager.logout(person.getUsername());
+        } catch (Exception e) {
+            showError("Something went wrong", 30);
+        }
         person = null;
         mainMenu.run();
     }
