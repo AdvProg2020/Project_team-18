@@ -32,6 +32,7 @@ public class PurchasingManager extends Manager {
             seller.addBalance(totalPricePerSeller * 0.9);
             createSellLog(seller, totalPricePerSeller, discountPercentage);
         }
+        refineFileProducts();
         cart.isPurchased();
         cart.emptyCart();
         return cart;
@@ -53,8 +54,20 @@ public class PurchasingManager extends Manager {
             seller.addBalance(totalPricePerSeller * 0.9);
             createSellLog(seller, totalPricePerSeller, discountPercentage);
         }
+        refineFileProducts();
         cart.isPurchased();
         cart.emptyCart();
+    }
+
+    private void refineFileProducts() {
+        for (Product product : cart.getProductsInCart().keySet()) {
+            if(product instanceof FileProduct){
+                FileProduct fileProduct = (FileProduct)product;
+                fileProduct.setFileState(FileState.READY_TO_DOWNLOAD);
+                ((Customer)person).addToFileProducts(fileProduct);
+                product.getSeller().addToFileProducts(fileProduct);
+            }
+        }
     }
 
     private void addCustomerToProductsBuyers() {

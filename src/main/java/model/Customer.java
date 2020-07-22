@@ -9,6 +9,8 @@ public class Customer extends Person {
     private ArrayList<Discount> allDiscounts;
     private double amountOfAllPurchasing;
     private Wallet wallet;
+    // to do : refine in file saver
+    private ArrayList<FileProduct> payedFileProducts;
     private transient static ArrayList<Person> allCustomers = new ArrayList<>();
 
     public static ArrayList<Person> getAllCustomers() {
@@ -22,8 +24,15 @@ public class Customer extends Person {
         super(information);
         this.buyHistory = new ArrayList<>();
         this.allDiscounts = new ArrayList<>();
+        this.payedFileProducts = new ArrayList<>();
+    }
+    public void addToFileProducts(FileProduct fileProduct){
+        payedFileProducts.add(fileProduct);
     }
 
+    public ArrayList<FileProduct> getPayedFileProducts() {
+        return payedFileProducts;
+    }
 
     public ArrayList<BuyLog> getBuyHistory() {
         return buyHistory;

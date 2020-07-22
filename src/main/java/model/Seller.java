@@ -10,6 +10,8 @@ public class Seller extends Person {
     private ArrayList<Sale> saleList;
     private Wallet wallet;
     private ArrayList<Auction> thisSellerAuctions;
+    // to do : refine in file saver
+    private ArrayList<FileProduct> soldFileProducts;
     private transient static ArrayList<Person> allSellers = new ArrayList<>();
 
     public static ArrayList<Person> getAllSellers() {
@@ -21,6 +23,14 @@ public class Seller extends Person {
         this.productsToSell = new ArrayList<>();
         this.thisSellerAuctions = new ArrayList<>();
         this.saleList = new ArrayList<>();
+        this.soldFileProducts = new ArrayList<>();
+    }
+    public void addToFileProducts(FileProduct fileProduct){
+        soldFileProducts.add(fileProduct);
+    }
+
+    public ArrayList<FileProduct> getSoldFileProducts() {
+        return soldFileProducts;
     }
 
     public String getCompany() {

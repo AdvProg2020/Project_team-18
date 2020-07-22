@@ -153,5 +153,12 @@ public class ClientCustomerManager extends ClientManager {
             throw  (Exception)serverMessage.getResult();
         }
     }
+    public ArrayList<FileProduct> getPayedFileProducts(String username){
+        ArrayList <Object> params = new ArrayList<>();
+        params.add(username);
+        ClientMessage clientMessage = new ClientMessage(MessageType.GET_PAYED_FILE_PRODUCTS,params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        return (ArrayList<FileProduct>)serverMessage.getResult();
+    }
 
 }

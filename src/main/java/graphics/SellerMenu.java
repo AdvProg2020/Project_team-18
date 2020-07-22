@@ -700,4 +700,7 @@ public class SellerMenu extends Menu implements Initializable {
         sellerRequestMenu.run();
     }
 
+    public void GoToMyFiles(ActionEvent actionEvent) {
+        System.out.println(sellerManager.getSoldFileProducts(person.getUsername()));
+    }
 }

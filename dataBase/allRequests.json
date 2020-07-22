@@ -6,13 +6,13 @@
       "typeOfRequest": "REGISTER_SELLER",
       "stateOfRequest": "ACCEPTED",
       "information": {
-        "number": "1",
+        "number": "22",
         "password": "s1",
         "role": "seller",
         "familyName": "s1",
         "name": "s1",
         "company": "s1",
-        "email": "s@s",
+        "email": "s1@s1",
         "username": "s1"
       }
     }
@@ -26,11 +26,11 @@
       "information": {
         "seller": "s1",
         "price": "10",
-        "name": "shoe1",
-        "explanation": "x",
-        "brand": "x",
-        "supply": "1",
-        "categoryName": "shoe"
+        "name": "cloth",
+        "explanation": "cloth",
+        "brand": "cloth",
+        "supply": "2",
+        "categoryName": "Clothing"
       }
     }
   },
@@ -43,11 +43,11 @@
       "information": {
         "seller": "s1",
         "price": "20",
-        "name": "cloth1",
-        "explanation": "x",
-        "brand": "x",
-        "supply": "1",
-        "categoryName": "cloth"
+        "name": "elec",
+        "explanation": "elec",
+        "brand": "elec",
+        "supply": "2",
+        "categoryName": "Electronics"
       }
     }
   },
@@ -55,31 +55,16 @@
     "@type": "model.Request",
     "@val": {
       "requestId": 4,
-      "typeOfRequest": "ADD_SALE",
-      "stateOfRequest": "PROCESSING",
-      "information": {
-        "amountOfSale": "20",
-        "seller": "s1",
-        "beginDate": "2020,12,01,01,01",
-        "endDate": "2020,12,01,02,01",
-        "offId": "1"
-      }
-    }
-  },
-  {
-    "@type": "model.Request",
-    "@val": {
-      "requestId": 5,
       "typeOfRequest": "ADD_PRODUCT",
       "stateOfRequest": "ACCEPTED",
       "information": {
         "seller": "s1",
-        "price": "30",
-        "name": "a.pdf",
-        "explanation": "pdf file",
-        "brand": "ebook",
-        "supply": "1",
-        "categoryName": "file"
+        "price": "15",
+        "name": "file",
+        "explanation": "file",
+        "brand": "file",
+        "supply": "2",
+        "categoryName": "File"
       }
     }
   }
