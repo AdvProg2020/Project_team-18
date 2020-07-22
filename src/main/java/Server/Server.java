@@ -583,6 +583,9 @@ public class Server {
                     auction.setCustomer(newCustomer);
                     break;
                 case TERMINATE:
+                    String name = (String) clientMessage.getParameters().get(0);
+                    manager.setPerson(storage.getUserByUsername(name));
+                    manager.getPerson().makeOffline();
                     manager.terminate();
                     break;
                 case CHARGE_WALLET:

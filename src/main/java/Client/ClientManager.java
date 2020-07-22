@@ -100,9 +100,15 @@ public class ClientManager {
         }
     }
 
-    public void terminate() {
-        ClientMessage clientMessage = new ClientMessage(MessageType.TERMINATE, null);
-        ServerMessage serverMessage = clientMessage.sendAndReceive();
+    public void terminate(String username) {
+        ArrayList<Object> params = new ArrayList<>();
+        if (username.equals("")) {
+            ClientMessage clientMessage = new ClientMessage(MessageType.TERMINATE, null);
+            ServerMessage serverMessage = clientMessage.sendAndReceive();
+        } else {
+            params.add(username);
+            ClientMessage clientMessage = new ClientMessage(MessageType.TERMINATE, params);
+            ServerMessage serverMessage = clientMessage.sendAndReceive();
+        }
     }
-
 }
