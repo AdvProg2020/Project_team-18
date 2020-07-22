@@ -64,12 +64,12 @@ public class PurchasingManager extends Manager {
 
     private void refineFileProducts() {
         for (Product product : cart.getProductsInCart().keySet()) {
-            if(product instanceof FileProduct){
-                System.out.println("*****65 purchasing manager\n"+product);
+            if(product.getCategory().getCategoryName().equalsIgnoreCase("File")){
                 FileProduct fileProduct = (FileProduct)product;
                 fileProduct.setFileState(FileState.READY_TO_DOWNLOAD);
                 ((Customer)person).addToFileProducts(fileProduct);
-                product.getSeller().addToFileProducts(fileProduct);
+                Seller seller = (Seller)getPersonByUsername(fileProduct.getSellerName());
+                seller.addToFileProducts(fileProduct);
             }
         }
     }
