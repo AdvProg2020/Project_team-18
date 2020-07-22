@@ -65,8 +65,16 @@ public class BankServer {
             allAccounts = new HashMap<>();
             validTokens = new HashMap<>();
             tokenPerAccount = new HashMap<>();
-            allAccountIds = new ArrayList<>();
-            allAccounts.put("shop","shop");
+            allAccountIds = new ArrayList<>();;
+            BankFileSavor bankFileSavor = new BankFileSavor(allAccounts,allAccountIds);
+            allAccountIds = bankFileSavor.readAllAccountIds();
+            allAccounts = bankFileSavor.readAllAccounts();
+            System.out.println(allAccounts.toString());
+            System.out.println(allAccountIds.toString());
+            if(!allAccounts.containsKey("shop")) {
+                allAccounts.put("shop", "shop");
+                allAccountIds.add(1);
+            }
         }
 
         private void handleClient() {
@@ -111,6 +119,10 @@ public class BankServer {
                         String[] inputs = input.split("\\s");
                         String token = inputs[1];
                         getBalanceByToken(token);
+                    } else if (input.equals("terminate")) {
+                        System.out.println(allAccounts.keySet().toString());
+                        BankFileSavor bankFileSavor = new BankFileSavor(this.allAccounts,this.allAccountIds);
+                        bankFileSavor.dataSavor();
                     } else if (input.startsWith("exit")) {
                         outputStream.writeUTF("Successfully Logged out!");
                         outputStream.flush();

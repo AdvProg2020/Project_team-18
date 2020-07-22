@@ -590,6 +590,12 @@ public class Server {
                         manager.terminate();
                         break;
                     } else {
+                        try {
+                            server.bankDataOutputStream.writeUTF("terminate");
+                            server.bankDataOutputStream.flush();
+                        } catch (IOException e) {
+                            System.out.println(e.getMessage());
+                        }
                         manager.setPerson(storage.getUserByUsername(name));
                         manager.getPerson().makeOffline();
                         manager.terminate();
