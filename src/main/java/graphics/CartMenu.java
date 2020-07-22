@@ -104,6 +104,8 @@ public class CartMenu extends Menu implements Initializable {
                     product.numberInCartProperty()
             );
         });
+        if (currentCart.getProductsInCart().isEmpty())
+            data.clear();
         tableView.setItems(data);
         totalPriceLabel.setText("Total Price OF Cart : " + customerManager.getCartTotalPrice());
     }

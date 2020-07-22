@@ -259,6 +259,50 @@ public class AdminMenu extends Menu implements Initializable {
         mainMenu.run();
     }
 
+    public void confirmCenterSettings () {
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Center Settings");
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        double money = manager.getShopAccountBalance();
+        Button wage = new Button("Set the center's wage");
+        wage.setOnAction(e -> setWage());
+        Button minBalance = new Button("Set the minimum amount in wallets");
+        minBalance.setOnAction(e -> setMinBalance());
+        String shopAccountBalance = Double.toString(money);
+        Label label = new Label("Shopping Center's money in account : " + shopAccountBalance);
+        HBox content = new HBox();
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setSpacing(10);
+        content.getChildren().addAll(label, wage,minBalance);
+        dialog.getDialogPane().setContent(content);
+        dialog.showAndWait();
+    }
+
+    private void setWage() {
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Set Wage");
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        TextField textField = new TextField();
+        Label label = new Label("Enter percentage of shop's wage");
+        HBox content = new HBox();
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setSpacing(10);
+        content.getChildren().addAll(label, textField);
+        dialog.getDialogPane().setContent(content);
+        dialog.showAndWait();
+        try {
+            manager.setWage(Integer.parseInt(textField.getText()));
+        } catch (Exception e) {
+            showError(e.getMessage(),20);
+        }
+    }
+
+    private void setMinBalance() {
+
+    }
+
     public void goToMainMenu() {
         MainMenu mainMenu = new MainMenu(this);
         mainMenu.run();

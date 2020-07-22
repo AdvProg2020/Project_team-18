@@ -339,7 +339,8 @@ public class Server {
                         String charge = "get_token " + customer.getWallet().getBankAccountUsername() + " " +
                                 customer.getWallet().getBankAccountPassword();
                         String token = getTokenFromBank(charge);
-                        moveToShopAccount(token,(0.1 * moneyToTransfer),customer.getWallet().getAccountId(),"payment with wallet");
+                        int wage = purchasingManager.getWage();
+                        moveToShopAccount(token,((double)(wage/100) * moneyToTransfer),customer.getWallet().getAccountId(),"payment with wallet");
                         purchasingManager.setPerson(thisPerson);
                         purchasingManager.setCart((Cart) clientMessage.getParameters().get(1));
                         Cart result = purchasingManager.performPayment(receiverInformation, totalPrice, percentage, discountUsed);
@@ -672,7 +673,22 @@ public class Server {
                 case GET_PAYED_FILE_PRODUCTS:
                     newCustomer = (Customer) storage.getUserByUsername((String) clientMessage.getParameters().get(0));
                     return new ServerMessage(MessageType.GET_PAYED_FILE_PRODUCTS,newCustomer.getPayedFileProducts());
+                case GET_SHOP_BALANCE:
 
+                    try {
+                        String charge = "get_token shop shop";
+                        String token = getTokenFromBank(charge);
+                        server.bankDataOutputStream.writeUTF("get_balance " + token);
+                        server.bankDataOutputStream.flush();
+                        String balanceToReturn = server.bankDataInputStream.readUTF();
+                        return new ServerMessage(MessageType.GET_SHOP_BALANCE,balanceToReturn);
+                    } catch (IOException e) {
+                        return new ServerMessage(MessageType.ERROR,e.getMessage());
+                    }
+                case SET_WAGE:
+                    int wagePercentage = (int) clientMessage.getParameters().get(0);
+                    purchasingManager.setWage(wagePercentage);
+                    break;
             }
             return null;
         }

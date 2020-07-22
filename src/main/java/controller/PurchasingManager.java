@@ -10,6 +10,7 @@ import java.util.HashMap;
 public class PurchasingManager extends Manager {
 
     private int buyLogCode = 0;
+    private int wage;
     private AdminManager adminManager = new AdminManager();
 
     public PurchasingManager() {
@@ -30,7 +31,8 @@ public class PurchasingManager extends Manager {
         addCustomerToProductsBuyers();
         for (Seller seller : findDistinctSellers(super.cart)) {
             double totalPricePerSeller = calculateEachSellerMoneyTransfer(sellerProductsInCart(super.cart, seller));
-            seller.addBalance(totalPricePerSeller * 0.9);
+            double w = (double) wage/100;
+            seller.addBalance(totalPricePerSeller * (1-w));
             createSellLog(seller, totalPricePerSeller, discountPercentage);
         }
         refineFileProducts();
@@ -52,7 +54,8 @@ public class PurchasingManager extends Manager {
         addCustomerToProductsBuyers();
         for (Seller seller : findDistinctSellers(super.cart)) {
             double totalPricePerSeller = calculateEachSellerMoneyTransfer(sellerProductsInCart(super.cart, seller));
-            seller.addBalance(totalPricePerSeller * 0.9);
+            double w = (double) wage/100;
+            seller.addBalance(totalPricePerSeller * (1 - w));
             createSellLog(seller, totalPricePerSeller, discountPercentage);
         }
         refineFileProducts();
@@ -167,6 +170,14 @@ public class PurchasingManager extends Manager {
                 return true;
         }
         return false;
+    }
+
+    public int getWage() {
+        return wage;
+    }
+
+    public void setWage(int wage) {
+        this.wage = wage;
     }
 }
 
