@@ -1,0 +1,14 @@
+[
+  {
+    "@type": "java.lang.Integer",
+    "@val": 1
+  },
+  {
+    "@type": "java.lang.Integer",
+    "@val": 2
+  },
+  {
+    "@type": "java.lang.Integer",
+    "@val": 3
+  }
+]

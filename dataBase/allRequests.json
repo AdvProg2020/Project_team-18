@@ -27,10 +27,10 @@
         "seller": "s1",
         "price": "10",
         "name": "cloth",
-        "explanation": "cloth",
+        "explanation": "hot",
         "brand": "cloth",
-        "supply": "2",
-        "categoryName": "Clothing"
+        "supply": "3",
+        "categoryName": "clothing"
       }
     }
   },
@@ -42,12 +42,12 @@
       "stateOfRequest": "ACCEPTED",
       "information": {
         "seller": "s1",
-        "price": "20",
+        "price": "30",
         "name": "elec",
-        "explanation": "elec",
-        "brand": "elec",
-        "supply": "2",
-        "categoryName": "Electronics"
+        "explanation": "laptop",
+        "brand": "mac",
+        "supply": "3",
+        "categoryName": "electronics"
       }
     }
   },
@@ -59,12 +59,12 @@
       "stateOfRequest": "ACCEPTED",
       "information": {
         "seller": "s1",
-        "price": "15",
+        "price": "20",
         "name": "file",
         "explanation": "file",
         "brand": "file",
-        "supply": "2",
-        "categoryName": "File"
+        "supply": "4",
+        "categoryName": "file"
       }
     }
   }

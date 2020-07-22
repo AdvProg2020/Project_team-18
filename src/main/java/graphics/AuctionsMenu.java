@@ -1,7 +1,6 @@
 package graphics;
 
 import Client.ClientAdminManager;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -9,8 +8,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.util.Callback;
 import model.*;
 
@@ -39,50 +36,20 @@ public class AuctionsMenu extends Menu implements Initializable {
     TableColumn<Auction, LocalDateTime> beginDate = new TableColumn<>();
     @FXML
     TableColumn<Auction, LocalDateTime> endDate = new TableColumn<>();
-//    @FXML
-//    TableColumn<Product, Image> statusColumn = new TableColumn<>();
     @FXML
     TableColumn<Auction, String> sellerColumn = new TableColumn<>();
     @FXML
     TableColumn<Auction, Void> buttonColumn = new TableColumn<>();
 
-    private void updateShownProducts(ArrayList<Auction> shownProducts) {
+    private void updateShownAuctions(ArrayList<Auction> shownProducts) {
         final ObservableList<Auction> data = FXCollections.observableArrayList(
                 shownProducts
         );
-//        for (Product product : shownProducts) {
-//            if (product.getSupply() == 0)
-//                product.setStatusImagePath("file:src/main/java/graphics/fxml/images/finished.jpg");
-//            else if (product.getSale() == null)
-//                product.setStatusImagePath("file:src/main/java/graphics/fxml/images/available.png");
-//            else
-//                product.setStatusImagePath("file:src/main/java/graphics/fxml/images/sale.jpg");
-//        }
         beginDate.setCellValueFactory(new PropertyValueFactory<>("beginDate"));
         endDate.setCellValueFactory(new PropertyValueFactory<>("endDate"));
         auctionId.setCellValueFactory(new PropertyValueFactory<>("auctionId"));
         latestPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
         productColumn.setCellValueFactory(new PropertyValueFactory<>("productName"));
-//        statusColumn.setCellFactory(param -> {
-//            //Set up the ImageView
-//            final ImageView imageview = new ImageView();
-//            imageview.setFitHeight(50);
-//            imageview.setFitWidth(50);
-//
-//
-//            //Set up the Table
-//            TableCell<Product, Image> cell = new TableCell<Product, Image>() {
-//                public void updateItem(Image item, boolean empty) {
-//                    if (item != null) {
-//                        imageview.setImage(item);
-//                    }
-//                }
-//            };
-//            // Attach the imageView to the cell
-//            cell.setGraphic(imageview);
-//            return cell;
-//        });
-        //statusColumn.setCellValueFactory(new PropertyValueFactory<>("statusImage"));
         sellerColumn.setCellValueFactory(new PropertyValueFactory<>("sellerName"));
         addButtonToTable(this);
         auctionsTable.setItems(data);
@@ -126,7 +93,7 @@ public class AuctionsMenu extends Menu implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
-            updateShownProducts(clientAdminManager.viewAllAuctions());
+            updateShownAuctions(clientAdminManager.viewAllAuctions());
         } catch (Exception e) {
             showError(e.getMessage(), 20);
         }

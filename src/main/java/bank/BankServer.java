@@ -35,6 +35,7 @@ public class BankServer {
                         DataInputStream inputStream = new DataInputStream(clientSocket.getInputStream());
                         new ClientHandler(outputStream, inputStream , clientSocket , shop).start();
                     } catch (Exception e) {
+                        System.out.println(e.getMessage());
                         System.err.println("Error in accepting client!");
                         break;
                     }
@@ -66,7 +67,16 @@ public class BankServer {
             validTokens = new HashMap<>();
             tokenPerAccount = new HashMap<>();
             allAccountIds = new ArrayList<>();
-            allAccounts.put("shop","shop");
+            BankFileSavor bankFileSavor = new BankFileSavor(allAccounts,allAccountIds);
+            if (bankFileSavor.readAllAccountIds() != null ) {
+                allAccountIds = bankFileSavor.readAllAccountIds();
+                allAccounts = bankFileSavor.readAllAccounts();
+            } else {
+                allAccounts.put("shop", "shop");
+                allAccountIds.add(1);
+            }
+            System.out.println(allAccountIds.toString());
+            System.out.println(allAccounts.toString());
         }
 
         private void handleClient() {
@@ -111,6 +121,10 @@ public class BankServer {
                         String[] inputs = input.split("\\s");
                         String token = inputs[1];
                         getBalanceByToken(token);
+                    } else if (input.equals("terminate")) {
+                        System.out.println(allAccounts.keySet().toString());
+                        BankFileSavor bankFileSavor = new BankFileSavor(this.allAccounts,this.allAccountIds);
+                        bankFileSavor.dataSavor();
                     } else if (input.startsWith("exit")) {
                         outputStream.writeUTF("Successfully Logged out!");
                         outputStream.flush();
@@ -305,7 +319,7 @@ public class BankServer {
 
         private void performPayment(String receiptId) {
             Receipt receipt = new Receipt(null,null,null,null,null,null);
-            BankAccount bankAccount = new BankAccount(null,null,null,null);
+            BankAccount bankAccount = new BankAccount("temp","temp","temp","temp");
             Receipt toBePaid = receipt.getReceiptById(Integer.parseInt(receiptId));
                 try {
                     if (toBePaid == null) {
@@ -394,7 +408,7 @@ public class BankServer {
 
         private void getBalanceByToken(String token) {
             String username = tokenPerAccount.get(token);
-            BankAccount temp = new BankAccount(null,null,null,null);
+            BankAccount temp = new BankAccount("temp","temp","temp","temp");
             String balance = Double.toString(temp.getValueByUsername(username));
             try {
                 outputStream.writeUTF(balance);
@@ -419,7 +433,7 @@ public class BankServer {
                 System.out.println(ex.getMessage());
             }
             String username = tokenPerAccount.get(token);
-            BankAccount temp = new BankAccount(null,null,null,null);
+            BankAccount temp = new BankAccount("temp","temp","temp","temp");
             Receipt receipt = new Receipt(null,null,null,null,null,null);
             BankAccount account = temp.getAccountByUsername(username);
             try {

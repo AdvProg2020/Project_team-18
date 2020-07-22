@@ -341,7 +341,7 @@ public class Server {
                                 customer.getWallet().getBankAccountPassword();
                         String token = getTokenFromBank(charge);
                         int wage = purchasingManager.getWage();
-                        moveToShopAccount(token,((double)(wage/100) * moneyToTransfer),customer.getWallet().getAccountId(),"payment with wallet");
+                        moveToShopAccount(token,(((double) wage/100) * moneyToTransfer),customer.getWallet().getAccountId(),"payment with wallet");
                         purchasingManager.setPerson(thisPerson);
                         purchasingManager.setCart((Cart) clientMessage.getParameters().get(1));
                         Cart result = purchasingManager.performPayment(receiverInformation, totalPrice, percentage, discountUsed);
@@ -584,7 +584,28 @@ public class Server {
                     auction.setPrice(newPrice);
                     auction.setCustomer(newCustomer);
                     break;
+                case SEND_MESSAGE_FROM_CUSTOMER:
+                    Supporter supporter = (Supporter) storage.getUserByUsername((String) clientMessage.getParameters().get(1));
+                    Customer customer1 = (Customer) storage.getUserByUsername((String) clientMessage.getParameters().get(0));
+                    supporter.addToInBox((String) clientMessage.getParameters().get(0), (String) clientMessage.getParameters().get(2));
+                    System.out.println(supporter.getInbox().get(0));
+                    customer1.addToCombinedMessages(supporter.getUsername()
+                            , ("Sent -> " + (String) clientMessage.getParameters().get(3) + "Received -> " + ""));
+                    break;
+                case SENT_MESSAGE_FROM_SUPPORTER:
+                    Customer customer2 = (Customer) storage.getUserByUsername((String) clientMessage.getParameters().get(1));
+                    Supporter supporter1 = (Supporter) storage.getUserByUsername((String) clientMessage.getParameters().get(0));
+                    supporter1.addToInBox((String) clientMessage.getParameters().get(0), (String) clientMessage.getParameters().get(2));
+                    customer2.addMessage(supporter1.getUsername(), (String) clientMessage.getParameters().get(2));
+                case VIEW_ONLINE_SUPPORTERS:
+                    return new ServerMessage(MessageType.VIEW_ONLINE_SUPPORTERS, adminManager.viewOnlineSupporters());
                 case TERMINATE:
+                    try {
+                        server.bankDataOutputStream.writeUTF("terminate");
+                        server.bankDataOutputStream.flush();
+                    } catch (IOException e) {
+                        System.out.println(e.getMessage());
+                    }
                     String name = (String) clientMessage.getParameters().get(0);
                     if (name.equals("no user!")){
                         manager.terminate();

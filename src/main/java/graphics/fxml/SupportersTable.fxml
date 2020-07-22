@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphics.SupportersTable">
+    <stylesheets>
+        <URL value="@cssSheets/BasicStyle.css" />
+    </stylesheets>
+    <stylesheets>
+        <URL value="@cssSheets/BackGround.css" />
+    </stylesheets>
+    <children>
+      <TableView fx:id="supportersTable" layoutX="88.0" layoutY="43.0" prefHeight="334.0" prefWidth="462.0">
+        <columns>
+          <TableColumn fx:id="usernameColumn" prefWidth="155.99996948242188" text="Supporter Username" />
+            <TableColumn fx:id="availabilityColumn" prefWidth="152.80006408691406" text="Availability" />
+          <TableColumn fx:id="buttonColumn" prefWidth="152.79998779296875" text="Go To ChatRoom" />
+        </columns>
+      </TableView>
+      <Label alignment="CENTER" layoutX="197.0" layoutY="7.0" prefHeight="39.0" prefWidth="202.0" text="Online Supporters">
+         <font>
+            <Font name="Andalus" size="24.0" />
+         </font>
+      </Label>
+      <Button layoutX="5.0" layoutY="4.0" mnemonicParsing="false" onAction="#back" text="back" />
+   </children>
+</AnchorPane>

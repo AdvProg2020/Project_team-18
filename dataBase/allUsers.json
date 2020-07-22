@@ -11,7 +11,8 @@
       "email": "a1@a1",
       "number": "22",
       "balance": 0.0,
-      "role": "ADMIN"
+      "role": "ADMIN",
+      "availability": "OFFLINE"
     }
   },
   {
@@ -28,6 +29,10 @@
         "accountId": 2
       },
       "payedFileProducts": [],
+      "supportersSender": [],
+      "inbox": [],
+      "sentMessages": [],
+      "combinedMessages": [],
       "id": 2,
       "username": "c1",
       "password": "c1",
@@ -36,7 +41,8 @@
       "email": "c1@c1",
       "number": "22",
       "balance": 50.0,
-      "role": "CUSTOMER"
+      "role": "CUSTOMER",
+      "availability": "OFFLINE"
     }
   },
   {
@@ -53,19 +59,19 @@
           "price": 10.0,
           "numberInCart": 0,
           "seller": "@root.2",
-          "supply": 2,
+          "supply": 3,
           "category": {
             "id": 0,
-            "categoryName": "Clothing",
+            "categoryName": "clothing",
             "imagePath": "file:src/main/java/graphics/fxml/images/clothing.jpg",
             "thisCategoryProducts": [
               "@root.2.productsToSell.0"
             ],
             "properties": {}
           },
-          "categoryName": "Clothing",
+          "categoryName": "clothing",
           "sellerName": "s1",
-          "explanation": "cloth",
+          "explanation": "hot",
           "averageRate": 0.0,
           "comments": [],
           "rates": [],
@@ -77,23 +83,23 @@
           "imagePath": "file:src/main/java/graphics/fxml/images/electronics.jpg",
           "productId": 2,
           "name": "elec",
-          "brand": "elec",
-          "price": 20.0,
+          "brand": "mac",
+          "price": 30.0,
           "numberInCart": 0,
           "seller": "@root.2",
-          "supply": 2,
+          "supply": 3,
           "category": {
             "id": 0,
-            "categoryName": "Electronics",
+            "categoryName": "electronics",
             "imagePath": "file:src/main/java/graphics/fxml/images/electronics.jpg",
             "thisCategoryProducts": [
               "@root.2.productsToSell.1"
             ],
             "properties": {}
           },
-          "categoryName": "Electronics",
+          "categoryName": "electronics",
           "sellerName": "s1",
-          "explanation": "elec",
+          "explanation": "laptop",
           "averageRate": 0.0,
           "comments": [],
           "rates": [],
@@ -102,32 +108,35 @@
           "numberOfSeen": 0
         },
         {
-          "imagePath": "file:src/main/java/graphics/fxml/images/FileIcon.png",
-          "productId": 3,
-          "name": "file",
-          "brand": "file",
-          "price": 15.0,
-          "numberInCart": 0,
-          "seller": "@root.2",
-          "supply": 2,
-          "category": {
-            "id": 0,
-            "categoryName": "File",
+          "@type": "model.FileProduct",
+          "@val": {
             "imagePath": "file:src/main/java/graphics/fxml/images/FileIcon.png",
-            "thisCategoryProducts": [
-              "@root.2.productsToSell.2"
-            ],
-            "properties": {}
-          },
-          "categoryName": "File",
-          "sellerName": "s1",
-          "explanation": "file",
-          "averageRate": 0.0,
-          "comments": [],
-          "rates": [],
-          "thisProductsBuyers": [],
-          "salePercent": 0.0,
-          "numberOfSeen": 0
+            "productId": 3,
+            "name": "file",
+            "brand": "file",
+            "price": 20.0,
+            "numberInCart": 0,
+            "seller": "@root.2",
+            "supply": 4,
+            "category": {
+              "id": 0,
+              "categoryName": "file",
+              "imagePath": "file:src/main/java/graphics/fxml/images/FileIcon.png",
+              "thisCategoryProducts": [
+                "@root.2.productsToSell.2"
+              ],
+              "properties": {}
+            },
+            "categoryName": "file",
+            "sellerName": "s1",
+            "explanation": "file",
+            "averageRate": 0.0,
+            "comments": [],
+            "rates": [],
+            "thisProductsBuyers": [],
+            "salePercent": 0.0,
+            "numberOfSeen": 0
+          }
         }
       ],
       "saleList": [],
@@ -148,7 +157,8 @@
       "email": "s1@s1",
       "number": "22",
       "balance": 50.0,
-      "role": "SELLER"
+      "role": "SELLER",
+      "availability": "OFFLINE"
     }
   }
 ]

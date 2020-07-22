@@ -228,4 +228,9 @@ public class SupporterMenu extends Menu implements Initializable {
         MainMenu mainMenu = new MainMenu(this);
         mainMenu.run();
     }
+
+    public void getToMyChatRoom(){
+        MyChatRoom chatRoom = new MyChatRoom(this);
+        chatRoom.run();
+    }
 }

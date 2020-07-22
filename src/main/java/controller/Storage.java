@@ -297,4 +297,14 @@ public class Storage {
     public void deleteCategory(Category category) {
         allCategories.remove(category);
     }
+
+    public ArrayList<Supporter> viewOnlineSupporters(){
+        ArrayList<Supporter> onlineSupporters = new ArrayList<>();
+        for (Person supporter : allSupporters) {
+            if (supporter.getAvailability() == Availability.ONLINE){
+                onlineSupporters.add((Supporter) supporter);
+            }
+        }
+        return onlineSupporters;
+    }
 }

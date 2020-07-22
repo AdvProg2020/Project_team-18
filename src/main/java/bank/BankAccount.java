@@ -22,9 +22,14 @@ public class BankAccount {
         this.lastName = lastName;
         this.userName = userName;
         this.passWord = passWord;
-        value = 50.0;
+        if (userName.equals("shop"))
+            value = 0.0;
+        else {
+            value = 50.0;
+            allAccounts.get(0).setValue(allAccounts.get(0).getValue() + 50);
+        }
         this.accountId = idSetter();
-        if(firstName != null)
+        if(!firstName.equals("temp"))
             allAccounts.add(this);
         withdrawalTransactions = new ArrayList<>();
         depositTransactions = new ArrayList<>();
