@@ -17,7 +17,7 @@
             "imagePath": "file:src/main/java/graphics/fxml/images/electronics.jpg",
             "productId": 2,
             "name": "elec",
-            "brand": "apple",
+            "brand": "mac",
             "price": 30.0,
             "numberInCart": 0,
             "seller": "@root.0.seller",
@@ -33,7 +33,7 @@
             },
             "categoryName": "electronics",
             "sellerName": "s1",
-            "explanation": "mac",
+            "explanation": "laptop",
             "averageRate": 0.0,
             "comments": [],
             "rates": [],
@@ -51,7 +51,7 @@
               "price": 20.0,
               "numberInCart": 0,
               "seller": "@root.0.seller",
-              "supply": 5,
+              "supply": 4,
               "category": {
                 "id": 0,
                 "categoryName": "file",
@@ -94,7 +94,7 @@
         "role": "SELLER",
         "availability": "OFFLINE"
       },
-      "supply": 4,
+      "supply": 3,
       "category": {
         "id": 0,
         "categoryName": "clothing",

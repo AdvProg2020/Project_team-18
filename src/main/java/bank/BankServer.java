@@ -319,7 +319,7 @@ public class BankServer {
 
         private void performPayment(String receiptId) {
             Receipt receipt = new Receipt(null,null,null,null,null,null);
-            BankAccount bankAccount = new BankAccount(null,null,null,null);
+            BankAccount bankAccount = new BankAccount("temp","temp","temp","temp");
             Receipt toBePaid = receipt.getReceiptById(Integer.parseInt(receiptId));
                 try {
                     if (toBePaid == null) {
@@ -408,7 +408,7 @@ public class BankServer {
 
         private void getBalanceByToken(String token) {
             String username = tokenPerAccount.get(token);
-            BankAccount temp = new BankAccount(null,null,null,null);
+            BankAccount temp = new BankAccount("temp","temp","temp","temp");
             String balance = Double.toString(temp.getValueByUsername(username));
             try {
                 outputStream.writeUTF(balance);
@@ -433,7 +433,7 @@ public class BankServer {
                 System.out.println(ex.getMessage());
             }
             String username = tokenPerAccount.get(token);
-            BankAccount temp = new BankAccount(null,null,null,null);
+            BankAccount temp = new BankAccount("temp","temp","temp","temp");
             Receipt receipt = new Receipt(null,null,null,null,null,null);
             BankAccount account = temp.getAccountByUsername(username);
             try {

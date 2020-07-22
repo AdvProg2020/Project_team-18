@@ -341,7 +341,7 @@ public class Server {
                                 customer.getWallet().getBankAccountPassword();
                         String token = getTokenFromBank(charge);
                         int wage = purchasingManager.getWage();
-                        moveToShopAccount(token,((double)(wage/100) * moneyToTransfer),customer.getWallet().getAccountId(),"payment with wallet");
+                        moveToShopAccount(token,(((double) wage/100) * moneyToTransfer),customer.getWallet().getAccountId(),"payment with wallet");
                         purchasingManager.setPerson(thisPerson);
                         purchasingManager.setCart((Cart) clientMessage.getParameters().get(1));
                         Cart result = purchasingManager.performPayment(receiverInformation, totalPrice, percentage, discountUsed);

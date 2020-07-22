@@ -29,7 +29,7 @@
         "name": "cloth",
         "explanation": "hot",
         "brand": "cloth",
-        "supply": "4",
+        "supply": "3",
         "categoryName": "clothing"
       }
     }
@@ -44,8 +44,8 @@
         "seller": "s1",
         "price": "30",
         "name": "elec",
-        "explanation": "mac",
-        "brand": "apple",
+        "explanation": "laptop",
+        "brand": "mac",
         "supply": "3",
         "categoryName": "electronics"
       }
@@ -63,7 +63,7 @@
         "name": "file",
         "explanation": "file",
         "brand": "file",
-        "supply": "5",
+        "supply": "4",
         "categoryName": "file"
       }
     }
