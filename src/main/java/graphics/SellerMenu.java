@@ -689,6 +689,7 @@ public class SellerMenu extends Menu implements Initializable {
     public void logout(ActionEvent actionEvent) {
         ClientView.setToken(null);
         MainMenu mainMenu = new MainMenu(null);
+        person.makeOffline();
         person = null;
         mainMenu.run();
     }

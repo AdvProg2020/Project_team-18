@@ -1,4 +1,5 @@
 package graphics;
+
 import Client.ClientManager;
 import Server.ClientView;
 import controller.Manager;
@@ -26,7 +27,7 @@ public abstract class Menu {
     private Menu previousMenu;
     protected String fxmlPath;
 
-    public Menu(Menu previousMenu,String fxmlPath) {
+    public Menu(Menu previousMenu, String fxmlPath) {
         this.previousMenu = previousMenu;
         this.fxmlPath = fxmlPath;
     }
@@ -55,7 +56,7 @@ public abstract class Menu {
         Menu.currentCart = currentCart;
     }
 
-    public void showError(String message, double height){
+    public void showError(String message, double height) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setContentText(message);
@@ -63,7 +64,8 @@ public abstract class Menu {
         alert.setHeight(height);
         alert.show();
     }
-    public void back(){
+
+    public void back() {
         this.getPreviousMenu().run();
     }
 
@@ -75,7 +77,8 @@ public abstract class Menu {
         mediaPlayer = new MediaPlayer(media);
         mediaPlayer.play();*/
     }
-    public void run(){
+
+    public void run() {
         FXMLLoader loader = null;
         try {
             loader = new FXMLLoader(new File(fxmlPath).toURI().toURL());
@@ -85,16 +88,15 @@ public abstract class Menu {
         try {
             loader.setControllerFactory(c -> this);
             root = loader.load();
-            if(fxmlPath.equals("src/main/java/graphics/fxml/AllProductsMenu.fxml")){
+            if (fxmlPath.equals("src/main/java/graphics/fxml/AllProductsMenu.fxml")) {
                 stage.setScene(new Scene(root, 900, 600));
-            }else if (fxmlPath.equals("src/main/java/graphics/fxml/AllOffsMenu.fxml")){
+            } else if (fxmlPath.equals("src/main/java/graphics/fxml/AllOffsMenu.fxml")) {
                 stage.setScene(new Scene(root, 1035, 600));
-            }else if (fxmlPath.equals("src/main/java/graphics/fxml/AdminManageCodesMenu.fxml")){
+            } else if (fxmlPath.equals("src/main/java/graphics/fxml/AdminManageCodesMenu.fxml")) {
                 stage.setScene(new Scene(root, 700, 600));
-            } else if (fxmlPath.equals("src/main/java/graphics/fxml/AdminManageUsersMenu.fxml")){
-                stage.setScene(new Scene(root, 910, 600));
-            }
-            else {
+            } else if (fxmlPath.equals("src/main/java/graphics/fxml/AdminManageUsersMenu.fxml")) {
+                stage.setScene(new Scene(root, 1000, 600));
+            } else {
                 stage.setScene(new Scene(root, 600, 600));
             }
         } catch (IOException e) {

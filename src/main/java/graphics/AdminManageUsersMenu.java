@@ -35,7 +35,7 @@ public class AdminManageUsersMenu extends Menu implements Initializable {
     @FXML TableColumn<Person, String> numberColumn = new TableColumn<>();
     @FXML TableColumn<Person, Double> balanceColumn = new TableColumn<>();
     @FXML TableColumn<Person, Void> buttonColumn = new TableColumn<>();
-
+    @FXML TableColumn<Person, String> availabilityColumn = new TableColumn<>();
     public AdminManageUsersMenu(Menu previousMenu) {
         super(previousMenu, "src/main/java/graphics/fxml/AdminManageUsersMenu.fxml");
     }
@@ -51,6 +51,7 @@ public class AdminManageUsersMenu extends Menu implements Initializable {
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         numberColumn.setCellValueFactory(new PropertyValueFactory<>("number"));
         balanceColumn.setCellValueFactory(new PropertyValueFactory<>("balance"));
+        availabilityColumn.setCellValueFactory(new PropertyValueFactory<>("availability"));
         addButtonToTable(this);
         userTable.setItems(data);
     }

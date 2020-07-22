@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="895.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphics.AdminManageUsersMenu">
+<AnchorPane prefHeight="600.0" prefWidth="977.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphics.AdminManageUsersMenu">
     <stylesheets>
         <URL value="@cssSheets/BasicStyle.css" />
     </stylesheets>
@@ -16,7 +16,7 @@
     </stylesheets>
     <children>
         <Button layoutX="6.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" onMousePressed="#buttonSound" text="back" />
-        <TableView fx:id="userTable" layoutX="66.0" prefHeight="524.0" prefWidth="829.0">
+        <TableView fx:id="userTable" layoutX="57.0" prefHeight="524.0" prefWidth="915.0">
             <columns>
                 <TableColumn fx:id="userNameColumn" prefWidth="97.00001525878906" text="UserName" />
                 <TableColumn fx:id="roleColumn" prefWidth="82.99996948242188" text="Role" />
@@ -26,9 +26,10 @@
                 <TableColumn fx:id="numberColumn" prefWidth="123.0" text="Number" />
                 <TableColumn fx:id="balanceColumn" prefWidth="96.79998779296875" text="Balance" />
                 <TableColumn fx:id="buttonColumn" prefWidth="98.39996337890625" text="View more" />
+            <TableColumn fx:id="availabilityColumn" prefWidth="75.0" text="Availability" />
             </columns>
         </TableView>
         <Button layoutX="205.0" layoutY="524.0" mnemonicParsing="false" onAction="#removeUser" onMousePressed="#buttonSound" prefHeight="46.0" prefWidth="174.0" text="Remove User" />
-        <Button layoutX="635.0" layoutY="524.0" mnemonicParsing="false" onAction="#createManagerAccount" onMousePressed="#buttonSound" prefHeight="45.0" prefWidth="195.0" text="Create Manager Profile" />
+        <Button layoutX="635.0" layoutY="524.0" mnemonicParsing="false" onAction="#createManagerAccount" onMousePressed="#buttonSound" prefHeight="46.0" prefWidth="248.0" text="Create Manager/Supporter Profile" />
     </children>
 </AnchorPane>
