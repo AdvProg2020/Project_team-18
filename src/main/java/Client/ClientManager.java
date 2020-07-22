@@ -111,4 +111,30 @@ public class ClientManager {
             ServerMessage serverMessage = clientMessage.sendAndReceive();
         }
     }
+
+    public double getShopAccountBalance() {
+        ClientMessage clientMessage = new ClientMessage(MessageType.GET_SHOP_BALANCE, null);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        return Double.parseDouble((String) serverMessage.getResult());
+    }
+
+    public void setWage(int percentage) throws Exception{
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(percentage);
+        ClientMessage clientMessage = new ClientMessage(MessageType.SET_WAGE, params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage != null && serverMessage.getMessageType() == MessageType.ERROR) {
+            throw (Exception) serverMessage.getResult();
+        }
+    }
+
+    public void setMinBalance (double min) throws Exception{
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(min);
+        ClientMessage clientMessage = new ClientMessage(MessageType.SET_MIN_BALANCE, params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage != null && serverMessage.getMessageType() == MessageType.ERROR) {
+            throw (Exception) serverMessage.getResult();
+        }
+    }
 }

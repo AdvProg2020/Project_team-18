@@ -35,7 +35,7 @@
             <Button mnemonicParsing="false" onAction="#goToManageBuyLogs" prefHeight="35.0" prefWidth="171.0" text="Manage BuyLogs" />
                 <Button layoutX="10.0" layoutY="143.0" mnemonicParsing="false" onAction="#goToManageCategoryMenu" onMousePressed="#buttonSound" prefHeight="35.0" prefWidth="173.0" text="Manage Categories" />
                 <Button mnemonicParsing="false" onAction="#goToMainMenu" prefHeight="31.0" prefWidth="171.0" text="Go To Main Menu" />
-                <Button layoutX="10.0" layoutY="174.0" mnemonicParsing="false" onMousePressed="#buttonSound" prefHeight="35.0" prefWidth="171.0" text="Center's Settings" />
+                <Button layoutX="10.0" layoutY="174.0" mnemonicParsing="false" onAction="#confirmCenterSettings" onMousePressed="#buttonSound" prefHeight="35.0" prefWidth="171.0" text="Center's Settings" />
                 <Button layoutX="10.0" layoutY="226.0" mnemonicParsing="false" onAction="#logout" onMousePressed="#buttonSound" prefHeight="35.0" prefWidth="171.0" text="logout" />
             </children>
         </VBox>
