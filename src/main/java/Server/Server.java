@@ -120,10 +120,17 @@ public class Server {
                     try {
                         ServerMessage serverMessage = new ServerMessage(MessageType.LOGIN, manager.login(username, password));
                         serverMessage.setToken(new Token(0));
+                        manager.setPerson(storage.getUserByUsername(username));
+                        manager.getPerson().makeOnline();
                         return serverMessage;
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
+                case LOGOUT:
+                    String user = (String) clientMessage.getParameters().get(0);
+                    manager.setPerson(storage.getUserByUsername(user));
+                    manager.getPerson().makeOffline();
+                    break;
                 case SELLER_ADD_BALANCE:
                     double amount = (double) clientMessage.getParameters().get(0);
                     try {
