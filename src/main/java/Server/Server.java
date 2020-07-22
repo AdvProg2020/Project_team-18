@@ -585,10 +585,15 @@ public class Server {
                     break;
                 case TERMINATE:
                     String name = (String) clientMessage.getParameters().get(0);
-                    manager.setPerson(storage.getUserByUsername(name));
-                    manager.getPerson().makeOffline();
-                    manager.terminate();
-                    break;
+                    if (name.equals("no user!")){
+                        manager.terminate();
+                        break;
+                    } else {
+                        manager.setPerson(storage.getUserByUsername(name));
+                        manager.getPerson().makeOffline();
+                        manager.terminate();
+                        break;
+                    }
                 case CHARGE_WALLET:
                     Person person = storage.getUserByUsername((String) clientMessage.getParameters().get(1));
                     if (person instanceof Customer) {

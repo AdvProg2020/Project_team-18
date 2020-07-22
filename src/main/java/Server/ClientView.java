@@ -52,7 +52,7 @@ public class ClientView extends Application {
     public void start(Stage stage) {
         mainStage = stage;
         try {
-            socket = new Socket("localhost",9090);
+            socket = new Socket("localhost", 9090);
             inputStream = socket.getInputStream();
             outputStream = socket.getOutputStream();
             ClientMessage.scanner = new Scanner(inputStream);
@@ -60,19 +60,19 @@ public class ClientView extends Application {
             e.printStackTrace();
         }
         MainMenu mainMenu = new MainMenu(null);
-        if (Menu.getPerson() != null) {
-            String username = Menu.getPerson().getUsername();
-        }
+
         stage.setTitle("TEAM-18");
-        //commented temporarily!
-     /*  stage.setOnCloseRequest(event -> {
-           ClientManager clientManager = new ClientManager();
-           if (Menu.getPerson() != null) {
-           clientManager.terminate(username);
-        }
-           clientManager.terminate("");
-        });*/
         mainMenu.run();
         stage.show();
+        //commented temporarily!
+        /*stage.setOnCloseRequest(event -> {
+            ClientManager clientManager = new ClientManager();
+            if (Menu.getPerson() != null) {
+                System.out.println(Menu.getPerson().getUsername());
+                clientManager.terminate(Menu.getPerson().getUsername());
+            } else {
+                clientManager.terminate("");
+            }
+        });*/
     }
 }
