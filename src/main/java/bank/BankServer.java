@@ -318,7 +318,7 @@ public class BankServer {
         }
 
         private void performPayment(String receiptId) {
-            Receipt receipt = new Receipt(null,null,null,null,null,null);
+            Receipt receipt = new Receipt("temp","temp","temp","temp","temp","temp");
             BankAccount bankAccount = new BankAccount("temp","temp","temp","temp");
             Receipt toBePaid = receipt.getReceiptById(Integer.parseInt(receiptId));
                 try {
@@ -334,6 +334,7 @@ public class BankServer {
                 } catch (IOException ex) {
                     System.out.println(ex.getMessage());
                 }
+            assert toBePaid != null;
             if (toBePaid.getReceiptType().equals("deposit"))
                 performDepositPayment(toBePaid,bankAccount);
             else if (toBePaid.getReceiptType().equals("withdraw"))
@@ -384,6 +385,11 @@ public class BankServer {
             int src = Integer.parseInt(receipt.getSourceAccountID());
             BankAccount destination = bankAccount.getAccountById(dest);
             BankAccount source = bankAccount.getAccountById(src);
+            System.out.println("here");
+            System.out.println(source.getValue());
+            System.out.println("jh");
+            System.out.println(Double.parseDouble(receipt.getMoney()));
+            System.out.println("lji");
             if (source.getValue() > Double.parseDouble(receipt.getMoney())) {
                 source.setValue(source.getValue() - Double.parseDouble(receipt.getMoney()));
                 destination.setValue(destination.getValue() + Double.parseDouble(receipt.getMoney()));
@@ -434,7 +440,7 @@ public class BankServer {
             }
             String username = tokenPerAccount.get(token);
             BankAccount temp = new BankAccount("temp","temp","temp","temp");
-            Receipt receipt = new Receipt(null,null,null,null,null,null);
+            Receipt receipt = new Receipt("temp","temp","temp","temp","temp","temp");
             BankAccount account = temp.getAccountByUsername(username);
             try {
                 if (type.equals("+")) {

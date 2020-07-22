@@ -54,6 +54,7 @@ public class BankAccount {
 
     public BankAccount getAccountById(int id){
         for (BankAccount account : allAccounts) {
+            System.out.println(account.getUserName());
             if(account.getAccountId() == id)
                 return account;
         }
