@@ -127,4 +127,14 @@ public class ClientManager {
             throw (Exception) serverMessage.getResult();
         }
     }
+
+    public void setMinBalance (double min) throws Exception{
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(min);
+        ClientMessage clientMessage = new ClientMessage(MessageType.SET_MIN_BALANCE, params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage != null && serverMessage.getMessageType() == MessageType.ERROR) {
+            throw (Exception) serverMessage.getResult();
+        }
+    }
 }

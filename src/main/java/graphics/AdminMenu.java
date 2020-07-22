@@ -300,7 +300,23 @@ public class AdminMenu extends Menu implements Initializable {
     }
 
     private void setMinBalance() {
-
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Set Minimum Balance");
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        TextField textField = new TextField();
+        Label label = new Label("Enter minimum balance that must be in wallets.");
+        HBox content = new HBox();
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setSpacing(10);
+        content.getChildren().addAll(label, textField);
+        dialog.getDialogPane().setContent(content);
+        dialog.showAndWait();
+        try {
+            manager.setMinBalance(Double.parseDouble(textField.getText()));
+        } catch (Exception e) {
+            showError(e.getMessage(),20);
+        }
     }
 
     public void goToMainMenu() {
