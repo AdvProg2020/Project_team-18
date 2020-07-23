@@ -25,4 +25,8 @@ public class Supporter extends Person {
     public ArrayList<String> getInbox() {
         return this.inbox;
     }
+
+    public ArrayList<String> getSenders(){
+        return senders;
+    }
 }

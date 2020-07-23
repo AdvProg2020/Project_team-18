@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import java.net.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="graphics.MyChatRoom"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphics.MyChatRoom">
+   <stylesheets>
+      <URL value="@cssSheets/BasicStyle.css" />
+   </stylesheets>
+   <stylesheets>
+      <URL value="@cssSheets/BackGround.css" />
+   </stylesheets>
+   <children>
+      <Label layoutX="14.0" layoutY="316.0" prefHeight="24.0" prefWidth="37.0" text="To :" />
+      <TextArea fx:id="chatBox" layoutX="5.0" layoutY="31.0" prefHeight="276.0" prefWidth="591.0" />
+      <TextField fx:id="receiverName" layoutX="85.0" layoutY="312.0" prefHeight="39.0" prefWidth="246.0" />
+      <TextField fx:id="messageField" layoutX="84.0" layoutY="357.0" prefHeight="39.0" prefWidth="513.0" />
+      <Label layoutX="14.0" layoutY="361.0" prefHeight="24.0" prefWidth="72.0" text="Message :" />
+      <Button layoutX="346.0" layoutY="313.0" mnemonicParsing="false" onAction="#sendMessage" prefHeight="39.0" prefWidth="58.0" text="Send" />
+      <Button layoutX="415.0" layoutY="313.0" mnemonicParsing="false" onAction="#back" prefHeight="39.0" prefWidth="58.0" text="Back" />
+      <Label layoutX="15.0" layoutY="4.0" prefHeight="24.0" prefWidth="133.0" text="ChatRoom For User " />
+      <Label fx:id="supporterName" layoutX="150.0" layoutY="4.0" prefHeight="24.0" prefWidth="160.0" />
+   </children>
 </AnchorPane>

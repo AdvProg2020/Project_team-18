@@ -83,7 +83,7 @@ public class Server {
                 while (true) {
                     Scanner scanner = new Scanner(inputStream);
                     clientMessage = yaGson.fromJson(scanner.nextLine(), ClientMessage.class);
-                    if (clientMessage.getToken()!= null) {
+                    if (clientMessage.getToken() != null) {
                         try {
                             String token = clientMessage.getToken().getJWS();
                             Token.readJWS(token);
@@ -91,10 +91,10 @@ public class Server {
                             if (e instanceof io.jsonwebtoken.ExpiredJwtException) {
                                 System.out.println("expired token!");
                                 Formatter formatter = new Formatter(outputStream);
-                                formatter.format(yaGson.toJson(new ServerMessage(MessageType.ERROR,new Exception("expired token!"))) + "\n");
+                                formatter.format(yaGson.toJson(new ServerMessage(MessageType.ERROR, new Exception("expired token!"))) + "\n");
                                 formatter.flush();
                                 continue;
-                            }else{
+                            } else {
                                 break;
                             }
                         }
@@ -136,7 +136,7 @@ public class Server {
                     try {
                         sellerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(1)));
                         sellerManager.addBalance(amount);
-                        return new ServerMessage(MessageType.SELLER_ADD_BALANCE,sellerManager.getPerson());
+                        return new ServerMessage(MessageType.SELLER_ADD_BALANCE, sellerManager.getPerson());
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
@@ -245,7 +245,7 @@ public class Server {
                     Double money = (Double) clientMessage.getParameters().get(0);
                     customerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(1)));
                     customerManager.addBalance(money);
-                    return new ServerMessage(MessageType.ADD_BALANCE,customerManager.getPerson());
+                    return new ServerMessage(MessageType.ADD_BALANCE, customerManager.getPerson());
                 case DECREASE_PRODUCT:
                     String productId1 = (String) clientMessage.getParameters().get(0);
                     try {
@@ -259,7 +259,7 @@ public class Server {
                         System.out.println("I'm here!");
                         customerManager.setCart((Cart) clientMessage.getParameters().get(0));
                         Cart resultCart = customerManager.increaseProduct((String) clientMessage.getParameters().get(1));
-                        return new ServerMessage(MessageType.INCREASE_PRODUCT,resultCart);
+                        return new ServerMessage(MessageType.INCREASE_PRODUCT, resultCart);
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
@@ -340,11 +340,11 @@ public class Server {
                                 customer.getWallet().getBankAccountPassword();
                         String token = getTokenFromBank(charge);
                         int wage = purchasingManager.getWage();
-                        moveToShopAccount(token,((double)(wage/100) * moneyToTransfer),customer.getWallet().getAccountId(),"payment with wallet");
+                        moveToShopAccount(token, ((double) (wage / 100) * moneyToTransfer), customer.getWallet().getAccountId(), "payment with wallet");
                         purchasingManager.setPerson(thisPerson);
                         purchasingManager.setCart((Cart) clientMessage.getParameters().get(1));
                         Cart result = purchasingManager.performPayment(receiverInformation, totalPrice, percentage, discountUsed);
-                        return new ServerMessage(MessageType.PERFORM_PAYMENT,result);
+                        return new ServerMessage(MessageType.PERFORM_PAYMENT, result);
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
@@ -433,7 +433,7 @@ public class Server {
                     return new ServerMessage(MessageType.GET_BUY_LOG_BY_CODE, storage.getBuyLogByCode((String) clientMessage.getParameters().get(0)));
                 case REGISTER:
                     try {
-                        HashMap<String,String> registerInfo = (HashMap<String, String>) clientMessage.getParameters().get(0);
+                        HashMap<String, String> registerInfo = (HashMap<String, String>) clientMessage.getParameters().get(0);
                         manager.register(registerInfo);
                         if (!registerInfo.get("role").equals("seller"))
                             createBankAccount(registerInfo);
@@ -448,7 +448,7 @@ public class Server {
                     updatedVersion = (String) clientMessage.getParameters().get(1);
                     try {
                         manager.editField(field, updatedVersion);
-                        return new ServerMessage(MessageType.EDIT_FIELD,manager.getPerson());
+                        return new ServerMessage(MessageType.EDIT_FIELD, manager.getPerson());
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
@@ -532,7 +532,7 @@ public class Server {
                         String requestId = (String) clientMessage.getParameters().get(0);
                         Request request = storage.getRequestById(Integer.parseInt(requestId));
                         adminManager.acceptRequest(requestId);
-                        if(request.getTypeOfRequest().equals(RequestType.REGISTER_SELLER)) {
+                        if (request.getTypeOfRequest().equals(RequestType.REGISTER_SELLER)) {
                             createBankAccount(request.getInformation());
                         }
                         break;
@@ -587,11 +587,15 @@ public class Server {
                     Supporter supporter = (Supporter) storage.getUserByUsername((String) clientMessage.getParameters().get(1));
                     Customer customer1 = (Customer) storage.getUserByUsername((String) clientMessage.getParameters().get(0));
                     supporter.addToInBox((String) clientMessage.getParameters().get(0), (String) clientMessage.getParameters().get(2));
+                    System.out.println(supporter.getInbox().get(0));
                     customer1.addToCombinedMessages(supporter.getUsername()
-                            , ("Sent -> "+ (String) clientMessage.getParameters().get(3) + "Received -> " + (String) clientMessage.getParameters().get(2)));
+                            , ("Sent -> " + (String) clientMessage.getParameters().get(3) + "Received -> " + ""));
                     break;
                 case SENT_MESSAGE_FROM_SUPPORTER:
-
+                    Customer customer2 = (Customer) storage.getUserByUsername((String) clientMessage.getParameters().get(1));
+                    Supporter supporter1 = (Supporter) storage.getUserByUsername((String) clientMessage.getParameters().get(0));
+                    supporter1.addToInBox((String) clientMessage.getParameters().get(0), (String) clientMessage.getParameters().get(2));
+                    customer2.addMessage(supporter1.getUsername(), (String) clientMessage.getParameters().get(2));
                 case VIEW_ONLINE_SUPPORTERS:
                     return new ServerMessage(MessageType.VIEW_ONLINE_SUPPORTERS, adminManager.viewOnlineSupporters());
                 case TERMINATE:
@@ -649,7 +653,7 @@ public class Server {
                     String withdraw = "get_token " + seller.getWallet().getBankAccountUsername() + " " +
                             seller.getWallet().getBankAccountPassword();
                     double minBalanceInWallet = sellerManager.getMinBalance();
-                    if (isValidWithdrawal(minBalanceInWallet, seller,(double) clientMessage.getParameters().get(0))) {
+                    if (isValidWithdrawal(minBalanceInWallet, seller, (double) clientMessage.getParameters().get(0))) {
                         try {
                             String token = getTokenFromBank(withdraw);
                             if (token.equals(""))
@@ -665,7 +669,7 @@ public class Server {
                         }
                         break;
                     } else {
-                        return new ServerMessage(MessageType.ERROR,new Exception("not valid withdrawal"));
+                        return new ServerMessage(MessageType.ERROR, new Exception("not valid withdrawal"));
                     }
                 case PERFORM_PAYMENT_WiTH_BANK_ACCOUNT:
                     HashMap<String, String> receiverInformation1 = (HashMap<String, String>) clientMessage.getParameters().get(2);
@@ -674,7 +678,7 @@ public class Server {
                     String discountUsed1 = (String) clientMessage.getParameters().get(5);
                     try {
                         Person person2 = storage.getUserByUsername((String) clientMessage.getParameters().get(0));
-                        boolean wasSuccessful = performPaymentWithBank(receiverInformation1, totalPrice1, percentage2, discountUsed1,person2);
+                        boolean wasSuccessful = performPaymentWithBank(receiverInformation1, totalPrice1, percentage2, discountUsed1, person2);
                         if (wasSuccessful) {
                             purchasingManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(0)));
                             purchasingManager.setCart((Cart) clientMessage.getParameters().get(1));
@@ -686,10 +690,10 @@ public class Server {
                     }
                 case GET_SOLD_FILE_PRODUCTS:
                     seller = (Seller) storage.getUserByUsername((String) clientMessage.getParameters().get(0));
-                    return new ServerMessage(MessageType.GET_SOLD_FILE_PRODUCTS,seller.getSoldFileProducts());
+                    return new ServerMessage(MessageType.GET_SOLD_FILE_PRODUCTS, seller.getSoldFileProducts());
                 case GET_PAYED_FILE_PRODUCTS:
                     newCustomer = (Customer) storage.getUserByUsername((String) clientMessage.getParameters().get(0));
-                    return new ServerMessage(MessageType.GET_PAYED_FILE_PRODUCTS,newCustomer.getPayedFileProducts());
+                    return new ServerMessage(MessageType.GET_PAYED_FILE_PRODUCTS, newCustomer.getPayedFileProducts());
                 case GET_SHOP_BALANCE:
 
                     try {
@@ -698,9 +702,9 @@ public class Server {
                         server.bankDataOutputStream.writeUTF("get_balance " + token);
                         server.bankDataOutputStream.flush();
                         String balanceToReturn = server.bankDataInputStream.readUTF();
-                        return new ServerMessage(MessageType.GET_SHOP_BALANCE,balanceToReturn);
+                        return new ServerMessage(MessageType.GET_SHOP_BALANCE, balanceToReturn);
                     } catch (IOException e) {
-                        return new ServerMessage(MessageType.ERROR,e.getMessage());
+                        return new ServerMessage(MessageType.ERROR, e.getMessage());
                     }
                 case SET_WAGE:
                     int wagePercentage = (int) clientMessage.getParameters().get(0);
@@ -714,8 +718,8 @@ public class Server {
             return null;
         }
 
-        private boolean performPaymentWithBank (HashMap<String,String> information, double totalPrice,
-                                             double percentage, String discountCode, Person person) {
+        private boolean performPaymentWithBank(HashMap<String, String> information, double totalPrice,
+                                               double percentage, String discountCode, Person person) {
             double moneyToTransfer = totalPrice - totalPrice * (1.0 * percentage / 100);
             try {
                 Customer customer = (Customer) person;
@@ -724,7 +728,7 @@ public class Server {
                 String token = getTokenFromBank(charge);
                 if (token.equals(""))
                     throw new Exception("username/password is invalid");
-                int receipt = moveToShopAccount(token,moneyToTransfer, customer.getWallet().getAccountId(), "payment");
+                int receipt = moveToShopAccount(token, moneyToTransfer, customer.getWallet().getAccountId(), "payment");
                 boolean wasPaid = pay(receipt);
                 if (wasPaid) {
                     return true;
@@ -809,7 +813,7 @@ public class Server {
             return false;
         }
 
-        private int moveFromShopAccount (String token, double money, int destId, String description) {
+        private int moveFromShopAccount(String token, double money, int destId, String description) {
             String request = "create_receipt " + token + " move " + money + " 1 " + destId + " " + description;
             System.out.println(request);
             try {
@@ -824,7 +828,7 @@ public class Server {
             return 0;
         }
 
-        private boolean isValidWithdrawal(double min, Seller seller,double toWithdraw) {
+        private boolean isValidWithdrawal(double min, Seller seller, double toWithdraw) {
             try {
                 String info = "get_token " + seller.getWallet().getBankAccountUsername() + " " +
                         seller.getWallet().getBankAccountPassword();

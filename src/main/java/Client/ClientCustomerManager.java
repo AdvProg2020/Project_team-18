@@ -162,15 +162,23 @@ public class ClientCustomerManager extends ClientManager {
         return (ArrayList<FileProduct>) serverMessage.getResult();
     }
 
-    public boolean sendMessage(String sender, String receiver, String message1, String message2) {
+    public void sendMessage(String sender, String receiver, String message1, String message2) {
         ArrayList<Object> params = new ArrayList<>();
         params.add(sender);
         params.add(receiver);
         params.add(message1);
         params.add(message2);
+        System.out.println(message1);
         ClientMessage clientMessage = new ClientMessage(MessageType.SEND_MESSAGE_FROM_CUSTOMER, params);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
-        return (boolean) serverMessage.getResult();
     }
 
+    public void sendMessageFromSupporter(String sender, String receiver, String message) {
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(sender);
+        params.add(receiver);
+        params.add(message);
+        ClientMessage clientMessage = new ClientMessage(MessageType.SENT_MESSAGE_FROM_SUPPORTER, params);
+        clientMessage.sendAndReceive();
+    }
 }

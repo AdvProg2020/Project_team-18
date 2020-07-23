@@ -94,4 +94,10 @@ public class Customer extends Person {
         return this.combinedMessages;
     }
 
+    public void addMessage(String sender, String message){
+        int supporterIndex = supportersSender.lastIndexOf(sender);
+        String previous = this.getCombinedMessages().get(supporterIndex);
+        this.combinedMessages.remove(supporterIndex);
+        this.combinedMessages.add(previous + message);
+    }
 }
