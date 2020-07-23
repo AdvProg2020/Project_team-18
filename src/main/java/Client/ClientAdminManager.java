@@ -86,7 +86,7 @@ public class ClientAdminManager extends ClientManager {
         return (Discount) serverMessage.getResult();
     }
 
-    public void addCustomerToDiscount(String username, Discount discount) throws Exception {
+    public void addCustomerToDiscount(String username, String discount) throws Exception {
         ArrayList<Object> params = new ArrayList<>();
         params.add(username);
         params.add(discount);
@@ -97,7 +97,7 @@ public class ClientAdminManager extends ClientManager {
         }
     }
 
-    public void removeCustomerFromDiscount(Discount discount, String username) throws Exception {
+    public void removeCustomerFromDiscount(String discount, String username) throws Exception {
         ArrayList<Object> params = new ArrayList<>();
         params.add(discount);
         params.add(username);
@@ -108,7 +108,7 @@ public class ClientAdminManager extends ClientManager {
         }
     }
 
-    public void editDiscountField(Discount discount, String field, String updatedVersion) throws Exception{
+    public Discount editDiscountField(String discount, String field, String updatedVersion) throws Exception{
         ArrayList<Object> params = new ArrayList<>();
         params.add(discount);
         params.add(field);
@@ -118,6 +118,7 @@ public class ClientAdminManager extends ClientManager {
         if (serverMessage != null && serverMessage.getMessageType() == MessageType.ERROR) {
             throw (Exception) serverMessage.getResult();
         }
+        return (Discount) serverMessage.getResult();
     }
 
     public void createDiscountCode(String code, LocalDateTime startDate, LocalDateTime endDate,

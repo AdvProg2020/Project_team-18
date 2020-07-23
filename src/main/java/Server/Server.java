@@ -257,7 +257,6 @@ public class Server {
                     }
                 case INCREASE_PRODUCT:
                     try {
-                        System.out.println("I'm here!");
                         customerManager.setCart((Cart) clientMessage.getParameters().get(0));
                         Cart resultCart = customerManager.increaseProduct((String) clientMessage.getParameters().get(1));
                         return new ServerMessage(MessageType.INCREASE_PRODUCT,resultCart);
@@ -484,21 +483,24 @@ public class Server {
                     }
                 case ADD_CUSTOMER_TO_DISCOUNT:
                     try {
-                        adminManager.addCustomerToDiscount((String) clientMessage.getParameters().get(0), (Discount) clientMessage.getParameters().get(1));
+                        adminManager.addCustomerToDiscount((String) clientMessage.getParameters().get(0), (String) clientMessage.getParameters().get(1));
                         break;
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case REMOVE_CUSTOMER_FROM_DISCOUNT:
                     try {
-                        adminManager.removeCustomerFromDiscount((Discount) clientMessage.getParameters().get(0), (String) clientMessage.getParameters().get(1));
+                        adminManager.removeCustomerFromDiscount((String) clientMessage.getParameters().get(0), (String) clientMessage.getParameters().get(1));
                         break;
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case EDIT_DISCOUNT_FIELD:
-                    adminManager.editDiscountField((Discount) clientMessage.getParameters().get(0), (String) clientMessage.getParameters().get(1), (String) clientMessage.getParameters().get(2));
-                    break;
+                    Discount resultDiscount = adminManager.editDiscountField((String) clientMessage.getParameters().get(0),
+                            (String) clientMessage.getParameters().get(1), (String) clientMessage.getParameters().get(2));
+                    Discount toBeUpdated = storage.getDiscountByCode((String) clientMessage.getParameters().get(0));
+                    toBeUpdated = resultDiscount;
+                    return new ServerMessage(MessageType.EDIT_DISCOUNT_FIELD,toBeUpdated);
                 case CREATE_DISCOUNT_CODE:
                     String code = (String) clientMessage.getParameters().get(0);
                     LocalDateTime startDate = (LocalDateTime) clientMessage.getParameters().get(1);
