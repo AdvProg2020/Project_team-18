@@ -278,7 +278,8 @@ public class AdminManager extends Manager {
         storage.addSale(sale);
         ((Seller)storage.getUserByUsername(request.getInformation().get("seller"))).addSale(sale);
         for (Product product : tempSellerManager.getSavedProductsInSale().get(offId)) {
-            product.setSale(sale);
+            Product toBeUpdated = storage.getProductById(product.getProductId());
+            toBeUpdated.setSale(sale);
         }
     }
 
