@@ -15,4 +15,9 @@ public class FileProduct extends Product {
     public void setFileState(FileState fileState) {
         this.fileState = fileState;
     }
+
+    @Override
+    public String toString() {
+        return super.toString()+"****"+this.fileState;
+    }
 }
