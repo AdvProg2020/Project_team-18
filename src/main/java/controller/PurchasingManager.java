@@ -94,7 +94,8 @@ public class PurchasingManager extends Manager {
         BuyLog buyLog = new BuyLog(LocalDateTime.now(), totalPrice, saleAmount, findDistinctSellers(super.cart),
                 receiverInformation, cart.getProductsInCart(), discountUsed);
         storage.addBuyLog(buyLog);
-        ((Customer) person).addToBuyLogs(buyLog);
+        Customer toBeUpdated = (Customer) storage.getUserByUsername(person.getUsername());
+        toBeUpdated.addToBuyLogs(buyLog);
         this.buyLogCode = buyLog.getBuyCode();
     }
 

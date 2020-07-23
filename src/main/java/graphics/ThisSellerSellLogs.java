@@ -52,7 +52,12 @@ public class ThisSellerSellLogs extends Menu implements Initializable {
         tableView.setItems(thisSellerSellLogs);
     }
     public ArrayList<SellLog> returnThisSellerSellLogs(){
-        return ((Seller) person).getSellHistory();
+        try {
+            return sellerManager.getSellerSellHistory(person.getUsername());
+        } catch (Exception e) {
+            showError(e.getMessage(),20);
+        }
+        return null;
     }
 
     public void showBuyLog() throws IOException {
