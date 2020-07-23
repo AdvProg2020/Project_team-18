@@ -7,11 +7,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import model.FileProduct;
 import model.Person;
@@ -81,11 +80,38 @@ public class FileManagerMenu extends Menu implements Initializable {
 
     private void download(FileProduct fileProduct) {
         if (person instanceof Seller){
-            System.out.println("seller download");
+            sellerDownload();
         }else {
-            System.out.println("going to customer download!");
+            customerDownload();
         }
 
+    }
+
+    private void customerDownload() {
+    }
+
+    private void sellerDownload() {
+    }
+    private void openDownloadDialog(){
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Download Manager");
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        TextField fileNameField = new TextField();
+        VBox content = new VBox();
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setSpacing(10);
+        content.getChildren().addAll(new Label("Enter file path :"), fileNameField);
+        dialog.getDialogPane().setContent(content);
+        dialog.showAndWait();
+        try {
+            System.out.println("112 file manager menu");
+
+            //adminManager.addCategory(categoryNameField.getText(),imageField.getText());
+            //updateShownCategories(adminManager.viewAllCategories());
+        } catch (Exception e) {
+            showError(e.getMessage(),20);
+        }
     }
 
 
