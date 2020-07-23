@@ -98,4 +98,9 @@ public class Cart {
     public void isPurchased(){
         this.isPurchased = true;
     }
+
+    @Override
+    public String toString() {
+        return "****"+productsInCart.size();
+    }
 }

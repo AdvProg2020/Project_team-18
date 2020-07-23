@@ -120,8 +120,10 @@ public class PurchasingMenu extends Menu {
                 if (!discountCodeField.getText().equals("")) {
                     purchasingManager.updateDiscountUsagePerPerson(discountCodeField.getText() , person.getUsername());
                 }
+                person = purchasingManager.getPersonByUsername(person.getUsername());
                 currentCart = result;
                 showMessage();
+                //new CartMenu(this).run();
                 back();
             }
         }

@@ -18,7 +18,6 @@ public class PurchasingManager extends Manager {
 
     public Cart performPayment(HashMap<String, String> receiverInformation, double totalPrice, double discountPercentage, String discountUsed)
             throws Exception {
-        System.out.println("im in perform payment");
         double moneyToTransfer = totalPrice - totalPrice * (1.0 * discountPercentage / 100);
         person.setBalance(person.getBalance() - moneyToTransfer);
         ((Customer) person).addAmountOfAllPurchasing(moneyToTransfer);
@@ -64,7 +63,6 @@ public class PurchasingManager extends Manager {
     }
 
     private void refineFileProducts() {
-        System.out.println("salaaaam 63");
         for (Product product : cart.getProductsInCart().keySet()) {
             if(product instanceof FileProduct){
                 System.out.println("*****65 purchasing manager\n"+product);

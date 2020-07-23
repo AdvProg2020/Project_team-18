@@ -439,6 +439,8 @@ public class CustomerMenu extends Menu implements Initializable {
     }
 
     public void goToFilesMenu(ActionEvent actionEvent) {
-        System.out.println(customerManager.getPayedFileProducts(person.getUsername()));
+        //System.out.println(customerManager.getPayedFileProducts(person.getUsername()));
+        FileManagerMenu fileManagerMenu = new FileManagerMenu(this);
+        fileManagerMenu.run();
     }
 }

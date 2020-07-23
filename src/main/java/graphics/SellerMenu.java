@@ -705,6 +705,8 @@ public class SellerMenu extends Menu implements Initializable {
     }
 
     public void GoToMyFiles(ActionEvent actionEvent) {
-        System.out.println(sellerManager.getSoldFileProducts(person.getUsername()));
+        //System.out.println(sellerManager.getSoldFileProducts(person.getUsername()));
+        FileManagerMenu fileManagerMenu = new FileManagerMenu(this);
+        fileManagerMenu.run();
     }
 }

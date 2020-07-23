@@ -65,6 +65,12 @@ public class ClientManager {
         Menu.setPerson((Person) serverMessage.getResult());
 
     }
+    public Person getPersonByUsername(String username){
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(username);
+        ClientMessage clientMessage = new ClientMessage(MessageType.GET_PERSON_BY_USERNAME, params);
+        return (Person) clientMessage.sendAndReceive().getResult();
+    }
 
 
     public boolean doesUsernameExist(String username) {

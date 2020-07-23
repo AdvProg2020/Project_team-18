@@ -63,6 +63,7 @@ public class CartMenu extends Menu implements Initializable {
     }
 
     private void updateTable(){
+
         final ObservableList<Product> data = FXCollections.observableArrayList(
                 customerManager.getProductsInCart(currentCart).keySet()
         );
@@ -107,7 +108,7 @@ public class CartMenu extends Menu implements Initializable {
         if (currentCart.getProductsInCart().isEmpty())
             data.clear();
         tableView.setItems(data);
-        totalPriceLabel.setText("Total Price OF Cart : " + customerManager.getCartTotalPrice());
+        totalPriceLabel.setText("Total Price OF Cart : " + customerManager.getCartTotalPrice(currentCart));
     }
 
     private int interpretHashMap (HashMap<Product,Integer> products , Product desiredProduct){
