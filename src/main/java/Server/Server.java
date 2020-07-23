@@ -741,7 +741,13 @@ public class Server {
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR,e);
                     }
-
+                case GET_AUCTION_BY_ID:
+                    return new ServerMessage(MessageType.GET_AUCTION_BY_ID, manager.getAuctionById((int) clientMessage.getParameters().get(0)));
+                case SEND_MESSAGE_TO_AUCTION:
+                    Auction auction1 = manager.getAuctionById((int) clientMessage.getParameters().get(1));
+                    Customer customer3 = (Customer) manager.getPersonByUsername((String) clientMessage.getParameters().get(0));
+                    auction1.addToThisAuctionChat(customer3.getUsername(), (String) clientMessage.getParameters().get(2));
+                    break;
             }
             return null;
         }

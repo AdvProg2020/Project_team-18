@@ -18,6 +18,7 @@ import java.util.ResourceBundle;
 
 public class AuctionMenu extends Menu implements Initializable {
     private ClientCustomerManager customerManager = new ClientCustomerManager();
+
     private Auction auction;
     @FXML
     private Label idLabel;
@@ -47,6 +48,9 @@ public class AuctionMenu extends Menu implements Initializable {
         beginDateLabel.setText(auction.getBeginDate().toString());
         endDateLabel.setText(auction.getEndDate().toString());
         latestPriceLabel.setText(Double.toString(auction.getPrice()));
+        if (auction.getCustomer() == null){
+            latestCustomerLabel.setText("no customer");
+        } else
         latestCustomerLabel.setText(auction.getCustomer().getUsername());
     }
 
@@ -95,5 +99,11 @@ public class AuctionMenu extends Menu implements Initializable {
 //            }
             }
         }
+    }
+
+    @FXML
+    private void goToThisAuctionChatRoom() {
+        AuctionChatRoom auctionChatRoom = new AuctionChatRoom(this, this.auction);
+        auctionChatRoom.run();
     }
 }

@@ -183,4 +183,13 @@ public class Manager {
         }
         return null;
     }
+
+    public Auction getAuctionById(int id){
+        for (Auction auction : storage.getAllAuctions()) {
+            if (auction.getId() == id){
+                return auction;
+            }
+        }
+        return null;
+    }
 }

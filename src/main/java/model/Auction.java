@@ -19,6 +19,7 @@ public class Auction extends TimerTask implements Idable<Auction> {
     private transient static ArrayList<Auction> allAuctions = new ArrayList<>();
     private Storage storage = new Storage();
     private ArrayList<String> thisAuctionChat = new ArrayList<>();
+    private ArrayList<String> senders = new ArrayList<>();
 
     public String getProductName() {
         return productName;
@@ -123,20 +124,30 @@ public class Auction extends TimerTask implements Idable<Auction> {
         return allAuctions;
     }
 
-    public ArrayList<String> getThisAuctionChat(){
+    public ArrayList<String> getThisAuctionChat() {
         return this.thisAuctionChat;
     }
 
-    public void addToThisAuctionChat(String message){
+    public int getAuctionId() {
+        return auctionId;
+    }
+
+    public ArrayList<String> getSenders() {
+        return this.senders;
+    }
+
+    public void addToThisAuctionChat(String username, String message) {
+        this.senders.add(username);
         this.thisAuctionChat.add(message);
     }
+
     public void finishAuction() {
         Timer timer = new Timer();
         TimerTask task = new Auction();
         Date date = Date.from(this.getEndDate().atZone(ZoneId.systemDefault()).toInstant());
         try {
             timer.schedule(task, date);
-        } catch (Exception e){
+        } catch (Exception e) {
             timer.cancel();
             this.getProduct().setSupply(this.getProduct().getSupply() + 1);
         }
@@ -144,7 +155,7 @@ public class Auction extends TimerTask implements Idable<Auction> {
 
     @Override
     public void run() {
-        if (this.getCustomer() == null){
+        if (this.getCustomer() == null) {
             try {
                 throw new Exception("No Customer!");
             } catch (Exception e) {

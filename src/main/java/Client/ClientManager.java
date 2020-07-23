@@ -72,6 +72,12 @@ public class ClientManager {
         return (Person) clientMessage.sendAndReceive().getResult();
     }
 
+    public Auction getAuctionById(int id){
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(id);
+        ClientMessage clientMessage = new ClientMessage(MessageType.GET_AUCTION_BY_ID, params);
+        return (Auction) clientMessage.sendAndReceive().getResult();
+    }
 
     public boolean doesUsernameExist(String username) {
         ArrayList<Object> params = new ArrayList<>();
@@ -141,6 +147,15 @@ public class ClientManager {
         if (serverMessage != null && serverMessage.getMessageType() == MessageType.ERROR) {
             throw (Exception) serverMessage.getResult();
         }
+    }
+
+    public void sendMessageToChatInbox(String username, int auctionId, String message){
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(username);
+        params.add(auctionId);
+        params.add(message);
+        ClientMessage clientMessage = new ClientMessage(MessageType.SEND_MESSAGE_TO_AUCTION, params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
     }
 
 }
