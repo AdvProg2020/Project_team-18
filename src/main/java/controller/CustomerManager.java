@@ -4,6 +4,7 @@ import model.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 public class CustomerManager extends Manager {
 
@@ -52,12 +53,11 @@ public class CustomerManager extends Manager {
             System.out.println("run out of");
             throw new Exception("We have run out of this product!!");
         }
-        for (Product product : cart.getProductsInCart().keySet()) {
-            if (product.equals(storage.getProductById(Integer.parseInt(productId)))) {
+        if (findProductInCart(Integer.parseInt(productId),cart.getProductsInCart().keySet())) {
                 cart.addNumberOfProductInTheCart(storage.getProductById(Integer.parseInt(productId)));
                 System.out.println("proper!");
+                return cart;
             }
-        }
         cart.addProductToCart(storage.getProductById(Integer.parseInt(productId)));
         System.out.println("again proper!");
         return cart;
@@ -65,16 +65,19 @@ public class CustomerManager extends Manager {
 
     public Cart decreaseProduct(String productId) throws Exception {
         System.out.println(cart.getProductsInCart().keySet().toString());
+        System.out.println(storage.getProductById(Integer.parseInt(productId)));
         if (storage.getProductById(Integer.parseInt(productId)) == null)
             throw new Exception("There is not such product!");
-        else if (!super.cart.getProductsInCart().containsKey(storage.getProductById(Integer.parseInt(productId))))
+        else if (!findProductInCart(Integer.parseInt(productId), cart.getProductsInCart().keySet()))
             throw new Exception("You don't have a product with this Id in your cart!");
         else
             super.cart.decreaseProduct(storage.getProductById(Integer.parseInt(productId)));
         return cart;
     }
 
-    private boolean findProductInCart (int productId, ArrayList<Product> products) {
+    private boolean findProductInCart (int productId, Set<Product> products) {
+        if (products.isEmpty())
+            return false;
         for (Product product : products) {
             if (product.getId() == productId)
                 return true;

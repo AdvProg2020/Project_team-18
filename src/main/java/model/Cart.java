@@ -51,25 +51,37 @@ public class Cart {
     }
 
     public void addNumberOfProductInTheCart(Product product) {
-        if(product.getSupply() != 0) {
-            productsInCart.replace(product, productsInCart.get(product) + 1);
-            product.setSupply(product.getSupply() - 1);
-            totalPrice += product.getPrice();
-            product.setNumberInCart(productsInCart.get(product));
+        for (Product productInCart : productsInCart.keySet()) {
+            if (productInCart.getId() == product.getId()) {
+                if(productInCart.getSupply() != 0) {
+                    productsInCart.replace(productInCart, productsInCart.get(productInCart) + 1);
+                    productInCart.setSupply(productInCart.getSupply() - 1);
+                    totalPrice += productInCart.getPrice();
+                    productInCart.setNumberInCart(productsInCart.get(productInCart));
+                }
+            }
         }
     }
 
     public void decreaseProduct(Product specificProduct) {
-        if (productsInCart.get(specificProduct) != 0) {
-            productsInCart.replace(specificProduct, productsInCart.get(specificProduct) - 1);
-            specificProduct.setSupply(specificProduct.getSupply() + 1);
-            totalPrice -= specificProduct.getPrice();
-            specificProduct.setNumberInCart(productsInCart.get(specificProduct));
+        for (Product product : productsInCart.keySet()) {
+            if (product.getId() == specificProduct.getId()){
+                if (productsInCart.get(product) != 0) {
+                    productsInCart.replace(product, productsInCart.get(product) - 1);
+                    product.setSupply(product.getSupply() + 1);
+                    totalPrice -= product.getPrice();
+                    product.setNumberInCart(productsInCart.get(product));
+                }
+                if (productsInCart.get(product) == 0) {
+                    //System.out.println(1);
+                    product.setNumberInCart(productsInCart.get(product));
+                    //System.out.println(2);
+                    removeProduct(product);
+                    //System.out.println(3);
+                }
+            }
         }
-        if (productsInCart.get(specificProduct) == 0) {
-            specificProduct.setNumberInCart(productsInCart.get(specificProduct));
-            removeProduct(specificProduct);
-        }
+
     }
 
     public void removeProduct(Product specificProduct) {
