@@ -118,7 +118,6 @@ public class ClientManager {
     }
 
     public double getShopAccountBalance() {
-        System.out.println("calling server");
         ClientMessage clientMessage = new ClientMessage(MessageType.GET_SHOP_BALANCE, null);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
         return Double.parseDouble((String) serverMessage.getResult());

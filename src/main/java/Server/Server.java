@@ -699,7 +699,6 @@ public class Server {
                     newCustomer = (Customer) storage.getUserByUsername((String) clientMessage.getParameters().get(0));
                     return new ServerMessage(MessageType.GET_PAYED_FILE_PRODUCTS,newCustomer.getPayedFileProducts());
                 case GET_SHOP_BALANCE:
-
                     try {
                         String charge = "get_token shop shop";
                         String token = getTokenFromBank(charge);
@@ -810,9 +809,7 @@ public class Server {
                 server.bankDataOutputStream.flush();
                 String result = server.bankDataInputStream.readUTF();
                 System.out.println(result);
-                if (result.startsWith("done"))
-                    return true;
-                else return false;
+                return result.startsWith("done");
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }

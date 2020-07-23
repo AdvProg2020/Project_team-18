@@ -22,7 +22,7 @@ public class BankAccount {
         this.lastName = lastName;
         this.userName = userName;
         this.passWord = passWord;
-        if (userName.equals("shop"))
+        if (userName.equals("shop") || userName.equals("temp"))
             value = 0.0;
         else {
             value = 50.0;
@@ -54,7 +54,6 @@ public class BankAccount {
 
     public BankAccount getAccountById(int id){
         for (BankAccount account : allAccounts) {
-            System.out.println(account.getUserName());
             if(account.getAccountId() == id)
                 return account;
         }
@@ -123,5 +122,13 @@ public class BankAccount {
 
     public ArrayList<BankAccount> getAllAccounts() {
         return allAccounts;
+    }
+
+    public void showAccounts () {
+        System.out.println("*****");
+        for (BankAccount account : allAccounts) {
+            System.out.println(account.getUserName() + " " + account.getAccountId());
+        }
+        System.out.println("*****");
     }
 }

@@ -38,6 +38,9 @@ public class BankFileSavor {
     public void dataReader() {
         reader(bankAccount.getAllAccounts(),"allBankAccounts",BankAccount[].class);
         reader(receipt.getAllReceipts(),"allReceipts",Receipt[].class);
+        for (BankAccount account : bankAccount.getAllAccounts()) {
+            System.out.println(account.getUserName());
+        }
     }
 
     private <T> void reader(ArrayList<T> main, String path, Class<T[]> tClass){

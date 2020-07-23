@@ -2,6 +2,7 @@ package bank;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -23,9 +24,14 @@ public class BankServer {
         private void run() {
             try {
                 ServerSocket serverSocket = new ServerSocket(8787);
-                BankAccount shop = new BankAccount("shop","shop","shop","shop");
-                System.out.println("initializing shop account with id " + shop.getAccountId());
-
+                BankAccount shop;
+                File file = new File("./bankDataBase/allBankAccounts.json");
+                if (!file.exists()) {
+                     shop = new BankAccount("shop", "shop", "shop", "shop");
+                } else {
+                    BankAccount bankAccount = new BankAccount("temp","temp","temp","temp");
+                    shop = bankAccount.getAccountByUsername("shop");
+                }
                 while (true) {
                     Socket clientSocket;
                     try {
@@ -68,7 +74,8 @@ public class BankServer {
             tokenPerAccount = new HashMap<>();
             allAccountIds = new ArrayList<>();
             BankFileSavor bankFileSavor = new BankFileSavor(allAccounts,allAccountIds);
-            if (bankFileSavor.readAllAccountIds() != null ) {
+            File file = new File("./bankDataBase/allBankAccounts.json");
+            if (file.exists()) {
                 allAccountIds = bankFileSavor.readAllAccountIds();
                 allAccounts = bankFileSavor.readAllAccounts();
                 bankFileSavor.dataReader();
@@ -117,7 +124,6 @@ public class BankServer {
                         String[] inputs = input.split("\\s");
                         String receiptId = inputs[1];
                         performPayment(receiptId);
-                        System.out.println(shoppingCenter.getValue());
                     } else if (input.startsWith("get_balance")) {
                         String[] inputs = input.split("\\s");
                         String token = inputs[1];
@@ -385,12 +391,8 @@ public class BankServer {
             int dest = Integer.parseInt(receipt.getDestAccountID());
             int src = Integer.parseInt(receipt.getSourceAccountID());
             BankAccount destination = bankAccount.getAccountById(dest);
+            System.out.println(destination.getUserName());
             BankAccount source = bankAccount.getAccountById(src);
-            System.out.println("here");
-            System.out.println(source.getValue());
-            System.out.println("jh");
-            System.out.println(Double.parseDouble(receipt.getMoney()));
-            System.out.println("lji");
             if (source.getValue() > Double.parseDouble(receipt.getMoney())) {
                 source.setValue(source.getValue() - Double.parseDouble(receipt.getMoney()));
                 destination.setValue(destination.getValue() + Double.parseDouble(receipt.getMoney()));
