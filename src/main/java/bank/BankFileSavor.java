@@ -18,6 +18,8 @@ public class BankFileSavor {
 
     private HashMap allAccounts;
     private ArrayList allAccountIDs;
+    private BankAccount bankAccount = new BankAccount("temp","temp","temp","temp");
+    private Receipt receipt = new Receipt("temp","temp","temp","temp","temp","temp");
     private YaGson gson = new YaGsonBuilder().setPrettyPrinting().create();
     private static final Type TT_mapStringString = new TypeToken<HashMap<String,String>>(){}.getType();
 
@@ -29,6 +31,32 @@ public class BankFileSavor {
     public void dataSavor () {
         writeHashMapToFile(allAccounts , "./bankDataBase/allAccounts.json");
         writeArrayToFile(allAccountIDs , "./bankDataBase/allAccountIds.json");
+        writeArrayToFile(bankAccount.getAllAccounts(),"./bankDataBase/allBankAccounts.json");
+        writeArrayToFile(receipt.getAllReceipts(),"./bankDataBase/allReceipts.json");
+    }
+
+    public void dataReader() {
+        reader(bankAccount.getAllAccounts(),"allBankAccounts",BankAccount[].class);
+        reader(receipt.getAllReceipts(),"allReceipts",Receipt[].class);
+    }
+
+    private <T> void reader(ArrayList<T> main, String path, Class<T[]> tClass){
+        File file = new File("./bankDataBase/"+path+".json");
+        if (!file.exists()) {
+            file.getParentFile().mkdir();
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
+        try(FileReader fileReader = new FileReader(file)) {
+            T [] fromFile = gson.fromJson(fileReader,tClass);
+            Collections.addAll(main,fromFile);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
     public HashMap<String,String> readAllAccounts () {

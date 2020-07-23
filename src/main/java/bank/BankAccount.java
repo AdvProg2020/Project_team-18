@@ -120,4 +120,8 @@ public class BankAccount {
         }
         return json;
     }
+
+    public ArrayList<BankAccount> getAllAccounts() {
+        return allAccounts;
+    }
 }

@@ -82,6 +82,10 @@ public class Receipt {
         this.paid = paid;
     }
 
+    public ArrayList<Receipt> getAllReceipts() {
+        return allReceipts;
+    }
+
     @Override
     public String toString() {
         return "Receipt{" +

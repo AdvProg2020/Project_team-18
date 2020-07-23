@@ -71,6 +71,7 @@ public class BankServer {
             if (bankFileSavor.readAllAccountIds() != null ) {
                 allAccountIds = bankFileSavor.readAllAccountIds();
                 allAccounts = bankFileSavor.readAllAccounts();
+                bankFileSavor.dataReader();
             } else {
                 allAccounts.put("shop", "shop");
                 allAccountIds.add(1);
