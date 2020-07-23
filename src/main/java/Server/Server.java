@@ -832,18 +832,7 @@ public class Server {
         }
 
         private boolean isValidWithdrawal(double min, Seller seller,double toWithdraw) {
-            try {
-                String info = "get_token " + seller.getWallet().getBankAccountUsername() + " " +
-                        seller.getWallet().getBankAccountPassword();
-                String token = getTokenFromBank(info);
-                server.bankDataOutputStream.writeUTF("get_balance " + token);
-                server.bankDataOutputStream.flush();
-                double balance = Double.parseDouble(server.bankDataInputStream.readUTF());
-                return (balance - toWithdraw) > min;
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-            return false;
+           return (seller.getBalance() - toWithdraw) >= min ;
         }
 
         @Override
