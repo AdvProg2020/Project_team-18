@@ -63,13 +63,23 @@ public class CustomerManager extends Manager {
         return cart;
     }
 
-    public void decreaseProduct(String productId) throws Exception {
+    public Cart decreaseProduct(String productId) throws Exception {
+        System.out.println(cart.getProductsInCart().keySet().toString());
         if (storage.getProductById(Integer.parseInt(productId)) == null)
             throw new Exception("There is not such product!");
         else if (!super.cart.getProductsInCart().containsKey(storage.getProductById(Integer.parseInt(productId))))
             throw new Exception("You don't have a product with this Id in your cart!");
         else
             super.cart.decreaseProduct(storage.getProductById(Integer.parseInt(productId)));
+        return cart;
+    }
+
+    private boolean findProductInCart (int productId, ArrayList<Product> products) {
+        for (Product product : products) {
+            if (product.getId() == productId)
+                return true;
+        }
+        return false;
     }
 
     public double getCartTotalPrice() {

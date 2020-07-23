@@ -247,13 +247,14 @@ public class Server {
                     customerManager.addBalance(money);
                     return new ServerMessage(MessageType.ADD_BALANCE,customerManager.getPerson());
                 case DECREASE_PRODUCT:
-                    String productId1 = (String) clientMessage.getParameters().get(0);
+                    String productId1 = (String) clientMessage.getParameters().get(1);
+                    customerManager.setCart((Cart) clientMessage.getParameters().get(0));
                     try {
-                        customerManager.decreaseProduct(productId1);
+                        Cart resultCartAfterDecrease = customerManager.decreaseProduct(productId1);
+                        return new ServerMessage(MessageType.DECREASE_PRODUCT,resultCartAfterDecrease);
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
-                    break;
                 case INCREASE_PRODUCT:
                     try {
                         System.out.println("I'm here!");

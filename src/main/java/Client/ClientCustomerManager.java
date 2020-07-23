@@ -81,14 +81,17 @@ public class ClientCustomerManager extends ClientManager {
         return cart1;
     }
 
-    public void decreaseProduct(String productId) throws Exception {
+    public Cart decreaseProduct(Cart cart , String productId) throws Exception {
         ArrayList<Object> params = new ArrayList<>();
+        params.add(cart);
         params.add(productId);
         ClientMessage clientMessage = new ClientMessage(MessageType.DECREASE_PRODUCT, params);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
         if (serverMessage != null && serverMessage.getMessageType() == MessageType.ERROR) {
             throw (Exception) serverMessage.getResult();
         }
+        Cart cart1 = (Cart) serverMessage.getResult();
+        return cart1;
     }
 
     public double getCartTotalPrice(Cart cart) {
