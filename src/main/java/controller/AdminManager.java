@@ -350,4 +350,8 @@ public class AdminManager extends Manager {
         seller.addAuction(auction);
         auction.finishAuction();
     }
+
+    public ArrayList<Supporter> viewOnlineSupporters(){
+        return storage.viewOnlineSupporters();
+    }
 }

@@ -583,17 +583,25 @@ public class Server {
                     auction.setPrice(newPrice);
                     auction.setCustomer(newCustomer);
                     break;
+                case SEND_MESSAGE_FROM_CUSTOMER:
+                    Supporter supporter = (Supporter) storage.getUserByUsername((String) clientMessage.getParameters().get(1));
+                    Customer customer1 = (Customer) storage.getUserByUsername((String) clientMessage.getParameters().get(0));
+                    supporter.addToInBox((String) clientMessage.getParameters().get(0), (String) clientMessage.getParameters().get(2));
+                    customer1.addToCombinedMessages(supporter.getUsername()
+                            , ("Sent -> "+ (String) clientMessage.getParameters().get(3) + "Received -> " + (String) clientMessage.getParameters().get(2)));
+                    break;
+                case SENT_MESSAGE_FROM_SUPPORTER:
+
+                case VIEW_ONLINE_SUPPORTERS:
+                    return new ServerMessage(MessageType.VIEW_ONLINE_SUPPORTERS, adminManager.viewOnlineSupporters());
                 case TERMINATE:
                     String name = (String) clientMessage.getParameters().get(0);
-                    if (name.equals("no user!")){
-                        manager.terminate();
-                        break;
-                    } else {
+                    if (!name.equals("no user!")) {
                         manager.setPerson(storage.getUserByUsername(name));
                         manager.getPerson().makeOffline();
-                        manager.terminate();
-                        break;
                     }
+                    manager.terminate();
+                    break;
                 case CHARGE_WALLET:
                     Person person = storage.getUserByUsername((String) clientMessage.getParameters().get(1));
                     if (person instanceof Customer) {
