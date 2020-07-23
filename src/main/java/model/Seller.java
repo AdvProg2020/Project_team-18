@@ -27,6 +27,13 @@ public class Seller extends Person {
         this.saleList = new ArrayList<>();
         this.soldFileProducts = new ArrayList<>();
     }
+    public FileProduct findInFileProductsById(int id){
+        for (FileProduct fileProduct : soldFileProducts){
+            if (fileProduct.getProductId() == id)
+                return fileProduct;
+        }
+        return null;
+    }
 
     public String getIp() {
         return ip;

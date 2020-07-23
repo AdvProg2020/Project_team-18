@@ -738,6 +738,11 @@ public class Server {
                     try {
                         FileProduct fileProduct = (FileProduct) manager.getProductById((int)clientMessage.getParameters().get(0));
                         fileProduct.setFileState(FileState.DOWNLOADING);
+                        Customer customer = (Customer)manager.getPersonByUsername((String)clientMessage.getParameters().get(1));
+                        seller = (Seller)manager.getPersonByUsername(fileProduct.getSellerName());
+                        customer.findInFileProductsById(fileProduct.getProductId()).setFileState(FileState.DOWNLOADING);
+                        seller.findInFileProductsById(fileProduct.getProductId()).setFileState(FileState.DOWNLOADING);
+                        break;
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR,e);
                     }
@@ -748,6 +753,18 @@ public class Server {
                     Customer customer3 = (Customer) manager.getPersonByUsername((String) clientMessage.getParameters().get(0));
                     auction1.addToThisAuctionChat(customer3.getUsername(), (String) clientMessage.getParameters().get(2));
                     break;
+                case SET_FILE_DOWNLOADED:
+                    try {
+                        FileProduct fileProduct = (FileProduct) manager.getProductById((int)clientMessage.getParameters().get(0));
+                        fileProduct.setFileState(FileState.DOWNLOADED);
+                        Customer customer = (Customer)manager.getPersonByUsername((String)clientMessage.getParameters().get(1));
+                        seller = (Seller)manager.getPersonByUsername(fileProduct.getSellerName());
+                        customer.findInFileProductsById(fileProduct.getProductId()).setFileState(FileState.DOWNLOADED);
+                        seller.findInFileProductsById(fileProduct.getProductId()).setFileState(FileState.DOWNLOADED);
+                        break;
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR,e);
+                    }
             }
             return null;
         }

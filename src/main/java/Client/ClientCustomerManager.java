@@ -213,10 +213,19 @@ public class ClientCustomerManager extends ClientManager {
         return (int) serverMessage.getResult();
     }
 
-    public void setFileDownloading(int productId) {
+    public void setFileDownloading(int productId, String customerUsername) {
         ArrayList<Object> params = new ArrayList<>();
         params.add(productId);
+        params.add(customerUsername);
         ClientMessage clientMessage = new ClientMessage(MessageType.SET_FILE_DOWNLOADING, params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+    }
+
+    public void setFileDownloaded(int productId, String customerUsername) {
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(productId);
+        params.add(customerUsername);
+        ClientMessage clientMessage = new ClientMessage(MessageType.SET_FILE_DOWNLOADED, params);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
     }
 }
