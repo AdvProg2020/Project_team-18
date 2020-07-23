@@ -40,18 +40,18 @@ public class MyChatRoom extends Menu implements Initializable {
         String message = messageField.getText();
         if (receiver.equals("")) {
             showError("No recipient!", 50);
-        }else if (message.equals("")) {
+        } else if (message.equals("")) {
             showError("No message!", 50);
-        } else if (!((Supporter) person).getSenders().contains(receiver)){
+        } else if (!((Supporter) person).getSenders().contains(receiver)) {
             showError("This customer has not contacted you yet!", 50);
-        }  else {
+        } else {
             clientCustomerManager.sendMessageFromSupporter(person.getUsername(), receiver, message);
             receiverName.clear();
             messageField.clear();
         }
     }
 
-    public void refresh(){
+    public void refresh() {
         chatBox.clear();
         setPerson(clientCustomerManager.getPersonByUsername(person.getUsername()));
         for (String inbox : ((Supporter) person).getInbox()) {

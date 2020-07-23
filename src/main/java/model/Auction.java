@@ -18,6 +18,7 @@ public class Auction extends TimerTask implements Idable<Auction> {
     private Customer customer;
     private transient static ArrayList<Auction> allAuctions = new ArrayList<>();
     private Storage storage = new Storage();
+    private ArrayList<String> thisAuctionChat = new ArrayList<>();
 
     public String getProductName() {
         return productName;
@@ -122,6 +123,13 @@ public class Auction extends TimerTask implements Idable<Auction> {
         return allAuctions;
     }
 
+    public ArrayList<String> getThisAuctionChat(){
+        return this.thisAuctionChat;
+    }
+
+    public void addToThisAuctionChat(String message){
+        this.thisAuctionChat.add(message);
+    }
     public void finishAuction() {
         Timer timer = new Timer();
         TimerTask task = new Auction();
