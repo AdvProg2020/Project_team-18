@@ -147,16 +147,16 @@ public class ClientCustomerManager extends ClientManager {
         return (BuyLog) serverMessage.getResult();
     }
 
-    public void bidding(Auction auction, String updatedVersion, String username) throws Exception {
+    public void bidding(int auctionId, String updatedVersion, String username) throws Exception {
         ArrayList<Object> params = new ArrayList<>();
-        params.add(auction);
+        params.add(auctionId);
         params.add(updatedVersion);
         params.add(username);
         ClientMessage clientMessage = new ClientMessage(MessageType.BIDDING, params);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
-        if (serverMessage.getMessageType() == MessageType.ERROR) {
-            throw (Exception) serverMessage.getResult();
-        }
+//        if (serverMessage.getMessageType() == MessageType.ERROR) {
+//            throw (Exception) serverMessage.getResult();
+//        }
     }
 
     public ArrayList<FileProduct> getPayedFileProducts(String username) {

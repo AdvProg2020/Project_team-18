@@ -42,6 +42,8 @@ public class AuctionMenu extends Menu implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        this.auction = customerManager.getAuctionById(auction.getId());
+        setPerson((Customer) customerManager.getPersonByUsername(person.getUsername()));
         idLabel.setText(Integer.toString(auction.getId()));
         productLabel.setText(auction.getProductName());
         sellerLabel.setText(auction.getSellerName());
@@ -78,12 +80,23 @@ public class AuctionMenu extends Menu implements Initializable {
                 } else {
                     if (Double.parseDouble(updatedVersion) < auction.getPrice()) {
                         showError("If you want to offer, you should offer more money than the price shown in the table", 30);
-                    }
-                    if (Double.parseDouble(updatedVersion) < ((Customer) person).getWallet().getMoney()) {
+                    } else if (Double.parseDouble(updatedVersion) < ((Customer) person).getWallet().getMoney()) {
                         showError("Oops!You don't have enough money in your wallet!!", 30);
                     } else {
                         try {
-                            customerManager.bidding(auction, updatedVersion, person.getUsername());
+                            customerManager.bidding(auction.getId(), updatedVersion, person.getUsername());
+                            this.auction = customerManager.getAuctionById(auction.getId());
+                            setPerson((Customer) customerManager.getPersonByUsername(person.getUsername()));
+                            idLabel.setText(Integer.toString(auction.getId()));
+                            productLabel.setText(auction.getProductName());
+                            sellerLabel.setText(auction.getSellerName());
+                            beginDateLabel.setText(auction.getBeginDate().toString());
+                            endDateLabel.setText(auction.getEndDate().toString());
+                            latestPriceLabel.setText(Double.toString(auction.getPrice()));
+                            if (auction.getCustomer() == null){
+                                latestCustomerLabel.setText("no customer");
+                            } else
+                                latestCustomerLabel.setText(auction.getCustomer().getUsername());
                         } catch (Exception e) {
                             showError(e.getMessage(), 30);
                         }
