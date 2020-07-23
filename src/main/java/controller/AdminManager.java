@@ -127,7 +127,6 @@ public class AdminManager extends Manager {
                 return;
             case "maxAmount":
                 discount.setMaxAmount(Double.parseDouble(updatedVersion));
-                return;
         }
     }
 

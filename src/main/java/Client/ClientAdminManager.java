@@ -108,13 +108,16 @@ public class ClientAdminManager extends ClientManager {
         }
     }
 
-    public void editDiscountField(Discount discount, String field, String updatedVersion) {
+    public void editDiscountField(Discount discount, String field, String updatedVersion) throws Exception{
         ArrayList<Object> params = new ArrayList<>();
         params.add(discount);
         params.add(field);
         params.add(updatedVersion);
         ClientMessage clientMessage = new ClientMessage(MessageType.EDIT_DISCOUNT_FIELD, params);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage != null && serverMessage.getMessageType() == MessageType.ERROR) {
+            throw (Exception) serverMessage.getResult();
+        }
     }
 
     public void createDiscountCode(String code, LocalDateTime startDate, LocalDateTime endDate,
