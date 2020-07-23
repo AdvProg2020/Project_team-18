@@ -55,6 +55,7 @@ public class CustomerManager extends Manager {
         }
         if (findProductInCart(Integer.parseInt(productId),cart.getProductsInCart().keySet())) {
                 cart.addNumberOfProductInTheCart(storage.getProductById(Integer.parseInt(productId)));
+                storage.getProductById(Integer.parseInt(productId)).setSupply(storage.getProductById(Integer.parseInt(productId)).getSupply() -1);
                 System.out.println("proper!");
                 return cart;
             }
@@ -70,8 +71,11 @@ public class CustomerManager extends Manager {
             throw new Exception("There is not such product!");
         else if (!findProductInCart(Integer.parseInt(productId), cart.getProductsInCart().keySet()))
             throw new Exception("You don't have a product with this Id in your cart!");
-        else
+        else {
             super.cart.decreaseProduct(storage.getProductById(Integer.parseInt(productId)));
+            storage.getProductById(Integer.parseInt(productId)).setSupply(storage.getProductById(Integer.parseInt(productId)).getSupply() -1);
+
+        }
         return cart;
     }
 

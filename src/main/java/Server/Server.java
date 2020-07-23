@@ -257,7 +257,6 @@ public class Server {
                     }
                 case INCREASE_PRODUCT:
                     try {
-                        System.out.println("I'm here!");
                         customerManager.setCart((Cart) clientMessage.getParameters().get(0));
                         Cart resultCart = customerManager.increaseProduct((String) clientMessage.getParameters().get(1));
                         return new ServerMessage(MessageType.INCREASE_PRODUCT,resultCart);
