@@ -353,7 +353,7 @@ public class AdminManager extends Manager {
         Auction auction = new Auction(beginDate, endDate, product1, initialPrice, seller);
         storage.addAuction(auction);
         seller.addAuction(auction);
-        auction.finishAuction();
+        //auction.finishAuction();
     }
 
     public ArrayList<Supporter> viewOnlineSupporters(){

@@ -1,12 +1,8 @@
 package Server;
 
-import bank.BankAccount;
 import com.gilecode.yagson.YaGson;
 import controller.*;
-import javafx.scene.media.MediaPlayer;
 import model.*;
-
-import javax.print.DocFlavor;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -574,11 +570,12 @@ public class Server {
                 case VIEW_ALL_AUCTIONS:
                     return new ServerMessage(MessageType.VIEW_ALL_AUCTIONS, adminManager.viewAllAuctions());
                 case BIDDING:
-                    Auction auction = (Auction) clientMessage.getParameters().get(0);
+                    Auction auction = manager.getAuctionById((int) clientMessage.getParameters().get(0));
                     Double newPrice = Double.parseDouble((String) clientMessage.getParameters().get(1));
                     Customer newCustomer = (Customer) storage.getUserByUsername((String) clientMessage.getParameters().get(2));
                     auction.setPrice(newPrice);
                     auction.setCustomer(newCustomer);
+                    System.out.println(newPrice + " " + newCustomer.getUsername());
                     break;
                 case SEND_MESSAGE_FROM_CUSTOMER:
                     Supporter supporter = (Supporter) storage.getUserByUsername((String) clientMessage.getParameters().get(1));
@@ -767,6 +764,11 @@ public class Server {
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR,e);
                     }
+                case SET_IP_PORT_NULL:
+                    seller = (Seller)manager.getPersonByUsername((String)clientMessage.getParameters().get(0));
+                    seller.setIp(null);
+                    seller.setPort(0);
+                    return new ServerMessage(MessageType.SET_IP_PORT_NULL,seller);
             }
             return null;
         }
