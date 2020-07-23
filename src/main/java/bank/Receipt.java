@@ -22,7 +22,7 @@ public class Receipt {
         this.description = description;
         this.receiptId = idSetter();
         this.paid = false;
-        if (type != null)
+        if (!type.equals("temp"))
             allReceipts.add(this);
     }
 
@@ -80,6 +80,10 @@ public class Receipt {
 
     public void setPaid(boolean paid) {
         this.paid = paid;
+    }
+
+    public ArrayList<Receipt> getAllReceipts() {
+        return allReceipts;
     }
 
     @Override

@@ -10,7 +10,7 @@
           "imagePath": "file:src/main/java/graphics/fxml/images/clothing.jpg",
           "productId": 1,
           "name": "cloth",
-          "brand": "cloth",
+          "brand": "H&M",
           "price": 10.0,
           "numberInCart": 0,
           "seller": {
@@ -26,7 +26,7 @@
                 "price": 30.0,
                 "numberInCart": 0,
                 "seller": "@root.0.thisCategoryProducts.0.seller",
-                "supply": 3,
+                "supply": 2,
                 "category": {
                   "id": 0,
                   "categoryName": "electronics",
@@ -38,7 +38,7 @@
                 },
                 "categoryName": "electronics",
                 "sellerName": "s1",
-                "explanation": "laptop",
+                "explanation": "apple",
                 "averageRate": 0.0,
                 "comments": [],
                 "rates": [],
@@ -56,7 +56,7 @@
                   "price": 20.0,
                   "numberInCart": 0,
                   "seller": "@root.0.thisCategoryProducts.0.seller",
-                  "supply": 4,
+                  "supply": 2,
                   "category": {
                     "id": 0,
                     "categoryName": "file",
@@ -99,7 +99,7 @@
             "role": "SELLER",
             "availability": "OFFLINE"
           },
-          "supply": 3,
+          "supply": 2,
           "category": "@root.0",
           "categoryName": "clothing",
           "sellerName": "s1",

@@ -247,13 +247,14 @@ public class Server {
                     customerManager.addBalance(money);
                     return new ServerMessage(MessageType.ADD_BALANCE,customerManager.getPerson());
                 case DECREASE_PRODUCT:
-                    String productId1 = (String) clientMessage.getParameters().get(0);
+                    String productId1 = (String) clientMessage.getParameters().get(1);
+                    customerManager.setCart((Cart) clientMessage.getParameters().get(0));
                     try {
-                        customerManager.decreaseProduct(productId1);
+                        Cart resultCartAfterDecrease = customerManager.decreaseProduct(productId1);
+                        return new ServerMessage(MessageType.DECREASE_PRODUCT,resultCartAfterDecrease);
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
-                    break;
                 case INCREASE_PRODUCT:
                     try {
                         System.out.println("I'm here!");
@@ -581,15 +582,15 @@ public class Server {
                     Supporter supporter = (Supporter) storage.getUserByUsername((String) clientMessage.getParameters().get(1));
                     Customer customer1 = (Customer) storage.getUserByUsername((String) clientMessage.getParameters().get(0));
                     supporter.addToInBox((String) clientMessage.getParameters().get(0), (String) clientMessage.getParameters().get(2));
-                    System.out.println(supporter.getInbox().get(0));
                     customer1.addToCombinedMessages(supporter.getUsername()
-                            , ("Sent -> " + (String) clientMessage.getParameters().get(3) + "Received -> " + ""));
-                    break;
+                            , ("Sent -> " + (String) clientMessage.getParameters().get(3) + " *** Received -> " + ""));
+                    return new ServerMessage(MessageType.SEND_MESSAGE_FROM_CUSTOMER, customer1);
                 case SENT_MESSAGE_FROM_SUPPORTER:
                     Customer customer2 = (Customer) storage.getUserByUsername((String) clientMessage.getParameters().get(1));
                     Supporter supporter1 = (Supporter) storage.getUserByUsername((String) clientMessage.getParameters().get(0));
-                    supporter1.addToInBox((String) clientMessage.getParameters().get(0), (String) clientMessage.getParameters().get(2));
+                    supporter1.addToInBox((String) clientMessage.getParameters().get(0), "You to " + customer2.getUsername() + " : " + (String) clientMessage.getParameters().get(2));
                     customer2.addMessage(supporter1.getUsername(), (String) clientMessage.getParameters().get(2));
+                    return new ServerMessage(MessageType.SENT_MESSAGE_FROM_SUPPORTER, supporter1);
                 case VIEW_ONLINE_SUPPORTERS:
                     return new ServerMessage(MessageType.VIEW_ONLINE_SUPPORTERS, adminManager.viewOnlineSupporters());
                 case TERMINATE:
@@ -698,7 +699,6 @@ public class Server {
                     newCustomer = (Customer) storage.getUserByUsername((String) clientMessage.getParameters().get(0));
                     return new ServerMessage(MessageType.GET_PAYED_FILE_PRODUCTS,newCustomer.getPayedFileProducts());
                 case GET_SHOP_BALANCE:
-
                     try {
                         String charge = "get_token shop shop";
                         String token = getTokenFromBank(charge);
@@ -832,9 +832,7 @@ public class Server {
                 server.bankDataOutputStream.flush();
                 String result = server.bankDataInputStream.readUTF();
                 System.out.println(result);
-                if (result.startsWith("done"))
-                    return true;
-                else return false;
+                return result.startsWith("done");
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
@@ -857,18 +855,7 @@ public class Server {
         }
 
         private boolean isValidWithdrawal(double min, Seller seller,double toWithdraw) {
-            try {
-                String info = "get_token " + seller.getWallet().getBankAccountUsername() + " " +
-                        seller.getWallet().getBankAccountPassword();
-                String token = getTokenFromBank(info);
-                server.bankDataOutputStream.writeUTF("get_balance " + token);
-                server.bankDataOutputStream.flush();
-                double balance = Double.parseDouble(server.bankDataInputStream.readUTF());
-                return (balance - toWithdraw) > min;
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-            return false;
+           return (seller.getBalance() - toWithdraw) >= min ;
         }
 
         @Override

@@ -2,6 +2,7 @@ package bank;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -23,9 +24,14 @@ public class BankServer {
         private void run() {
             try {
                 ServerSocket serverSocket = new ServerSocket(8787);
-                BankAccount shop = new BankAccount("shop","shop","shop","shop");
-                System.out.println("initializing shop account with id " + shop.getAccountId());
-
+                BankAccount shop;
+                File file = new File("./bankDataBase/allBankAccounts.json");
+                if (!file.exists()) {
+                     shop = new BankAccount("shop", "shop", "shop", "shop");
+                } else {
+                    BankAccount bankAccount = new BankAccount("temp","temp","temp","temp");
+                    shop = bankAccount.getAccountByUsername("shop");
+                }
                 while (true) {
                     Socket clientSocket;
                     try {
@@ -68,9 +74,11 @@ public class BankServer {
             tokenPerAccount = new HashMap<>();
             allAccountIds = new ArrayList<>();
             BankFileSavor bankFileSavor = new BankFileSavor(allAccounts,allAccountIds);
-            if (bankFileSavor.readAllAccountIds() != null ) {
+            File file = new File("./bankDataBase/allBankAccounts.json");
+            if (file.exists()) {
                 allAccountIds = bankFileSavor.readAllAccountIds();
                 allAccounts = bankFileSavor.readAllAccounts();
+                bankFileSavor.dataReader();
             } else {
                 allAccounts.put("shop", "shop");
                 allAccountIds.add(1);
@@ -116,7 +124,6 @@ public class BankServer {
                         String[] inputs = input.split("\\s");
                         String receiptId = inputs[1];
                         performPayment(receiptId);
-                        System.out.println(shoppingCenter.getValue());
                     } else if (input.startsWith("get_balance")) {
                         String[] inputs = input.split("\\s");
                         String token = inputs[1];
@@ -318,7 +325,7 @@ public class BankServer {
         }
 
         private void performPayment(String receiptId) {
-            Receipt receipt = new Receipt(null,null,null,null,null,null);
+            Receipt receipt = new Receipt("temp","temp","temp","temp","temp","temp");
             BankAccount bankAccount = new BankAccount("temp","temp","temp","temp");
             Receipt toBePaid = receipt.getReceiptById(Integer.parseInt(receiptId));
                 try {
@@ -334,6 +341,7 @@ public class BankServer {
                 } catch (IOException ex) {
                     System.out.println(ex.getMessage());
                 }
+            assert toBePaid != null;
             if (toBePaid.getReceiptType().equals("deposit"))
                 performDepositPayment(toBePaid,bankAccount);
             else if (toBePaid.getReceiptType().equals("withdraw"))
@@ -383,6 +391,7 @@ public class BankServer {
             int dest = Integer.parseInt(receipt.getDestAccountID());
             int src = Integer.parseInt(receipt.getSourceAccountID());
             BankAccount destination = bankAccount.getAccountById(dest);
+            System.out.println(destination.getUserName());
             BankAccount source = bankAccount.getAccountById(src);
             if (source.getValue() > Double.parseDouble(receipt.getMoney())) {
                 source.setValue(source.getValue() - Double.parseDouble(receipt.getMoney()));
@@ -434,7 +443,7 @@ public class BankServer {
             }
             String username = tokenPerAccount.get(token);
             BankAccount temp = new BankAccount("temp","temp","temp","temp");
-            Receipt receipt = new Receipt(null,null,null,null,null,null);
+            Receipt receipt = new Receipt("temp","temp","temp","temp","temp","temp");
             BankAccount account = temp.getAccountByUsername(username);
             try {
                 if (type.equals("+")) {

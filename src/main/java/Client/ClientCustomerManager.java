@@ -81,14 +81,17 @@ public class ClientCustomerManager extends ClientManager {
         return cart1;
     }
 
-    public void decreaseProduct(String productId) throws Exception {
+    public Cart decreaseProduct(Cart cart , String productId) throws Exception {
         ArrayList<Object> params = new ArrayList<>();
+        params.add(cart);
         params.add(productId);
         ClientMessage clientMessage = new ClientMessage(MessageType.DECREASE_PRODUCT, params);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
         if (serverMessage != null && serverMessage.getMessageType() == MessageType.ERROR) {
             throw (Exception) serverMessage.getResult();
         }
+        Cart cart1 = (Cart) serverMessage.getResult();
+        return cart1;
     }
 
     public double getCartTotalPrice(Cart cart) {
@@ -173,6 +176,8 @@ public class ClientCustomerManager extends ClientManager {
         System.out.println(message1);
         ClientMessage clientMessage = new ClientMessage(MessageType.SEND_MESSAGE_FROM_CUSTOMER, params);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
+        setPerson((Customer) serverMessage.getResult());
+        Menu.setPerson((Customer) serverMessage.getResult());
     }
 
     public void sendMessageFromSupporter(String sender, String receiver, String message) {
@@ -181,7 +186,9 @@ public class ClientCustomerManager extends ClientManager {
         params.add(receiver);
         params.add(message);
         ClientMessage clientMessage = new ClientMessage(MessageType.SENT_MESSAGE_FROM_SUPPORTER, params);
-        clientMessage.sendAndReceive();
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        setPerson((Supporter) serverMessage.getResult());
+        Menu.setPerson((Supporter) serverMessage.getResult());
     }
 
     public String getSellerIP(String sellerUsername) throws Exception {

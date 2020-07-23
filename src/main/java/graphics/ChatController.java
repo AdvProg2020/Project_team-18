@@ -15,12 +15,17 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class ChatController extends Menu implements Initializable {
-    @FXML private TextField message;
-    @FXML private TextArea chatBox;
-    @FXML private Label supporterName;
-    @FXML private Label customerName;
+    @FXML
+    private TextField message;
+    @FXML
+    private TextArea chatBox;
+    @FXML
+    private Label supporterName;
+    @FXML
+    private Label customerName;
     private ClientCustomerManager clientCustomerManager = new ClientCustomerManager();
     private Supporter supporter;
+
     public ChatController(Menu previousMenu, Supporter supporter) {
         super(previousMenu, "src/main/java/graphics/fxml/ChatRoom.fxml");
         this.supporter = supporter;
@@ -28,6 +33,7 @@ public class ChatController extends Menu implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        setPerson(clientCustomerManager.getPersonByUsername(person.getUsername()));
         supporterName.setText(supporter.getUsername());
         customerName.setText(person.getUsername());
         updateMessages();
@@ -35,31 +41,39 @@ public class ChatController extends Menu implements Initializable {
 
     public void sendMessage() {
         String message3 = message.getText();
-        boolean result = false;
         if (message3.equals("")) {
             showError("No message to be sent!", 30);
         } else {
             String message1 = person.getUsername() + " : " + message3;
             String message2 = "You : " + message3;
             clientCustomerManager.sendMessage(person.getUsername(), supporter.getUsername(), message1, message2);
+            message.clear();
         }
-//        if (result) {
-//            chatBox.append("You : " + message);
-//            System.out.println(message);
-//        } else {
-//            showError("Unable to send your message!", 30);
-//        }
     }
 
-    public void updateMessages(){
+    public void updateMessages() {
         ArrayList<Integer> indexes = new ArrayList<>();
-        for (String username : ((Customer) person).getSupportersSender()) {
-            if (username.equals(this.supporter.getUsername())){
-                indexes.add(((Customer) person).getSupportersSender().indexOf(username));
+        int j = 0;
+        for (int i = 0; i < ((Customer) person).getSupportersSender().size(); i++) {
+            if (((Customer) person).getSupportersSender().get(i).equals(this.supporter.getUsername())) {
+                indexes.add(i);
+                System.out.println(indexes.get(j));
+                j++;
             }
         }
         for (Integer index : indexes) {
-            chatBox.appendText(((Customer) person).getSupportersSender().get(index) + "\n");
+            System.out.println((((Customer) person).getCombinedMessages().get(index).charAt(((Customer) person).getCombinedMessages().get(index).length() - 1)));
+            if ((((Customer) person).getCombinedMessages().get(index).charAt(((Customer) person).getCombinedMessages().get(index).length() - 2) == '>')){
+                chatBox.appendText(((Customer) person).getCombinedMessages().get(index).concat("Not responded yet!"));
+            } else {
+                chatBox.appendText(((Customer) person).getCombinedMessages().get(index) + "\n");
+            }
         }
+    }
+
+    public void refresh(){
+        chatBox.clear();
+        setPerson(clientCustomerManager.getPersonByUsername(person.getUsername()));
+        updateMessages();
     }
 }

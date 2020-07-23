@@ -95,9 +95,19 @@ public class Customer extends Person {
     }
 
     public void addMessage(String sender, String message){
+        for (String combinedMessage : combinedMessages) {
+            System.out.println(combinedMessage);
+        }
         int supporterIndex = supportersSender.lastIndexOf(sender);
+        System.out.println(supporterIndex);
         String previous = this.getCombinedMessages().get(supporterIndex);
+        if (!previous.startsWith("Sent -> ")){
+            previous = "Sent -> " + previous + " Received : ";
+        }
+        System.out.println("hereeeee");
         this.combinedMessages.remove(supporterIndex);
         this.combinedMessages.add(previous + message);
+        System.out.println(combinedMessages.get(combinedMessages.size() - 1));
+
     }
 }

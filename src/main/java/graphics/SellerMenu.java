@@ -650,7 +650,7 @@ public class SellerMenu extends Menu implements Initializable {
         HBox content = new HBox();
         content.setAlignment(Pos.CENTER_LEFT);
         content.setSpacing(10);
-        content.getChildren().addAll(new Label("Enter amount of money you want to add to you account :"), textField);
+        content.getChildren().addAll(new Label("Enter amount of money you want to add to your account :"), textField);
         dialog.getDialogPane().setContent(content);
         Optional<ButtonType> result = dialog.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -673,7 +673,7 @@ public class SellerMenu extends Menu implements Initializable {
         HBox content = new HBox();
         content.setAlignment(Pos.CENTER_LEFT);
         content.setSpacing(10);
-        content.getChildren().addAll(new Label("Enter amount of money you want to add to you account :"), textField);
+        content.getChildren().addAll(new Label("Enter amount of money you want to withdraw from your account :"), textField);
         dialog.getDialogPane().setContent(content);
         Optional<ButtonType> result = dialog.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {

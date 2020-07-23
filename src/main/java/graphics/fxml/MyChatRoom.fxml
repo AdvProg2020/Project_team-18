@@ -20,6 +20,7 @@
       <Button layoutX="346.0" layoutY="313.0" mnemonicParsing="false" onAction="#sendMessage" prefHeight="39.0" prefWidth="58.0" text="Send" />
       <Button layoutX="415.0" layoutY="313.0" mnemonicParsing="false" onAction="#back" prefHeight="39.0" prefWidth="58.0" text="Back" />
       <Label layoutX="15.0" layoutY="4.0" prefHeight="24.0" prefWidth="133.0" text="ChatRoom For User " />
-      <Label fx:id="supporterName" layoutX="150.0" layoutY="4.0" prefHeight="24.0" prefWidth="160.0" />
+      <Label fx:id="supporterName" alignment="CENTER" layoutX="147.0" layoutY="4.0" prefHeight="24.0" prefWidth="160.0" />
+      <Button layoutX="526.0" layoutY="2.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
    </children>
 </AnchorPane>
