@@ -46,6 +46,16 @@ public class MyChatRoom extends Menu implements Initializable {
             showError("This customer has not contacted you yet!", 50);
         }  else {
             clientCustomerManager.sendMessageFromSupporter(person.getUsername(), receiver, message);
+            receiverName.clear();
+            messageField.clear();
+        }
+    }
+
+    public void refresh(){
+        chatBox.clear();
+        setPerson(clientCustomerManager.getPersonByUsername(person.getUsername()));
+        for (String inbox : ((Supporter) person).getInbox()) {
+            chatBox.appendText(inbox + "\n");
         }
     }
 }

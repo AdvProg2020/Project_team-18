@@ -47,6 +47,7 @@ public class ChatController extends Menu implements Initializable {
             String message1 = person.getUsername() + " : " + message3;
             String message2 = "You : " + message3;
             clientCustomerManager.sendMessage(person.getUsername(), supporter.getUsername(), message1, message2);
+            message.clear();
         }
     }
 
@@ -61,7 +62,18 @@ public class ChatController extends Menu implements Initializable {
             }
         }
         for (Integer index : indexes) {
-            chatBox.appendText(((Customer) person).getCombinedMessages().get(index) + "\n");
+            System.out.println((((Customer) person).getCombinedMessages().get(index).charAt(((Customer) person).getCombinedMessages().get(index).length() - 1)));
+            if ((((Customer) person).getCombinedMessages().get(index).charAt(((Customer) person).getCombinedMessages().get(index).length() - 2) == '>')){
+                chatBox.appendText(((Customer) person).getCombinedMessages().get(index).concat("Not responded yet!"));
+            } else {
+                chatBox.appendText(((Customer) person).getCombinedMessages().get(index) + "\n");
+            }
         }
+    }
+
+    public void refresh(){
+        chatBox.clear();
+        setPerson(clientCustomerManager.getPersonByUsername(person.getUsername()));
+        updateMessages();
     }
 }

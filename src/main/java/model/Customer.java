@@ -95,6 +95,9 @@ public class Customer extends Person {
     }
 
     public void addMessage(String sender, String message){
+        for (String combinedMessage : combinedMessages) {
+            System.out.println(combinedMessage);
+        }
         int supporterIndex = supportersSender.lastIndexOf(sender);
         System.out.println(supporterIndex);
         String previous = this.getCombinedMessages().get(supporterIndex);

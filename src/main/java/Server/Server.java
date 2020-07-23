@@ -582,9 +582,8 @@ public class Server {
                     Supporter supporter = (Supporter) storage.getUserByUsername((String) clientMessage.getParameters().get(1));
                     Customer customer1 = (Customer) storage.getUserByUsername((String) clientMessage.getParameters().get(0));
                     supporter.addToInBox((String) clientMessage.getParameters().get(0), (String) clientMessage.getParameters().get(2));
-                    System.out.println(supporter.getInbox().get(0));
                     customer1.addToCombinedMessages(supporter.getUsername()
-                            , ("Sent -> " + (String) clientMessage.getParameters().get(3) + " Received -> " + ""));
+                            , ("Sent -> " + (String) clientMessage.getParameters().get(3) + " *** Received -> " + ""));
                     return new ServerMessage(MessageType.SEND_MESSAGE_FROM_CUSTOMER, customer1);
                 case SENT_MESSAGE_FROM_SUPPORTER:
                     Customer customer2 = (Customer) storage.getUserByUsername((String) clientMessage.getParameters().get(1));
