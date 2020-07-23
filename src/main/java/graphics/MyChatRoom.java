@@ -28,6 +28,7 @@ public class MyChatRoom extends Menu implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        setPerson(clientCustomerManager.getPersonByUsername(person.getUsername()));
         supporterName.setText(person.getUsername() + " as supporter");
         for (String inbox : ((Supporter) person).getInbox()) {
             chatBox.appendText(inbox + "\n");
