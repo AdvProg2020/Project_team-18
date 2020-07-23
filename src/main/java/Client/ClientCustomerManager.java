@@ -183,4 +183,33 @@ public class ClientCustomerManager extends ClientManager {
         ClientMessage clientMessage = new ClientMessage(MessageType.SENT_MESSAGE_FROM_SUPPORTER, params);
         clientMessage.sendAndReceive();
     }
+
+    public String getSellerIP(String sellerUsername) throws Exception {
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(sellerUsername);
+        ClientMessage clientMessage = new ClientMessage(MessageType.GET_SELLER_IP, params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage != null && serverMessage.getMessageType() == MessageType.ERROR) {
+            throw (Exception) serverMessage.getResult();
+        }
+        return (String) serverMessage.getResult();
+    }
+
+    public int getSellerPort(String sellerUsername) throws Exception {
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(sellerUsername);
+        ClientMessage clientMessage = new ClientMessage(MessageType.GET_SELLER_PORT, params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage != null && serverMessage.getMessageType() == MessageType.ERROR) {
+            throw (Exception) serverMessage.getResult();
+        }
+        return (int) serverMessage.getResult();
+    }
+
+    public void setFileDownloading(int productId) {
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(productId);
+        ClientMessage clientMessage = new ClientMessage(MessageType.SET_FILE_DOWNLOADING, params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+    }
 }

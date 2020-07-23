@@ -221,4 +221,14 @@ public class ClientSellerManager extends ClientManager {
         ServerMessage serverMessage = clientMessage.sendAndReceive();
         return (ArrayList<FileProduct>)serverMessage.getResult();
     }
+
+    public boolean sendIPPort(String ip, int port,String username) {
+        ArrayList <Object> params = new ArrayList<>();
+        params.add(ip);
+        params.add(port);
+        params.add(username);
+        ClientMessage clientMessage = new ClientMessage(MessageType.SEND_IP_PORT,params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        return (boolean)serverMessage.getResult();
+    }
 }

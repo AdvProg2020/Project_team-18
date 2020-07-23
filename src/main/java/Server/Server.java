@@ -719,6 +719,29 @@ public class Server {
                     break;
                 case GET_PERSON_BY_USERNAME:
                     return new ServerMessage(MessageType.GET_PERSON_BY_USERNAME,manager.getPersonByUsername((String)clientMessage.getParameters().get(0)));
+                case SEND_IP_PORT:
+                     seller = (Seller)manager.getPersonByUsername((String)clientMessage.getParameters().get(2));
+                    seller.setIp((String)clientMessage.getParameters().get(0));
+                    seller.setPort((int)clientMessage.getParameters().get(1));
+                    return new ServerMessage(MessageType.SEND_IP_PORT,true);
+                case GET_SELLER_IP:
+                    seller = (Seller)manager.getPersonByUsername((String)clientMessage.getParameters().get(0));
+                    String ip = seller.getIp();
+                    if (ip == null) return new ServerMessage(MessageType.ERROR,new Exception("Seller is not available"));
+                    else return new ServerMessage(MessageType.GET_SELLER_IP,ip);
+                case GET_SELLER_PORT:
+                    seller = (Seller)manager.getPersonByUsername((String)clientMessage.getParameters().get(0));
+                    int port = seller.getPort();
+                    if (port == 0) return new ServerMessage(MessageType.ERROR,new Exception("Seller is not available"));
+                    else return new ServerMessage(MessageType.GET_SELLER_PORT,port);
+                case SET_FILE_DOWNLOADING:
+                    try {
+                        FileProduct fileProduct = (FileProduct) manager.getProductById((int)clientMessage.getParameters().get(0));
+                        fileProduct.setFileState(FileState.DOWNLOADING);
+                    } catch (Exception e) {
+                        return new ServerMessage(MessageType.ERROR,e);
+                    }
+
             }
             return null;
         }

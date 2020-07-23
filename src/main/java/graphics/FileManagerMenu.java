@@ -16,6 +16,9 @@ import model.FileProduct;
 import model.Person;
 import model.Seller;
 
+import java.io.File;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -33,7 +36,7 @@ public class FileManagerMenu extends Menu implements Initializable {
     @FXML TableColumn<FileProduct, String> sellerNameColumn = new TableColumn<>();
     @FXML TableColumn<FileProduct, String> stateColumn = new TableColumn<>();
     @FXML TableColumn<FileProduct, Void> buttonColumn = new TableColumn<>();
-    private void updateShownUsers(ArrayList<FileProduct> shownProducts){
+    private void updateShownProducts(ArrayList<FileProduct> shownProducts){
         final ObservableList<FileProduct> data = FXCollections.observableArrayList(
                 shownProducts
         );
@@ -79,36 +82,48 @@ public class FileManagerMenu extends Menu implements Initializable {
     }
 
     private void download(FileProduct fileProduct) {
-        if (person instanceof Seller){
-            sellerDownload();
-        }else {
-            customerDownload();
-        }
-
+        openDownloadDialog(fileProduct);
     }
 
-    private void customerDownload() {
+    private void customerDownload(String filePath,String sellerUsername,FileProduct fileProduct) throws Exception {
+        File myFile = new File(filePath);
+        String ip = clientCustomerManager.getSellerIP(sellerUsername);
+        int port = clientCustomerManager.getSellerPort(sellerUsername);
+        Socket socket = new Socket(ip,port);
+        clientCustomerManager.setFileDownloading(fileProduct.getProductId());
+        updateShownProducts(clientCustomerManager.getPayedFileProducts(person.getUsername()));
+        System.out.println("customer socket created");
     }
 
-    private void sellerDownload() {
+    private void sellerDownload(String filePath,String ip,int port,FileProduct fileProduct) throws Exception {
+        File myFile = new File(filePath);
+       if (!clientSellerManager.sendIPPort(ip, port, person.getUsername())){
+           throw new Exception("unsuccessful operation!");
+       }
+        ServerSocket serverSocket = new ServerSocket(port);
+        Socket socket = serverSocket.accept();
+
+        updateShownProducts(clientSellerManager.getSoldFileProducts(person.getUsername()));
+        System.out.println("seller socket created!");
     }
-    private void openDownloadDialog(){
+    private void openDownloadDialog(FileProduct fileProduct){
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Download Manager");
-        dialog.setHeaderText(null);
+        dialog.setHeaderText("File "+fileProduct.getName()+" Download");
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-        TextField fileNameField = new TextField();
+        TextField filePathField = new TextField();
         VBox content = new VBox();
         content.setAlignment(Pos.CENTER_LEFT);
         content.setSpacing(10);
-        content.getChildren().addAll(new Label("Enter file path :"), fileNameField);
+        content.getChildren().addAll(new Label("Enter file path :"), filePathField);
         dialog.getDialogPane().setContent(content);
         dialog.showAndWait();
         try {
-            System.out.println("112 file manager menu");
-
-            //adminManager.addCategory(categoryNameField.getText(),imageField.getText());
-            //updateShownCategories(adminManager.viewAllCategories());
+            if (person instanceof Seller){
+                sellerDownload(filePathField.getText(),"localhost",9000,fileProduct);
+            }else {
+                customerDownload(filePathField.getText(),fileProduct.getSellerName(),fileProduct);
+            }
         } catch (Exception e) {
             showError(e.getMessage(),20);
         }
@@ -118,7 +133,7 @@ public class FileManagerMenu extends Menu implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (person instanceof Seller){
-            updateShownUsers(clientSellerManager.getSoldFileProducts(person.getUsername()));
-        }else updateShownUsers(clientCustomerManager.getPayedFileProducts(person.getUsername()));
+            updateShownProducts(clientSellerManager.getSoldFileProducts(person.getUsername()));
+        }else updateShownProducts(clientCustomerManager.getPayedFileProducts(person.getUsername()));
     }
 }
