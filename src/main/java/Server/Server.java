@@ -765,6 +765,11 @@ public class Server {
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR,e);
                     }
+                case SET_IP_PORT_NULL:
+                    seller = (Seller)manager.getPersonByUsername((String)clientMessage.getParameters().get(0));
+                    seller.setIp(null);
+                    seller.setPort(0);
+                    return new ServerMessage(MessageType.SET_IP_PORT_NULL,seller);
             }
             return null;
         }

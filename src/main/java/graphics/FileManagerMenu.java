@@ -138,7 +138,7 @@ public class FileManagerMenu extends Menu implements Initializable {
                     out.flush();
                 }
                 socket.close();
-                Thread.sleep(500);
+                setPerson(clientSellerManager.setIPPortNull(person.getUsername()));
                 updateShownProducts(clientSellerManager.getSoldFileProducts(person.getUsername()));
             } catch (Exception e) {
                 e.printStackTrace();
