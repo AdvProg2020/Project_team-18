@@ -9,8 +9,10 @@ public class Discount implements Idable<Discount> {
 
     private int discountId;
     private String discountCode;
-    private LocalDateTime beginDate;
-    private LocalDateTime endDate;
+    //temporarily commented and made transient
+    private transient LocalDateTime beginDate;
+    //temporarily commented and made transient
+    private transient LocalDateTime endDate;
     private int usagePerCustomer;
     private double percentage;
     private double maxAmount;

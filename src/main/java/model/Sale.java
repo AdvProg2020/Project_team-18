@@ -5,8 +5,10 @@ import java.util.ArrayList;
 
 public class Sale implements Idable<Sale> {
     private int saleId;
-    private LocalDateTime beginDate;
-    private LocalDateTime endDate;
+    //temporarily commented and made transient
+    private transient LocalDateTime beginDate;
+    //temporarily commented and made transient
+    private transient LocalDateTime endDate;
     private double amountOfSale;
     private ArrayList<Product> productsWithThisSale;
     private transient static ArrayList<Sale> allSales = new ArrayList<>();

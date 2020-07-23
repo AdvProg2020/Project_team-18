@@ -18,6 +18,7 @@ public class Category implements Idable<Category> {
         this.categoryName = categoryName;
         this.thisCategoryProducts = new ArrayList<>();
         this.properties = new HashMap<>();
+        this.id = idSetter();
         switch (imageOption){
             case "-1":
                 this.imagePath = "file:src/main/java/graphics/fxml/images/FileIcon.png";
@@ -52,7 +53,6 @@ public class Category implements Idable<Category> {
             case "10" :
                 this.imagePath = "file:src/main/java/graphics/fxml/images/shoes.jpg";
         }
-        this.id = idSetter();
     }
     private int idSetter() {
         if (allCategories.size() == 0) {

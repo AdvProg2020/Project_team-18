@@ -16,10 +16,10 @@
   {
     "@type": "bank.BankAccount",
     "@val": {
-      "firstName": "c1",
-      "lastName": "c1",
-      "userName": "c1customer",
-      "passWord": "imc1",
+      "firstName": "s",
+      "lastName": "s",
+      "userName": "sseller",
+      "passWord": "ims",
       "value": 50.0,
       "accountId": 2,
       "withdrawalTransactions": [],
@@ -30,10 +30,10 @@
   {
     "@type": "bank.BankAccount",
     "@val": {
-      "firstName": "s1",
-      "lastName": "s1",
-      "userName": "s1seller",
-      "passWord": "ims1",
+      "firstName": "c",
+      "lastName": "c",
+      "userName": "ccustomer",
+      "passWord": "imc",
       "value": 50.0,
       "accountId": 3,
       "withdrawalTransactions": [],

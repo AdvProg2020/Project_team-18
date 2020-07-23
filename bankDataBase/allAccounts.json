@@ -2,7 +2,7 @@
   "@type": "java.util.HashMap",
   "@val": {
     "shop": "shop",
-    "s1seller": "ims1",
-    "c1customer": "imc1"
+    "sseller": "ims",
+    "ccustomer": "imc"
   }
 }

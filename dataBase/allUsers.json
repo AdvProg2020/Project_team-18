@@ -4,102 +4,300 @@
     "@val": {
       "allRequests": [],
       "id": 1,
-      "username": "a1",
-      "password": "a1",
-      "name": "a1",
-      "familyName": "a1",
-      "email": "a1@a1",
-      "number": "22",
+      "username": "a",
+      "password": "a",
+      "name": "a",
+      "familyName": "a",
+      "email": "a@a",
+      "number": "1",
       "balance": 0.0,
       "role": "ADMIN",
       "availability": "OFFLINE"
     }
   },
   {
-    "@type": "model.Customer",
-    "@val": {
-      "buyHistory": [],
-      "allDiscounts": [],
-      "amountOfAllPurchasing": 0.0,
-      "wallet": {
-        "money": 50.0,
-        "bankAccountUsername": "c1customer",
-        "bankAccountPassword": "imc1",
-        "currentBankToken": "",
-        "accountId": 2
-      },
-      "payedFileProducts": [],
-      "supportersSender": [],
-      "inbox": [],
-      "sentMessages": [],
-      "combinedMessages": [],
-      "id": 2,
-      "username": "c1",
-      "password": "c1",
-      "name": "c1",
-      "familyName": "c1",
-      "email": "c1@c1",
-      "number": "22",
-      "balance": 50.0,
-      "role": "CUSTOMER",
-      "availability": "OFFLINE"
-    }
-  },
-  {
     "@type": "model.Seller",
     "@val": {
-      "company": "s1",
-      "sellHistory": [],
+      "company": "s",
+      "sellHistory": [
+        {
+          "sellCode": 1,
+          "receivedMoney": 30.0,
+          "saleAmount": 0.0,
+          "customer": {
+            "buyHistory": [
+              {
+                "buyCode": 1,
+                "paidMoney": 30.0,
+                "discountAmount": 0.0,
+                "seller": [
+                  "@root.1"
+                ],
+                "customerInfo": {
+                  "address": "x",
+                  "phoneNumber": "x",
+                  "receiverName": "x"
+                },
+                "discountUsed": "",
+                "status": "WAITING",
+                "date": "2020,07,23,16,56",
+                "products": [
+                  [
+                    {
+                      "imagePath": "file:src/main/java/graphics/fxml/images/clothing.jpg",
+                      "productId": 1,
+                      "name": "cloth",
+                      "brand": "x",
+                      "price": 10.0,
+                      "numberInCart": 1,
+                      "seller": {
+                        "company": "s",
+                        "sellHistory": "@root.1.sellHistory",
+                        "productsToSell": [
+                          "@root.1.sellHistory.0.customer.buyHistory.0.products.0-key",
+                          {
+                            "@type": "model.FileProduct",
+                            "@val": {
+                              "imagePath": "file:src/main/java/graphics/fxml/images/FileIcon.png",
+                              "productId": 2,
+                              "name": "file",
+                              "brand": "x",
+                              "price": 20.0,
+                              "numberInCart": 1,
+                              "seller": "@root.1.sellHistory.0.customer.buyHistory.0.products.0-key.seller",
+                              "supply": 1,
+                              "category": {
+                                "id": 2,
+                                "categoryName": "file",
+                                "imagePath": "file:src/main/java/graphics/fxml/images/FileIcon.png",
+                                "thisCategoryProducts": [
+                                  "@root.1.sellHistory.0.customer.buyHistory.0.products.0-key.seller.productsToSell.1"
+                                ],
+                                "properties": {}
+                              },
+                              "categoryName": "file",
+                              "sellerName": "s",
+                              "explanation": "x",
+                              "averageRate": 0.0,
+                              "comments": [],
+                              "rates": [],
+                              "thisProductsBuyers": [],
+                              "salePercent": 0.0,
+                              "numberOfSeen": 0
+                            }
+                          }
+                        ],
+                        "saleList": [],
+                        "wallet": {
+                          "money": 50.0,
+                          "bankAccountUsername": "sseller",
+                          "bankAccountPassword": "ims",
+                          "currentBankToken": "",
+                          "accountId": 2
+                        },
+                        "thisSellerAuctions": [],
+                        "soldFileProducts": [],
+                        "port": 0,
+                        "id": 2,
+                        "username": "s",
+                        "password": "s",
+                        "name": "s",
+                        "familyName": "s",
+                        "email": "s@s",
+                        "number": "1",
+                        "balance": 50.0,
+                        "role": "SELLER",
+                        "availability": "ONLINE"
+                      },
+                      "supply": 2,
+                      "category": {
+                        "id": 1,
+                        "categoryName": "clothing",
+                        "imagePath": "file:src/main/java/graphics/fxml/images/clothing.jpg",
+                        "thisCategoryProducts": [
+                          "@root.1.sellHistory.0.customer.buyHistory.0.products.0-key"
+                        ],
+                        "properties": {}
+                      },
+                      "categoryName": "clothing",
+                      "sellerName": "s",
+                      "explanation": "x",
+                      "averageRate": 0.0,
+                      "comments": [],
+                      "rates": [],
+                      "thisProductsBuyers": [
+                        "@root.1.sellHistory.0.customer"
+                      ],
+                      "salePercent": 0.0,
+                      "numberOfSeen": 0
+                    },
+                    1
+                  ],
+                  [
+                    {
+                      "@type": "model.FileProduct",
+                      "@val": {
+                        "fileState": "READY_TO_DOWNLOAD",
+                        "imagePath": "file:src/main/java/graphics/fxml/images/FileIcon.png",
+                        "productId": 2,
+                        "name": "file",
+                        "brand": "x",
+                        "price": 20.0,
+                        "numberInCart": 1,
+                        "seller": {
+                          "company": "s",
+                          "sellHistory": "@root.1.sellHistory",
+                          "productsToSell": [
+                            {
+                              "imagePath": "file:src/main/java/graphics/fxml/images/clothing.jpg",
+                              "productId": 1,
+                              "name": "cloth",
+                              "brand": "x",
+                              "price": 10.0,
+                              "numberInCart": 0,
+                              "seller": "@root.1.sellHistory.0.customer.buyHistory.0.products.1-key.seller",
+                              "supply": 2,
+                              "category": {
+                                "id": 1,
+                                "categoryName": "clothing",
+                                "imagePath": "file:src/main/java/graphics/fxml/images/clothing.jpg",
+                                "thisCategoryProducts": [
+                                  "@root.1.sellHistory.0.customer.buyHistory.0.products.1-key.seller.productsToSell.0"
+                                ],
+                                "properties": {}
+                              },
+                              "categoryName": "clothing",
+                              "sellerName": "s",
+                              "explanation": "x",
+                              "averageRate": 0.0,
+                              "comments": [],
+                              "rates": [],
+                              "thisProductsBuyers": [],
+                              "salePercent": 0.0,
+                              "numberOfSeen": 0
+                            },
+                            "@root.1.sellHistory.0.customer.buyHistory.0.products.1-key"
+                          ],
+                          "saleList": [],
+                          "wallet": {
+                            "money": 50.0,
+                            "bankAccountUsername": "sseller",
+                            "bankAccountPassword": "ims",
+                            "currentBankToken": "",
+                            "accountId": 2
+                          },
+                          "thisSellerAuctions": [],
+                          "soldFileProducts": [],
+                          "port": 0,
+                          "id": 2,
+                          "username": "s",
+                          "password": "s",
+                          "name": "s",
+                          "familyName": "s",
+                          "email": "s@s",
+                          "number": "1",
+                          "balance": 50.0,
+                          "role": "SELLER",
+                          "availability": "ONLINE"
+                        },
+                        "supply": 2,
+                        "category": {
+                          "id": 2,
+                          "categoryName": "file",
+                          "imagePath": "file:src/main/java/graphics/fxml/images/FileIcon.png",
+                          "thisCategoryProducts": [
+                            "@root.1.sellHistory.0.customer.buyHistory.0.products.1-key"
+                          ],
+                          "properties": {}
+                        },
+                        "categoryName": "file",
+                        "sellerName": "s",
+                        "explanation": "x",
+                        "averageRate": 0.0,
+                        "comments": [],
+                        "rates": [],
+                        "thisProductsBuyers": [
+                          "@root.1.sellHistory.0.customer"
+                        ],
+                        "salePercent": 0.0,
+                        "numberOfSeen": 0
+                      }
+                    },
+                    1
+                  ]
+                ],
+                "id": 0
+              }
+            ],
+            "allDiscounts": [
+              {
+                "discountId": 1,
+                "discountCode": "Random1",
+                "usagePerCustomer": 2,
+                "percentage": 20.0,
+                "maxAmount": 100.0,
+                "customersWithThisDiscount": {
+                  "@root.1.sellHistory.0.customer": 2
+                }
+              }
+            ],
+            "amountOfAllPurchasing": 30.0,
+            "wallet": {
+              "money": 50.0,
+              "bankAccountUsername": "ccustomer",
+              "bankAccountPassword": "imc",
+              "currentBankToken": "",
+              "accountId": 3
+            },
+            "payedFileProducts": [
+              "@root.1.sellHistory.0.customer.buyHistory.0.products.1-key"
+            ],
+            "supportersSender": [],
+            "inbox": [],
+            "sentMessages": [],
+            "combinedMessages": [],
+            "id": 3,
+            "username": "c",
+            "password": "c",
+            "name": "c",
+            "familyName": "c",
+            "email": "c@c",
+            "number": "1",
+            "balance": 20.0,
+            "role": "CUSTOMER",
+            "availability": "OFFLINE"
+          },
+          "sellerProductsInCart": {
+            "@root.1.sellHistory.0.customer.buyHistory.0.products.0-key": 1,
+            "@root.1.sellHistory.0.customer.buyHistory.0.products.1-key": 1
+          },
+          "date": "2020,07,23,16,56",
+          "products": {},
+          "id": 0
+        }
+      ],
       "productsToSell": [
         {
           "imagePath": "file:src/main/java/graphics/fxml/images/clothing.jpg",
           "productId": 1,
           "name": "cloth",
-          "brand": "H&M",
+          "brand": "x",
           "price": 10.0,
-          "numberInCart": 0,
-          "seller": "@root.2",
-          "supply": 2,
+          "numberInCart": 1,
+          "seller": "@root.1",
+          "supply": 1,
           "category": {
-            "id": 0,
+            "id": 1,
             "categoryName": "clothing",
             "imagePath": "file:src/main/java/graphics/fxml/images/clothing.jpg",
             "thisCategoryProducts": [
-              "@root.2.productsToSell.0"
+              "@root.1.productsToSell.0"
             ],
             "properties": {}
           },
           "categoryName": "clothing",
-          "sellerName": "s1",
-          "explanation": "hot",
-          "averageRate": 0.0,
-          "comments": [],
-          "rates": [],
-          "thisProductsBuyers": [],
-          "salePercent": 0.0,
-          "numberOfSeen": 0
-        },
-        {
-          "imagePath": "file:src/main/java/graphics/fxml/images/electronics.jpg",
-          "productId": 2,
-          "name": "elec",
-          "brand": "mac",
-          "price": 30.0,
-          "numberInCart": 0,
-          "seller": "@root.2",
-          "supply": 2,
-          "category": {
-            "id": 0,
-            "categoryName": "electronics",
-            "imagePath": "file:src/main/java/graphics/fxml/images/electronics.jpg",
-            "thisCategoryProducts": [
-              "@root.2.productsToSell.1"
-            ],
-            "properties": {}
-          },
-          "categoryName": "electronics",
-          "sellerName": "s1",
-          "explanation": "apple",
+          "sellerName": "s",
+          "explanation": "x",
           "averageRate": 0.0,
           "comments": [],
           "rates": [],
@@ -110,26 +308,27 @@
         {
           "@type": "model.FileProduct",
           "@val": {
+            "fileState": "DOWNLOADING",
             "imagePath": "file:src/main/java/graphics/fxml/images/FileIcon.png",
-            "productId": 3,
+            "productId": 2,
             "name": "file",
-            "brand": "file",
+            "brand": "x",
             "price": 20.0,
-            "numberInCart": 0,
-            "seller": "@root.2",
-            "supply": 2,
+            "numberInCart": 1,
+            "seller": "@root.1",
+            "supply": 1,
             "category": {
-              "id": 0,
+              "id": 2,
               "categoryName": "file",
               "imagePath": "file:src/main/java/graphics/fxml/images/FileIcon.png",
               "thisCategoryProducts": [
-                "@root.2.productsToSell.2"
+                "@root.1.productsToSell.1"
               ],
               "properties": {}
             },
             "categoryName": "file",
-            "sellerName": "s1",
-            "explanation": "file",
+            "sellerName": "s",
+            "explanation": "x",
             "averageRate": 0.0,
             "comments": [],
             "rates": [],
@@ -142,23 +341,28 @@
       "saleList": [],
       "wallet": {
         "money": 50.0,
-        "bankAccountUsername": "s1seller",
-        "bankAccountPassword": "ims1",
+        "bankAccountUsername": "sseller",
+        "bankAccountPassword": "ims",
         "currentBankToken": "",
-        "accountId": 3
+        "accountId": 2
       },
       "thisSellerAuctions": [],
-      "soldFileProducts": [],
-      "id": 3,
-      "username": "s1",
-      "password": "s1",
-      "name": "s1",
-      "familyName": "s1",
-      "email": "s1@s1",
-      "number": "22",
-      "balance": 50.0,
+      "soldFileProducts": [
+        "@root.1.sellHistory.0.customer.buyHistory.0.products.1-key"
+      ],
+      "ip": "localhost",
+      "port": 9000,
+      "id": 2,
+      "username": "s",
+      "password": "s",
+      "name": "s",
+      "familyName": "s",
+      "email": "s@s",
+      "number": "1",
+      "balance": 80.0,
       "role": "SELLER",
       "availability": "OFFLINE"
     }
-  }
+  },
+  "@root.1.sellHistory.0.customer"
 ]

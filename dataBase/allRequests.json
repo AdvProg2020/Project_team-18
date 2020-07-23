@@ -6,14 +6,14 @@
       "typeOfRequest": "REGISTER_SELLER",
       "stateOfRequest": "ACCEPTED",
       "information": {
-        "number": "22",
-        "password": "s1",
+        "number": "1",
+        "password": "s",
         "role": "seller",
-        "familyName": "s1",
-        "name": "s1",
-        "company": "s1",
-        "email": "s1@s1",
-        "username": "s1"
+        "familyName": "s",
+        "name": "s",
+        "company": "s",
+        "email": "s@s",
+        "username": "s"
       }
     }
   },
@@ -24,11 +24,11 @@
       "typeOfRequest": "ADD_PRODUCT",
       "stateOfRequest": "ACCEPTED",
       "information": {
-        "seller": "s1",
+        "seller": "s",
         "price": "10",
         "name": "cloth",
-        "explanation": "hot",
-        "brand": "H&M",
+        "explanation": "x",
+        "brand": "x",
         "supply": "2",
         "categoryName": "clothing"
       }
@@ -41,28 +41,11 @@
       "typeOfRequest": "ADD_PRODUCT",
       "stateOfRequest": "ACCEPTED",
       "information": {
-        "seller": "s1",
-        "price": "30",
-        "name": "elec",
-        "explanation": "apple",
-        "brand": "mac",
-        "supply": "2",
-        "categoryName": "electronics"
-      }
-    }
-  },
-  {
-    "@type": "model.Request",
-    "@val": {
-      "requestId": 4,
-      "typeOfRequest": "ADD_PRODUCT",
-      "stateOfRequest": "ACCEPTED",
-      "information": {
-        "seller": "s1",
+        "seller": "s",
         "price": "20",
         "name": "file",
-        "explanation": "file",
-        "brand": "file",
+        "explanation": "x",
+        "brand": "x",
         "supply": "2",
         "categoryName": "file"
       }
