@@ -12,6 +12,8 @@ public class Seller extends Person {
     private ArrayList<Auction> thisSellerAuctions;
     // to do : refine in file saver
     private ArrayList<FileProduct> soldFileProducts;
+    private String ip;
+    private int port;
     private transient static ArrayList<Person> allSellers = new ArrayList<>();
 
     public static ArrayList<Person> getAllSellers() {
@@ -25,6 +27,23 @@ public class Seller extends Person {
         this.saleList = new ArrayList<>();
         this.soldFileProducts = new ArrayList<>();
     }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
     public void addToFileProducts(FileProduct fileProduct){
         soldFileProducts.add(fileProduct);
     }
