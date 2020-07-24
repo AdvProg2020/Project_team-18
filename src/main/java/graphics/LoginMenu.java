@@ -39,7 +39,6 @@ public class LoginMenu extends Menu {
 
         } catch (Exception e) {
             message.setText(e.getMessage());
-            person.makeOffline();
         }
     }
 
