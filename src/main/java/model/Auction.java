@@ -143,9 +143,8 @@ public class Auction extends TimerTask implements Idable<Auction> {
     }
 
     public void finishAuction() {
-        System.out.println("hellooooo");
         Timer timer = new Timer();
-        TimerTask task = new Auction();
+        TimerTask task = this;
         Date date = Date.from(this.getEndDate().atZone(ZoneId.systemDefault()).toInstant());
         try {
             timer.schedule(task, date);
