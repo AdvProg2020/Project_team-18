@@ -25,7 +25,7 @@ public class BankAccount {
         if (userName.equals("shop") || userName.equals("temp"))
             value = 0.0;
         else {
-            value = 50.0;
+            value = 1000.0;
             allAccounts.get(0).setValue(allAccounts.get(0).getValue() + 50);
         }
         this.accountId = idSetter();
