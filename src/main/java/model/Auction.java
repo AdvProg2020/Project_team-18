@@ -94,6 +94,7 @@ public class Auction extends TimerTask implements Idable<Auction> {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+        this.finishAuction();
     }
 
     public LocalDateTime getBeginDate() {
@@ -142,6 +143,7 @@ public class Auction extends TimerTask implements Idable<Auction> {
     }
 
     public void finishAuction() {
+        System.out.println("hellooooo");
         Timer timer = new Timer();
         TimerTask task = new Auction();
         Date date = Date.from(this.getEndDate().atZone(ZoneId.systemDefault()).toInstant());
@@ -156,11 +158,8 @@ public class Auction extends TimerTask implements Idable<Auction> {
     @Override
     public void run() {
         if (this.getCustomer() == null) {
-            try {
-                throw new Exception("No Customer!");
-            } catch (Exception e) {
-                System.out.println("Error Occurred!");
-            }
+            System.out.println("error");
+            return;
         } else {
             this.getCustomer().setBalance(this.getCustomer().getBalance() - this.getPrice());
             this.getSeller().addBalance(this.getPrice() * 0.9);
