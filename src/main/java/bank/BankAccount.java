@@ -26,7 +26,7 @@ public class BankAccount {
             value = 0.0;
         else {
             value = 1000.0;
-            allAccounts.get(0).setValue(allAccounts.get(0).getValue() + 50);
+            allAccounts.get(0).setValue(allAccounts.get(0).getValue() + 1000);
         }
         this.accountId = idSetter();
         if(!firstName.equals("temp"))

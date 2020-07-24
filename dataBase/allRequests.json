@@ -7,7 +7,7 @@
       "stateOfRequest": "ACCEPTED",
       "information": {
         "number": "22",
-        "password": "s1",
+        "password": "123456Ss",
         "role": "seller",
         "familyName": "s1",
         "name": "s1",
@@ -44,8 +44,8 @@
         "seller": "s1",
         "price": "30",
         "name": "elec",
-        "explanation": "apple",
-        "brand": "mac",
+        "explanation": "mac",
+        "brand": "apple",
         "supply": "2",
         "categoryName": "electronics"
       }

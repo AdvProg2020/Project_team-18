@@ -29,10 +29,26 @@ public class BankFileSavor {
     }
 
     public void dataSavor () {
+       createFile("./bankDataBase/allAccounts.json");
+       createFile("./bankDataBase/allAccountIds.json");
+       createFile("./bankDataBase/allBankAccounts.json");
+       createFile("./bankDataBase/allReceipts.json");
         writeHashMapToFile(allAccounts , "./bankDataBase/allAccounts.json");
         writeArrayToFile(allAccountIDs , "./bankDataBase/allAccountIds.json");
         writeArrayToFile(bankAccount.getAllAccounts(),"./bankDataBase/allBankAccounts.json");
         writeArrayToFile(receipt.getAllReceipts(),"./bankDataBase/allReceipts.json");
+    }
+
+    private void createFile (String path) {
+        File file = new File(path);
+        if (!file.exists()) {
+            file.getParentFile().mkdir();
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void dataReader() {
