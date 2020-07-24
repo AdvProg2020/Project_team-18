@@ -18,7 +18,6 @@ public class Server {
 
     public static void main(String[] args) {
         new ServerImpl().run();
-        new ChatServer(8080);
     }
 
     private static class ServerImpl {
@@ -565,9 +564,6 @@ public class Server {
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
-                case CHAT_MESSAGE:
-                    ChatClient client = new ChatClient((String) clientMessage.getParameters().get(0));
-                    return new ServerMessage(MessageType.CHAT_MESSAGE, client);
                 case ADD_AUCTION:
                     sellerManager.addAuction((HashMap<String, String>) clientMessage.getParameters().get(0));
                     break;
