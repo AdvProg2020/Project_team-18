@@ -65,7 +65,7 @@ public class AddProductPage extends Menu implements Initializable {
         } else {
             productCategory = category;
         }
-        if (checkPriceValidity(productPrice)) {
+        if (checkPriceValidity(productPrice) && checkDescriptionValidity(productExplanation)) {
             productInformation.put("name", productName);
             productInformation.put("brand", productBrand);
             productInformation.put("price", productPrice);
@@ -92,6 +92,11 @@ public class AddProductPage extends Menu implements Initializable {
             return false;
         } else
             return true;
+    }
+
+    private boolean checkDescriptionValidity (String des) {
+        showError("Too long explanation!", 100);
+        return sellerManager.isInputProper(des);
     }
 
     public void showMessage() {
