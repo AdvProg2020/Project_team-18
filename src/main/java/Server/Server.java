@@ -7,7 +7,6 @@ import model.*;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.Time;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -74,7 +73,7 @@ public class Server {
             this.outputStream = objectOutputStream;
             this.clientSocket = clientSocket;
             this.server = server;
-            timer.schedule(new CheckIPs(IPsOfRequests),10000);
+            timer.schedule(new CheckIPs(IPsOfRequests,clientSocket),10000,10000);
         }
 
         private void handleClient() {
@@ -902,20 +901,6 @@ public class Server {
             return (seller.getBalance() - toWithdraw) >= min;
         }
 
-        public HashMap<String, Integer> getIPsOfRequests() {
-            return IPsOfRequests;
-        }
-
-        public void disconnectClient (String ip){
-            if (clientSocket.getRemoteSocketAddress().toString().equals(ip)) {
-                try {
-                    clientSocket.close();
-                } catch (IOException e) {
-                    System.out.println("error in disconnecting client");
-                }
-            }
-        }
-
         @Override
         public void run() {
             handleClient();
@@ -923,18 +908,28 @@ public class Server {
     }
 
     static class CheckIPs extends TimerTask {
-        HashMap<String , Integer> ips = new HashMap<>();
+        private HashMap<String , Integer> ips = new HashMap<>();
+        private Socket clientSocket;
 
-        public CheckIPs(HashMap<String, Integer> ips) {
+        public CheckIPs(HashMap<String, Integer> ips , Socket clientSocket) {
             this.ips = ips;
+            this.clientSocket = clientSocket;
         }
 
         public void run() {
             System.out.println("start timer");
             for (String s : ips.keySet()) {
-                if(ips.get(s) > 5)
-                    //clientHandler.disconnectClient(s);
-                    System.out.println("workingggg");
+                if(ips.get(s) > 5){
+                    try {
+                        clientSocket.close();
+                    } catch (IOException e) {
+                        System.out.println("error in disconnecting client");
+                    }
+                } else {
+                    for (String s1 : ips.keySet()) {
+                        ips.replace(s1,ips.get(s1),0);
+                    }
+                }
             }
         }
     }
