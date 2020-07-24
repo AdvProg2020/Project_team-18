@@ -3,6 +3,7 @@ package Server;
 import com.gilecode.yagson.YaGson;
 import controller.*;
 import model.*;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -79,7 +80,7 @@ public class Server {
                 while (true) {
                     Scanner scanner = new Scanner(inputStream);
                     clientMessage = yaGson.fromJson(scanner.nextLine(), ClientMessage.class);
-                    if (clientMessage.getToken()!= null) {
+                    if (clientMessage.getToken() != null) {
                         try {
                             String token = clientMessage.getToken().getJWS();
                             Token.readJWS(token);
@@ -87,10 +88,10 @@ public class Server {
                             if (e instanceof io.jsonwebtoken.ExpiredJwtException) {
                                 System.out.println("expired token!");
                                 Formatter formatter = new Formatter(outputStream);
-                                formatter.format(yaGson.toJson(new ServerMessage(MessageType.ERROR,new Exception("expired token!"))) + "\n");
+                                formatter.format(yaGson.toJson(new ServerMessage(MessageType.ERROR, new Exception("expired token!"))) + "\n");
                                 formatter.flush();
                                 continue;
-                            }else{
+                            } else {
                                 break;
                             }
                         }
@@ -132,7 +133,7 @@ public class Server {
                     try {
                         sellerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(1)));
                         sellerManager.addBalance(amount);
-                        return new ServerMessage(MessageType.SELLER_ADD_BALANCE,sellerManager.getPerson());
+                        return new ServerMessage(MessageType.SELLER_ADD_BALANCE, sellerManager.getPerson());
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
@@ -241,13 +242,13 @@ public class Server {
                     Double money = (Double) clientMessage.getParameters().get(0);
                     customerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(1)));
                     customerManager.addBalance(money);
-                    return new ServerMessage(MessageType.ADD_BALANCE,customerManager.getPerson());
+                    return new ServerMessage(MessageType.ADD_BALANCE, customerManager.getPerson());
                 case DECREASE_PRODUCT:
                     String productId1 = (String) clientMessage.getParameters().get(1);
                     customerManager.setCart((Cart) clientMessage.getParameters().get(0));
                     try {
                         Cart resultCartAfterDecrease = customerManager.decreaseProduct(productId1);
-                        return new ServerMessage(MessageType.DECREASE_PRODUCT,resultCartAfterDecrease);
+                        return new ServerMessage(MessageType.DECREASE_PRODUCT, resultCartAfterDecrease);
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
@@ -255,7 +256,7 @@ public class Server {
                     try {
                         customerManager.setCart((Cart) clientMessage.getParameters().get(0));
                         Cart resultCart = customerManager.increaseProduct((String) clientMessage.getParameters().get(1));
-                        return new ServerMessage(MessageType.INCREASE_PRODUCT,resultCart);
+                        return new ServerMessage(MessageType.INCREASE_PRODUCT, resultCart);
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
@@ -337,7 +338,7 @@ public class Server {
                         purchasingManager.setPerson(thisPerson);
                         purchasingManager.setCart((Cart) clientMessage.getParameters().get(1));
                         Cart result = purchasingManager.performPayment(receiverInformation, totalPrice, percentage, discountUsed);
-                        return new ServerMessage(MessageType.PERFORM_PAYMENT,result);
+                        return new ServerMessage(MessageType.PERFORM_PAYMENT, result);
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
@@ -426,7 +427,7 @@ public class Server {
                     return new ServerMessage(MessageType.GET_BUY_LOG_BY_CODE, storage.getBuyLogByCode((String) clientMessage.getParameters().get(0)));
                 case REGISTER:
                     try {
-                        HashMap<String,String> registerInfo = (HashMap<String, String>) clientMessage.getParameters().get(0);
+                        HashMap<String, String> registerInfo = (HashMap<String, String>) clientMessage.getParameters().get(0);
                         manager.register(registerInfo);
                         if (!registerInfo.get("role").equals("seller"))
                             createBankAccount(registerInfo);
@@ -441,7 +442,7 @@ public class Server {
                     updatedVersion = (String) clientMessage.getParameters().get(1);
                     try {
                         manager.editField(field, updatedVersion);
-                        return new ServerMessage(MessageType.EDIT_FIELD,manager.getPerson());
+                        return new ServerMessage(MessageType.EDIT_FIELD, manager.getPerson());
                     } catch (Exception e) {
                         return new ServerMessage(MessageType.ERROR, e);
                     }
@@ -499,7 +500,7 @@ public class Server {
                             (String) clientMessage.getParameters().get(1), (String) clientMessage.getParameters().get(2));
                     Discount toBeUpdated = storage.getDiscountByCode((String) clientMessage.getParameters().get(0));
                     toBeUpdated = resultDiscount;
-                    return new ServerMessage(MessageType.EDIT_DISCOUNT_FIELD,toBeUpdated);
+                    return new ServerMessage(MessageType.EDIT_DISCOUNT_FIELD, toBeUpdated);
                 case CREATE_DISCOUNT_CODE:
                     String code = (String) clientMessage.getParameters().get(0);
                     LocalDateTime startDate = (LocalDateTime) clientMessage.getParameters().get(1);
@@ -528,7 +529,7 @@ public class Server {
                         String requestId = (String) clientMessage.getParameters().get(0);
                         Request request = storage.getRequestById(Integer.parseInt(requestId));
                         adminManager.acceptRequest(requestId);
-                        if(request.getTypeOfRequest().equals(RequestType.REGISTER_SELLER)) {
+                        if (request.getTypeOfRequest().equals(RequestType.REGISTER_SELLER)) {
                             createBankAccount(request.getInformation());
                         }
                         break;
@@ -574,10 +575,13 @@ public class Server {
                     return new ServerMessage(MessageType.VIEW_ALL_AUCTIONS, adminManager.viewAllAuctions());
                 case BIDDING:
                     Auction auction = manager.getAuctionById((int) clientMessage.getParameters().get(0));
+                    if (auction.getCustomer() != null)
+                        auction.getCustomer().setBalance(auction.getCustomer().getBalance() + auction.getPrice());
                     Double newPrice = Double.parseDouble((String) clientMessage.getParameters().get(1));
                     Customer newCustomer = (Customer) storage.getUserByUsername((String) clientMessage.getParameters().get(2));
                     auction.setPrice(newPrice);
                     auction.setCustomer(newCustomer);
+                    newCustomer.setBalance(newCustomer.getBalance() - newPrice);
                     System.out.println(newPrice + " " + newCustomer.getUsername());
                     break;
                 case SEND_MESSAGE_FROM_CUSTOMER:
@@ -603,7 +607,7 @@ public class Server {
                         System.out.println(e.getMessage());
                     }
                     String name = (String) clientMessage.getParameters().get(0);
-                    if (name.equals("no user!")){
+                    if (name.equals("no user!")) {
                         manager.terminate();
                         break;
                     } else {
@@ -659,7 +663,7 @@ public class Server {
                     String withdraw = "get_token " + seller.getWallet().getBankAccountUsername() + " " +
                             seller.getWallet().getBankAccountPassword();
                     double minBalanceInWallet = sellerManager.getMinBalance();
-                    if (isValidWithdrawal(minBalanceInWallet, seller,(double) clientMessage.getParameters().get(0))) {
+                    if (isValidWithdrawal(minBalanceInWallet, seller, (double) clientMessage.getParameters().get(0))) {
                         try {
                             String token = getTokenFromBank(withdraw);
                             if (token.equals(""))
@@ -675,7 +679,7 @@ public class Server {
                         }
                         break;
                     } else {
-                        return new ServerMessage(MessageType.ERROR,new Exception("not valid withdrawal"));
+                        return new ServerMessage(MessageType.ERROR, new Exception("not valid withdrawal"));
                     }
                 case PERFORM_PAYMENT_WiTH_BANK_ACCOUNT:
                     HashMap<String, String> receiverInformation1 = (HashMap<String, String>) clientMessage.getParameters().get(2);
@@ -684,7 +688,7 @@ public class Server {
                     String discountUsed1 = (String) clientMessage.getParameters().get(5);
                     try {
                         Person person2 = storage.getUserByUsername((String) clientMessage.getParameters().get(0));
-                        boolean wasSuccessful = performPaymentWithBank(receiverInformation1, totalPrice1, percentage2, discountUsed1,person2);
+                        boolean wasSuccessful = performPaymentWithBank(receiverInformation1, totalPrice1, percentage2, discountUsed1, person2);
                         if (wasSuccessful) {
                             purchasingManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(0)));
                             purchasingManager.setCart((Cart) clientMessage.getParameters().get(1));
@@ -696,10 +700,10 @@ public class Server {
                     }
                 case GET_SOLD_FILE_PRODUCTS:
                     seller = (Seller) storage.getUserByUsername((String) clientMessage.getParameters().get(0));
-                    return new ServerMessage(MessageType.GET_SOLD_FILE_PRODUCTS,seller.getSoldFileProducts());
+                    return new ServerMessage(MessageType.GET_SOLD_FILE_PRODUCTS, seller.getSoldFileProducts());
                 case GET_PAYED_FILE_PRODUCTS:
                     newCustomer = (Customer) storage.getUserByUsername((String) clientMessage.getParameters().get(0));
-                    return new ServerMessage(MessageType.GET_PAYED_FILE_PRODUCTS,newCustomer.getPayedFileProducts());
+                    return new ServerMessage(MessageType.GET_PAYED_FILE_PRODUCTS, newCustomer.getPayedFileProducts());
                 case GET_SHOP_BALANCE:
                     try {
                         String charge = "get_token shop shop";
@@ -707,9 +711,9 @@ public class Server {
                         server.bankDataOutputStream.writeUTF("get_balance " + token);
                         server.bankDataOutputStream.flush();
                         String balanceToReturn = server.bankDataInputStream.readUTF();
-                        return new ServerMessage(MessageType.GET_SHOP_BALANCE,balanceToReturn);
+                        return new ServerMessage(MessageType.GET_SHOP_BALANCE, balanceToReturn);
                     } catch (IOException e) {
-                        return new ServerMessage(MessageType.ERROR,e.getMessage());
+                        return new ServerMessage(MessageType.ERROR, e.getMessage());
                     }
                 case SET_WAGE:
                     int wagePercentage = (int) clientMessage.getParameters().get(0);
@@ -720,33 +724,35 @@ public class Server {
                     sellerManager.setMinBalance(min);
                     break;
                 case GET_PERSON_BY_USERNAME:
-                    return new ServerMessage(MessageType.GET_PERSON_BY_USERNAME,manager.getPersonByUsername((String)clientMessage.getParameters().get(0)));
+                    return new ServerMessage(MessageType.GET_PERSON_BY_USERNAME, manager.getPersonByUsername((String) clientMessage.getParameters().get(0)));
                 case SEND_IP_PORT:
-                     seller = (Seller)manager.getPersonByUsername((String)clientMessage.getParameters().get(2));
-                    seller.setIp((String)clientMessage.getParameters().get(0));
-                    seller.setPort((int)clientMessage.getParameters().get(1));
-                    return new ServerMessage(MessageType.SEND_IP_PORT,true);
+                    seller = (Seller) manager.getPersonByUsername((String) clientMessage.getParameters().get(2));
+                    seller.setIp((String) clientMessage.getParameters().get(0));
+                    seller.setPort((int) clientMessage.getParameters().get(1));
+                    return new ServerMessage(MessageType.SEND_IP_PORT, true);
                 case GET_SELLER_IP:
-                    seller = (Seller)manager.getPersonByUsername((String)clientMessage.getParameters().get(0));
+                    seller = (Seller) manager.getPersonByUsername((String) clientMessage.getParameters().get(0));
                     String ip = seller.getIp();
-                    if (ip == null) return new ServerMessage(MessageType.ERROR,new Exception("Seller is not available"));
-                    else return new ServerMessage(MessageType.GET_SELLER_IP,ip);
+                    if (ip == null)
+                        return new ServerMessage(MessageType.ERROR, new Exception("Seller is not available"));
+                    else return new ServerMessage(MessageType.GET_SELLER_IP, ip);
                 case GET_SELLER_PORT:
-                    seller = (Seller)manager.getPersonByUsername((String)clientMessage.getParameters().get(0));
+                    seller = (Seller) manager.getPersonByUsername((String) clientMessage.getParameters().get(0));
                     int port = seller.getPort();
-                    if (port == 0) return new ServerMessage(MessageType.ERROR,new Exception("Seller is not available"));
-                    else return new ServerMessage(MessageType.GET_SELLER_PORT,port);
+                    if (port == 0)
+                        return new ServerMessage(MessageType.ERROR, new Exception("Seller is not available"));
+                    else return new ServerMessage(MessageType.GET_SELLER_PORT, port);
                 case SET_FILE_DOWNLOADING:
                     try {
-                        FileProduct fileProduct = (FileProduct) manager.getProductById((int)clientMessage.getParameters().get(0));
+                        FileProduct fileProduct = (FileProduct) manager.getProductById((int) clientMessage.getParameters().get(0));
                         fileProduct.setFileState(FileState.DOWNLOADING);
-                        Customer customer = (Customer)manager.getPersonByUsername((String)clientMessage.getParameters().get(1));
-                        seller = (Seller)manager.getPersonByUsername(fileProduct.getSellerName());
+                        Customer customer = (Customer) manager.getPersonByUsername((String) clientMessage.getParameters().get(1));
+                        seller = (Seller) manager.getPersonByUsername(fileProduct.getSellerName());
                         customer.findInFileProductsById(fileProduct.getProductId()).setFileState(FileState.DOWNLOADING);
                         seller.findInFileProductsById(fileProduct.getProductId()).setFileState(FileState.DOWNLOADING);
                         break;
                     } catch (Exception e) {
-                        return new ServerMessage(MessageType.ERROR,e);
+                        return new ServerMessage(MessageType.ERROR, e);
                     }
                 case GET_AUCTION_BY_ID:
                     return new ServerMessage(MessageType.GET_AUCTION_BY_ID, manager.getAuctionById((int) clientMessage.getParameters().get(0)));
@@ -757,27 +763,27 @@ public class Server {
                     break;
                 case SET_FILE_DOWNLOADED:
                     try {
-                        FileProduct fileProduct = (FileProduct) manager.getProductById((int)clientMessage.getParameters().get(0));
+                        FileProduct fileProduct = (FileProduct) manager.getProductById((int) clientMessage.getParameters().get(0));
                         fileProduct.setFileState(FileState.DOWNLOADED);
-                        Customer customer = (Customer)manager.getPersonByUsername((String)clientMessage.getParameters().get(1));
-                        seller = (Seller)manager.getPersonByUsername(fileProduct.getSellerName());
+                        Customer customer = (Customer) manager.getPersonByUsername((String) clientMessage.getParameters().get(1));
+                        seller = (Seller) manager.getPersonByUsername(fileProduct.getSellerName());
                         customer.findInFileProductsById(fileProduct.getProductId()).setFileState(FileState.DOWNLOADED);
                         seller.findInFileProductsById(fileProduct.getProductId()).setFileState(FileState.DOWNLOADED);
                         break;
                     } catch (Exception e) {
-                        return new ServerMessage(MessageType.ERROR,e);
+                        return new ServerMessage(MessageType.ERROR, e);
                     }
                 case SET_IP_PORT_NULL:
-                    seller = (Seller)manager.getPersonByUsername((String)clientMessage.getParameters().get(0));
+                    seller = (Seller) manager.getPersonByUsername((String) clientMessage.getParameters().get(0));
                     seller.setIp(null);
                     seller.setPort(0);
-                    return new ServerMessage(MessageType.SET_IP_PORT_NULL,seller);
+                    return new ServerMessage(MessageType.SET_IP_PORT_NULL, seller);
             }
             return null;
         }
 
-        private boolean performPaymentWithBank (HashMap<String,String> information, double totalPrice,
-                                             double percentage, String discountCode, Person person) {
+        private boolean performPaymentWithBank(HashMap<String, String> information, double totalPrice,
+                                               double percentage, String discountCode, Person person) {
             double moneyToTransfer = totalPrice - totalPrice * (1.0 * percentage / 100);
             try {
                 Customer customer = (Customer) person;
@@ -786,7 +792,7 @@ public class Server {
                 String token = getTokenFromBank(charge);
                 if (token.equals(""))
                     throw new Exception("username/password is invalid");
-                int receipt = moveToShopAccount(token,moneyToTransfer, customer.getWallet().getAccountId(), "payment");
+                int receipt = moveToShopAccount(token, moneyToTransfer, customer.getWallet().getAccountId(), "payment");
                 boolean wasPaid = pay(receipt);
                 if (wasPaid) {
                     return true;
@@ -869,7 +875,7 @@ public class Server {
             return false;
         }
 
-        private int moveFromShopAccount (String token, double money, int destId, String description) {
+        private int moveFromShopAccount(String token, double money, int destId, String description) {
             String request = "create_receipt " + token + " move " + money + " 1 " + destId + " " + description;
             System.out.println(request);
             try {
@@ -884,8 +890,8 @@ public class Server {
             return 0;
         }
 
-        private boolean isValidWithdrawal(double min, Seller seller,double toWithdraw) {
-           return (seller.getBalance() - toWithdraw) >= min ;
+        private boolean isValidWithdrawal(double min, Seller seller, double toWithdraw) {
+            return (seller.getBalance() - toWithdraw) >= min;
         }
 
         @Override
