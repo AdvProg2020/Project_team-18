@@ -195,4 +195,8 @@ public class SellerManager extends Manager {
     public void setMinBalance(double minBalance) {
         this.minBalance = minBalance;
     }
+
+    public ArrayList<Product> getSellerProducts(Seller seller) {
+        return seller.getProductsToSell();
+    }
 }

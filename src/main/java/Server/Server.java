@@ -7,7 +7,6 @@ import model.*;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.Time;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -68,13 +67,14 @@ public class Server {
         AdminManager adminManager = new AdminManager();
         Storage storage = new Storage();
         HashMap<String,Integer> IPsOfRequests = new HashMap<>();
+        HashMap<String,Integer> failedRequests = new HashMap<>();
 
         public ClientHandler(OutputStream objectOutputStream, InputStream objectInputStream, ServerImpl server , Socket clientSocket) {
             this.inputStream = objectInputStream;
             this.outputStream = objectOutputStream;
             this.clientSocket = clientSocket;
             this.server = server;
-            timer.schedule(new CheckIPs(IPsOfRequests),10000);
+            timer.schedule(new CheckIPs(IPsOfRequests,clientSocket,failedRequests),10000,10000);
         }
 
         private void handleClient() {
@@ -117,7 +117,17 @@ public class Server {
             }
         }
 
+        private void updateFailedAttemptsHashMap(String ip) {
+            for (String s : failedRequests.keySet()) {
+                if(s.equals(ip))
+                    failedRequests.replace(s,failedRequests.get(s),failedRequests.get(s)+1);
+                return;
+            }
+            failedRequests.put(ip,1);
+        }
+
         private ServerMessage interpret(ClientMessage clientMessage) {
+            String ipAddress = clientSocket.getRemoteSocketAddress().toString();
             switch (clientMessage.getMessageType()) {
                 case DOES_USERNAME_EXIST:
                     String username = (String) clientMessage.getParameters().get(0);
@@ -132,6 +142,7 @@ public class Server {
                         manager.getPerson().makeOnline();
                         return serverMessage;
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case LOGOUT:
@@ -146,6 +157,7 @@ public class Server {
                         sellerManager.addBalance(amount);
                         return new ServerMessage(MessageType.SELLER_ADD_BALANCE, sellerManager.getPerson());
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case DOES_SELLER_HAVE_LOG:
@@ -154,6 +166,7 @@ public class Server {
                         sellerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(1)));
                         return new ServerMessage(MessageType.DOES_SELLER_HAVE_LOG, sellerManager.doesSellerHasThisSellLog(sellLogCode));
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case SELLER_SELL_HISTORY:
@@ -161,6 +174,7 @@ public class Server {
                         sellerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(0)));
                         return new ServerMessage(MessageType.SELLER_SELL_HISTORY, sellerManager.getSellerSellHistory());
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case REMOVE_PRODUCT_FROM_OFF:
@@ -170,6 +184,7 @@ public class Server {
                         sellerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(0)));
                         sellerManager.removeProductFromOff(offId, productId);
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                     break;
@@ -180,6 +195,7 @@ public class Server {
                         sellerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(0)));
                         sellerManager.addProductToOff(offId, productId);
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                     break;
@@ -189,6 +205,7 @@ public class Server {
                         sellerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(1)));
                         return new ServerMessage(MessageType.DOES_SELLER_HAVE_OFF, sellerManager.doesSellerHaveThisOff(offId));
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case DOES_SELLER_HAVE_PRODUCT:
@@ -197,6 +214,7 @@ public class Server {
                         sellerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(1)));
                         return new ServerMessage(MessageType.DOES_SELLER_HAVE_PRODUCT, sellerManager.doesSellerHaveProduct(productId));
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case EDIT_OFF:
@@ -207,6 +225,7 @@ public class Server {
                         sellerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(0)));
                         sellerManager.editOff(offId, field, updatedVersion);
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                     break;
@@ -217,6 +236,7 @@ public class Server {
                         sellerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(0)));
                         sellerManager.addOff(informationOFF, productsInOff);
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                     break;
@@ -228,6 +248,7 @@ public class Server {
                         sellerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(0)));
                         sellerManager.editProduct(productId, field, updatedVersion);
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                     break;
@@ -237,6 +258,7 @@ public class Server {
                         sellerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(0)));
                         sellerManager.addProduct(information);
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                     break;
@@ -246,6 +268,7 @@ public class Server {
                         sellerManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(0)));
                         sellerManager.removeProduct(productId);
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                     break;
@@ -261,6 +284,7 @@ public class Server {
                         Cart resultCartAfterDecrease = customerManager.decreaseProduct(productId1);
                         return new ServerMessage(MessageType.DECREASE_PRODUCT, resultCartAfterDecrease);
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case INCREASE_PRODUCT:
@@ -269,6 +293,7 @@ public class Server {
                         Cart resultCart = customerManager.increaseProduct((String) clientMessage.getParameters().get(1));
                         return new ServerMessage(MessageType.INCREASE_PRODUCT, resultCart);
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case GET_CART:
@@ -286,6 +311,7 @@ public class Server {
                     try {
                         customerManager.rateProduct(idOfProduct, rate, userId);
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                     break;
@@ -305,6 +331,7 @@ public class Server {
                         purchasingManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(1)));
                         return new ServerMessage(MessageType.DOES_CUSTOMER_HAVE_DISCOUNT, purchasingManager.doesCustomerHaveDiscountCode(discountCode));
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case UPDATE_DISCOUNT_USAGE:
@@ -313,6 +340,7 @@ public class Server {
                         purchasingManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(1)));
                         purchasingManager.updateDiscountUsagePerPerson(discountCode);
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                     break;
@@ -321,6 +349,7 @@ public class Server {
                     try {
                         return new ServerMessage(MessageType.GET_DISCOUNT_PERCENTAGE, purchasingManager.getDiscountPercentage(discountCode));
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case DOES_CUSTOMER_HAVE_MONEY:
@@ -329,6 +358,7 @@ public class Server {
                         purchasingManager.setPerson(storage.getUserByUsername((String) clientMessage.getParameters().get(1)));
                         return new ServerMessage(MessageType.DOES_CUSTOMER_HAVE_MONEY, purchasingManager.doesCustomerHaveEnoughMoney(price));
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case CHECK_DISCOUNT_VALIDITY:
@@ -336,6 +366,7 @@ public class Server {
                     try {
                         purchasingManager.checkDiscountValidity(discountCode);
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                     break;
@@ -351,6 +382,7 @@ public class Server {
                         Cart result = purchasingManager.performPayment(receiverInformation, totalPrice, percentage, discountUsed);
                         return new ServerMessage(MessageType.PERFORM_PAYMENT, result);
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case CALCULATE_TOTAL_PRICE_WITH_DISCOUNT:
@@ -359,6 +391,7 @@ public class Server {
                         purchasingManager.setCart((Cart) clientMessage.getParameters().get(1));
                         return new ServerMessage(MessageType.CALCULATE_TOTAL_PRICE_WITH_DISCOUNT, purchasingManager.calculateTotalPriceWithDiscount(discountCode));
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case CALCULATE_TOTAL_PRICE_WITHOUT_DISCOUNT:
@@ -366,12 +399,14 @@ public class Server {
                         purchasingManager.setCart((Cart) clientMessage.getParameters().get(0));
                         return new ServerMessage(MessageType.CALCULATE_TOTAL_PRICE_WITHOUT_DISCOUNT, purchasingManager.getTotalPriceWithoutDiscount());
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case VIEW_ALL_PRODUCTS:
                     try {
                         return new ServerMessage(MessageType.VIEW_ALL_PRODUCTS, searchingManager.viewAllProducts());
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case PERFORM_FILTER:
@@ -380,6 +415,7 @@ public class Server {
                     try {
                         return new ServerMessage(MessageType.PERFORM_FILTER, searchingManager.performFilter(filterTag, info));
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case PERFORM_SORT:
@@ -387,6 +423,7 @@ public class Server {
                     try {
                         return new ServerMessage(MessageType.PERFORM_SORT, searchingManager.performSort(sortTag));
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case DISABLE_FILTER:
@@ -395,6 +432,7 @@ public class Server {
                     try {
                         return new ServerMessage(MessageType.DISABLE_FILTER, searchingManager.disableFilter(filterTag, info));
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case DISABLE_SORT:
@@ -402,6 +440,7 @@ public class Server {
                     try {
                         return new ServerMessage(MessageType.DISABLE_SORT, searchingManager.disableSort(sortTag));
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case DEFAULT_SORT:
@@ -409,12 +448,14 @@ public class Server {
                     try {
                         return new ServerMessage(MessageType.DEFAULT_SORT, searchingManager.performDefaultSort(productsOfSort));
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case VIEW_ALL_CATEGORIES:
                     try {
                         return new ServerMessage(MessageType.VIEW_ALL_CATEGORIES, searchingManager.viewAllCategories());
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case ADD_COMMENT:
@@ -430,6 +471,7 @@ public class Server {
                     try {
                         return new ServerMessage(MessageType.GET_PRODUCT_BY_ID, manager.getProductById(productId));
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case GET_SELL_LOG_BY_CODE:
@@ -444,6 +486,7 @@ public class Server {
                             createBankAccount(registerInfo);
                         break;
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case DOES_ANY_ADMIN_EXIST:
@@ -455,6 +498,7 @@ public class Server {
                         manager.editField(field, updatedVersion);
                         return new ServerMessage(MessageType.EDIT_FIELD, manager.getPerson());
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case GET_ALL_USERS:
@@ -464,6 +508,7 @@ public class Server {
                         adminManager.deleteUser((String) clientMessage.getParameters().get(0));
                         break;
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case REMOVE_PRODUCT:
@@ -471,6 +516,7 @@ public class Server {
                         adminManager.removeProduct((String) clientMessage.getParameters().get(0));
                         break;
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case ADD_CATEGORY:
@@ -479,6 +525,7 @@ public class Server {
                         adminManager.addCategory((String) clientMessage.getParameters().get(0), (String) clientMessage.getParameters().get(1));
                         break;
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case VIEW_ALL_DISCOUNT_CODES:
@@ -490,6 +537,7 @@ public class Server {
                         adminManager.viewDiscountCode((String) clientMessage.getParameters().get(0));
                         break;
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case ADD_CUSTOMER_TO_DISCOUNT:
@@ -497,6 +545,7 @@ public class Server {
                         adminManager.addCustomerToDiscount((String) clientMessage.getParameters().get(0), (String) clientMessage.getParameters().get(1));
                         break;
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case REMOVE_CUSTOMER_FROM_DISCOUNT:
@@ -504,6 +553,7 @@ public class Server {
                         adminManager.removeCustomerFromDiscount((String) clientMessage.getParameters().get(0), (String) clientMessage.getParameters().get(1));
                         break;
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case EDIT_DISCOUNT_FIELD:
@@ -526,6 +576,7 @@ public class Server {
                         adminManager.removeDiscountCode((String) clientMessage.getParameters().get(0));
                         break;
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case REMOVE_CATEGORY:
@@ -533,6 +584,7 @@ public class Server {
                         adminManager.removeCategory((String) clientMessage.getParameters().get(0));
                         break;
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case ACCEPT_REQUEST:
@@ -545,6 +597,7 @@ public class Server {
                         }
                         break;
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case DECLINE_REQUEST:
@@ -552,6 +605,7 @@ public class Server {
                         adminManager.declineRequest((String) clientMessage.getParameters().get(0));
                         break;
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case EDIT_CATEGORY_BY_NAME:
@@ -564,6 +618,7 @@ public class Server {
                     try {
                         return new ServerMessage(MessageType.VIEW_CATEGORY, adminManager.viewCategory((String) clientMessage.getParameters().get(0)));
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case VIEW_ALL_BUY_LOGS:
@@ -574,6 +629,7 @@ public class Server {
                         adminManager.sendPurchase((String) clientMessage.getParameters().get(0));
                         break;
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case ADD_AUCTION:
@@ -642,6 +698,7 @@ public class Server {
                                 customer.setBalance(customer.getBalance() + (double) clientMessage.getParameters().get(0));
                             }
                         } catch (Exception e) {
+                            updateFailedAttemptsHashMap(ipAddress);
                             System.out.println(e.getMessage());
                         }
                         break;
@@ -661,6 +718,7 @@ public class Server {
                                 seller.setBalance(seller.getBalance() + (double) clientMessage.getParameters().get(0));
                             }
                         } catch (Exception e) {
+                            updateFailedAttemptsHashMap(ipAddress);
                             System.out.println(e.getMessage());
                         }
                         break;
@@ -683,6 +741,7 @@ public class Server {
                                 seller.setBalance(seller.getBalance() - (double) clientMessage.getParameters().get(0));
                             }
                         } catch (Exception e) {
+                            updateFailedAttemptsHashMap(ipAddress);
                             System.out.println(e.getMessage());
                         }
                         break;
@@ -704,6 +763,7 @@ public class Server {
                         }
                         break;
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case GET_SOLD_FILE_PRODUCTS:
@@ -721,6 +781,7 @@ public class Server {
                         String balanceToReturn = server.bankDataInputStream.readUTF();
                         return new ServerMessage(MessageType.GET_SHOP_BALANCE, balanceToReturn);
                     } catch (IOException e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e.getMessage());
                     }
                 case SET_WAGE:
@@ -760,6 +821,7 @@ public class Server {
                         seller.findInFileProductsById(fileProduct.getProductId()).setFileState(FileState.DOWNLOADING);
                         break;
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case GET_AUCTION_BY_ID:
@@ -779,6 +841,7 @@ public class Server {
                         seller.findInFileProductsById(fileProduct.getProductId()).setFileState(FileState.DOWNLOADED);
                         break;
                     } catch (Exception e) {
+                        updateFailedAttemptsHashMap(ipAddress);
                         return new ServerMessage(MessageType.ERROR, e);
                     }
                 case SET_IP_PORT_NULL:
@@ -786,6 +849,10 @@ public class Server {
                     seller.setIp(null);
                     seller.setPort(0);
                     return new ServerMessage(MessageType.SET_IP_PORT_NULL, seller);
+                case SELLER_PRODUCTS:
+                    Person aimed = storage.getUserByUsername((String) clientMessage.getParameters().get(0));
+                    Seller sellerAimed = (Seller) aimed;
+                    return new ServerMessage(MessageType.SELLER_PRODUCTS, sellerManager.getSellerProducts(sellerAimed));
             }
             return null;
         }
@@ -902,20 +969,6 @@ public class Server {
             return (seller.getBalance() - toWithdraw) >= min;
         }
 
-        public HashMap<String, Integer> getIPsOfRequests() {
-            return IPsOfRequests;
-        }
-
-        public void disconnectClient (String ip){
-            if (clientSocket.getRemoteSocketAddress().toString().equals(ip)) {
-                try {
-                    clientSocket.close();
-                } catch (IOException e) {
-                    System.out.println("error in disconnecting client");
-                }
-            }
-        }
-
         @Override
         public void run() {
             handleClient();
@@ -923,18 +976,43 @@ public class Server {
     }
 
     static class CheckIPs extends TimerTask {
-        HashMap<String , Integer> ips = new HashMap<>();
+        private HashMap<String , Integer> ips = new HashMap<>();
+        private HashMap<String, Integer> failedAttempts = new HashMap<>();
+        private Socket clientSocket;
 
-        public CheckIPs(HashMap<String, Integer> ips) {
+        public CheckIPs(HashMap<String, Integer> ips , Socket clientSocket , HashMap<String, Integer> failedAttempts) {
             this.ips = ips;
+            this.clientSocket = clientSocket;
+            this.failedAttempts = failedAttempts;
         }
 
         public void run() {
-            System.out.println("start timer");
             for (String s : ips.keySet()) {
-                if(ips.get(s) > 5)
-                    //clientHandler.disconnectClient(s);
-                    System.out.println("workingggg");
+                if(ips.get(s) > 100){
+                    try {
+                        clientSocket.close();
+                        System.out.println("Disconnecting client because of too many requests");
+                    } catch (IOException e) {
+                        System.out.println("error in disconnecting client");
+                    }
+                } else {
+                    for (String s1 : ips.keySet()) {
+                        ips.replace(s1,ips.get(s1),0);
+                    }
+                }
+            }
+            for (String str : failedAttempts.keySet()) {
+                if(failedAttempts.get(str) > 5){
+                    try {
+                        clientSocket.close();
+                    } catch (IOException e) {
+                        System.out.println("Disconnecting client because of too many failed requests");
+                    }
+                } else {
+                    for (String str1 : failedAttempts.keySet()) {
+                        failedAttempts.replace(str1,failedAttempts.get(str1),0);
+                    }
+                }
             }
         }
     }

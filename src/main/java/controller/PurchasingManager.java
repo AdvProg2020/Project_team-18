@@ -21,11 +21,11 @@ public class PurchasingManager extends Manager {
         double moneyToTransfer = totalPrice - totalPrice * (1.0 * discountPercentage / 100);
         person.setBalance(person.getBalance() - moneyToTransfer);
         ((Customer) person).addAmountOfAllPurchasing(moneyToTransfer);
-        if (((Customer) person).getAmountOfAllPurchasing() > 100) {
+        /*if (((Customer) person).getAmountOfAllPurchasing() > 100) {
             adminManager.getDiscountAwarded();
             ((Customer) person).setAmountOfAllPurchasing(0);
         }
-        adminManager.createRandomDiscounts();
+        adminManager.createRandomDiscounts();*/
         createBuyLog(receiverInformation, totalPrice, discountPercentage, discountUsed);
         addCustomerToProductsBuyers();
         for (Seller seller : findDistinctSellers(super.cart)) {
@@ -43,12 +43,12 @@ public class PurchasingManager extends Manager {
     public void performPaymentWithBankAccount(HashMap<String, String> receiverInformation, double totalPrice,
                                               double discountPercentage, String discountUsed) throws Exception {
         double moneyToTransfer = totalPrice - totalPrice * (1.0 * discountPercentage / 100);
-        ((Customer) person).addAmountOfAllPurchasing(moneyToTransfer);
+       /* ((Customer) person).addAmountOfAllPurchasing(moneyToTransfer);
         if (((Customer) person).getAmountOfAllPurchasing() > 100) {
             adminManager.getDiscountAwarded();
             ((Customer) person).setAmountOfAllPurchasing(0);
         }
-        adminManager.createRandomDiscounts();
+        adminManager.createRandomDiscounts();*/
         createBuyLog(receiverInformation, totalPrice, discountPercentage, discountUsed);
         addCustomerToProductsBuyers();
         for (Seller seller : findDistinctSellers(super.cart)) {

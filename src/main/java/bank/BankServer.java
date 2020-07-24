@@ -214,6 +214,7 @@ public class BankServer {
                 }
                 else {
                     token = new Token(1800000);
+                    token.setDisposable();
                     validTokens.put(token.getJWS(),LocalDateTime.now());
                     tokenPerAccount.put(token.getJWS(),username);
                     outputStream.writeUTF(token.getJWS());

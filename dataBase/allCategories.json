@@ -2,7 +2,7 @@
   {
     "@type": "model.Category",
     "@val": {
-      "id": 0,
+      "id": 1,
       "categoryName": "clothing",
       "imagePath": "file:src/main/java/graphics/fxml/images/clothing.jpg",
       "thisCategoryProducts": [
@@ -22,13 +22,13 @@
                 "imagePath": "file:src/main/java/graphics/fxml/images/electronics.jpg",
                 "productId": 2,
                 "name": "elec",
-                "brand": "mac",
+                "brand": "apple",
                 "price": 30.0,
                 "numberInCart": 0,
                 "seller": "@root.0.thisCategoryProducts.0.seller",
                 "supply": 2,
                 "category": {
-                  "id": 0,
+                  "id": 2,
                   "categoryName": "electronics",
                   "imagePath": "file:src/main/java/graphics/fxml/images/electronics.jpg",
                   "thisCategoryProducts": [
@@ -38,7 +38,7 @@
                 },
                 "categoryName": "electronics",
                 "sellerName": "s1",
-                "explanation": "apple",
+                "explanation": "mac",
                 "averageRate": 0.0,
                 "comments": [],
                 "rates": [],
@@ -58,7 +58,7 @@
                   "seller": "@root.0.thisCategoryProducts.0.seller",
                   "supply": 2,
                   "category": {
-                    "id": 0,
+                    "id": 3,
                     "categoryName": "file",
                     "imagePath": "file:src/main/java/graphics/fxml/images/FileIcon.png",
                     "thisCategoryProducts": [
@@ -88,9 +88,10 @@
             },
             "thisSellerAuctions": [],
             "soldFileProducts": [],
+            "port": 0,
             "id": 3,
             "username": "s1",
-            "password": "s1",
+            "password": "123456Ss",
             "name": "s1",
             "familyName": "s1",
             "email": "s1@s1",

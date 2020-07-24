@@ -57,7 +57,8 @@ public class SellerProductMenu extends Menu implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        final ObservableList<Product> data = FXCollections.observableArrayList(((Seller) person).getProductsToSell());
+        try {
+            final ObservableList<Product> data = FXCollections.observableArrayList(sellerManager.getSellerProducts(person.getUsername()));
         System.out.println(((Seller) person).getProductsToSell().toString());
         idColumn.setCellValueFactory(new PropertyValueFactory<>("productId"));
         brandColumn.setCellValueFactory(new PropertyValueFactory<>("brand"));
@@ -88,6 +89,9 @@ public class SellerProductMenu extends Menu implements Initializable {
         averageRateColumn.setCellValueFactory(new PropertyValueFactory<>("averageRate"));
         addButtonToTable();
         productTable.setItems(data);
+        } catch (Exception e) {
+            showError(e.getMessage() , 20);
+        }
     }
 
     private void addButtonToTable() {
