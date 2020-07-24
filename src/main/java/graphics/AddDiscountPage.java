@@ -29,12 +29,20 @@ public class AddDiscountPage extends Menu implements Initializable {
 
     @FXML
     private void addDiscount(){
-        LocalDateTime begin = beginDate.getValue().atStartOfDay();
-        LocalDateTime end = endDate.getValue().atStartOfDay();
-        adminManager.createDiscountCode(code.getText(),begin,end,Integer.parseInt(percentage.getText()),
-                Integer.parseInt(maxUsage.getText()),Double.parseDouble(maxAmount.getText()));
-        showMessage();
-        back();
+        if(properCode(code.getText())) {
+            LocalDateTime begin = beginDate.getValue().atStartOfDay();
+            LocalDateTime end = endDate.getValue().atStartOfDay();
+            adminManager.createDiscountCode(code.getText(), begin, end, Integer.parseInt(percentage.getText()),
+                    Integer.parseInt(maxUsage.getText()), Double.parseDouble(maxAmount.getText()));
+            showMessage();
+            back();
+        } else {
+            showError("your code is too long" , 100);
+        }
+    }
+
+    private boolean properCode (String code) {
+        return adminManager.isInputProper(code);
     }
 
     public void showMessage() {

@@ -40,7 +40,7 @@ public class Manager {
     public void register(HashMap<String, String> information) throws Exception {
         if (!checkValidity(information.get("username")))
             throw new Exception("Username is not valid");
-        else if (!isStringInputProper(information.get("password")))
+        else if (!isStringInputProper(information.get("username")))
             throw new Exception("Username is too long");
         else if (!isStringInputProper(information.get("name")))
             throw new Exception("Name is too long");
