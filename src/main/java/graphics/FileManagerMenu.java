@@ -158,7 +158,7 @@ public class FileManagerMenu extends Menu implements Initializable {
         byte[] buffer = new byte[1024];
         while(in.read(buffer) >0){
             //decrypt buffer
-            buffer = decrypt(buffer,KEY);
+            //buffer = decrypt(buffer,KEY);
             fos.write(buffer);
         }
         fos.close();
@@ -202,7 +202,7 @@ public class FileManagerMenu extends Menu implements Initializable {
                 byte[] buffer = new byte[1024];
                 while ((count = in.read(buffer)) > 0) {
                     //encrypt buffer
-                    buffer = encrypt(buffer,KEY);
+                    //buffer = encrypt(buffer,KEY);
                     out.write(buffer, 0, count);
                     out.flush();
                 }
