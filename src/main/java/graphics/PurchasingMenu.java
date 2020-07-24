@@ -39,13 +39,19 @@ public class PurchasingMenu extends Menu {
         if (name.getText().matches("")) {
             showError("All fields are essential except Discount Code!", 100);
             return false;
+        } else if (!purchasingManager.isInputProper(name.getText())) {
+            showError("Name is too long", 100);
+            return false;
         }
-        return true;
+            return true;
     }
 
     private boolean checkAddress() {
         if (address.getText().matches("")) {
             showError("All fields are essential except Discount Code!", 100);
+            return false;
+        } else if (!purchasingManager.isInputProper(address.getText())){
+            showError("Address is too long" , 100);
             return false;
         }
         return true;

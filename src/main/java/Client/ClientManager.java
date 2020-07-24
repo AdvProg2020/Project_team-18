@@ -158,4 +158,12 @@ public class ClientManager {
         ServerMessage serverMessage = clientMessage.sendAndReceive();
     }
 
+    public boolean isInputProper (String input) {
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(input);
+        ClientMessage clientMessage = new ClientMessage(MessageType.CHECK_PROPER_INPUT, params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        return (boolean) serverMessage.getResult();
+    }
+
 }

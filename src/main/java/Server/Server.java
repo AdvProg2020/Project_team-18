@@ -853,6 +853,8 @@ public class Server {
                     Person aimed = storage.getUserByUsername((String) clientMessage.getParameters().get(0));
                     Seller sellerAimed = (Seller) aimed;
                     return new ServerMessage(MessageType.SELLER_PRODUCTS, sellerManager.getSellerProducts(sellerAimed));
+                case CHECK_PROPER_INPUT:
+                    return new ServerMessage(MessageType.CHECK_PROPER_INPUT,manager.isStringInputProper((String)clientMessage.getParameters().get(0)));
             }
             return null;
         }
