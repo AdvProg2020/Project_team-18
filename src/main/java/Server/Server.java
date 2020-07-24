@@ -7,11 +7,9 @@ import model.*;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Time;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Formatter;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 public class Server {
 
@@ -41,7 +39,7 @@ public class Server {
                         System.out.println("client accepted");
                         OutputStream outputStream = clientSocket.getOutputStream();
                         InputStream inputStream = clientSocket.getInputStream();
-                        new ClientHandler(outputStream, inputStream, this).start();
+                        new ClientHandler(outputStream, inputStream, this,clientSocket).start();
                     } catch (Exception e) {
                         System.err.println("Error in accepting client!");
                         break;
@@ -58,8 +56,10 @@ public class Server {
         private InputStream inputStream;
         private OutputStream outputStream;
         private ClientMessage clientMessage;
+        private Socket clientSocket;
         private YaGson yaGson = new YaGson();
         ServerImpl server;
+        Timer timer = new Timer();
         Manager manager = new Manager();
         SellerManager sellerManager = new SellerManager();
         CustomerManager customerManager = new CustomerManager();
@@ -68,14 +68,18 @@ public class Server {
         ProductManager productManager = new ProductManager();
         AdminManager adminManager = new AdminManager();
         Storage storage = new Storage();
+        HashMap<String,Integer> IPsOfRequests = new HashMap<>();
 
-        public ClientHandler(OutputStream objectOutputStream, InputStream objectInputStream, ServerImpl server) {
+        public ClientHandler(OutputStream objectOutputStream, InputStream objectInputStream, ServerImpl server , Socket clientSocket) {
             this.inputStream = objectInputStream;
             this.outputStream = objectOutputStream;
+            this.clientSocket = clientSocket;
             this.server = server;
+            timer.schedule(new CheckIPs(IPsOfRequests),10000);
         }
 
         private void handleClient() {
+            String ipAddress = "";
             try {
                 while (true) {
                     Scanner scanner = new Scanner(inputStream);
@@ -97,6 +101,14 @@ public class Server {
                         }
                     }
                     System.out.println("message received");
+                    ipAddress = clientSocket.getRemoteSocketAddress().toString();
+                    if(IPsOfRequests.containsKey(ipAddress)){
+                        int x = IPsOfRequests.get(ipAddress);
+                        IPsOfRequests.replace(ipAddress,x,x+1);
+                    } else if(!IPsOfRequests.containsKey(ipAddress)) {
+                        IPsOfRequests.put(ipAddress,1);
+                    }
+                    System.out.println(IPsOfRequests.toString());
                     Formatter formatter = new Formatter(outputStream);
                     formatter.format(yaGson.toJson(interpret(clientMessage)) + "\n");
                     formatter.flush();
@@ -894,9 +906,40 @@ public class Server {
             return (seller.getBalance() - toWithdraw) >= min;
         }
 
+        public HashMap<String, Integer> getIPsOfRequests() {
+            return IPsOfRequests;
+        }
+
+        public void disconnectClient (String ip){
+            if (clientSocket.getRemoteSocketAddress().toString().equals(ip)) {
+                try {
+                    clientSocket.close();
+                } catch (IOException e) {
+                    System.out.println("error in disconnecting client");
+                }
+            }
+        }
+
         @Override
         public void run() {
             handleClient();
+        }
+    }
+
+    static class CheckIPs extends TimerTask {
+        HashMap<String , Integer> ips = new HashMap<>();
+
+        public CheckIPs(HashMap<String, Integer> ips) {
+            this.ips = ips;
+        }
+
+        public void run() {
+            System.out.println("start timer");
+            for (String s : ips.keySet()) {
+                if(ips.get(s) > 5)
+                    //clientHandler.disconnectClient(s);
+                    System.out.println("workingggg");
+            }
         }
     }
 }
