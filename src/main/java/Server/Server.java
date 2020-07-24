@@ -85,7 +85,7 @@ public class Server {
                     clientMessage = yaGson.fromJson(scanner.nextLine(), ClientMessage.class);
                     if (clientMessage.getToken() != null) {
                         try {
-                            String token = clientMessage.getToken().getJWS();
+                            Token token = clientMessage.getToken();
                             Token.readJWS(token);
                         } catch (Exception e) {
                             if (e instanceof io.jsonwebtoken.ExpiredJwtException) {

@@ -17,6 +17,20 @@ import static javax.crypto.Cipher.SECRET_KEY;
 
 public class Token {
     private String JWS;
+    private boolean disposable;
+    private int usageTimes;
+
+    public int getUsageTimes() {
+        return usageTimes;
+    }
+
+    public void addUsageTimes() {
+        this.usageTimes++;
+    }
+
+    public void setDisposable(){
+        this.disposable = true;
+    }
     public Token(long validPeriod){
         this.JWS = createJWS(validPeriod);
     }
@@ -26,7 +40,7 @@ public class Token {
     private static byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECRET_KEY);
     private static Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
    */
-    public static String createJWS(long validPeriod){
+    private static String createJWS(long validPeriod){
         String jws = null;
         if (validPeriod>0){
         long nowMillis = System.currentTimeMillis();
@@ -63,29 +77,40 @@ public class Token {
 
         return jws;
     }
-    public static void readJWS(String jws){
+    public static void readJWS(Token token) throws Exception{
+        if (token.disposable){
+            if (token.getUsageTimes()>0) {
+                throw new Exception("Your disposable token has already been used !");
+            }
+        }
         try {
             Jwts.parser()
                     .setSigningKey(secretCode.getBytes("UTF-8"))
-                    .parseClaimsJws(jws).getBody();
+                    .parseClaimsJws(token.getJWS()).getBody();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+        token.addUsageTimes();
     }
 
     public String getJWS() {
         return JWS;
     }
 
- /*   public static void main(String[] args){
-        String temp = new Token(1000).getJWS();
-        System.out.println(temp);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        readJWS(temp);
-        System.out.println("finished");
+ /*  public static void main(String[] args){
+        Token token = new Token(0);
+        token.setDisposable();
+        System.out.println(token.getUsageTimes());
+       try {
+           readJWS(token);
+           System.out.println(token.getUsageTimes());
+           System.out.println("first time");
+           readJWS(token);
+           System.out.println(token.getUsageTimes());
+           System.out.println("second time");
+       } catch (Exception e) {
+           System.out.println(e.getMessage());
+       }
+       System.out.println("finished");
     }*/
 }

@@ -25,6 +25,7 @@ import java.net.Socket;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class FileManagerMenu extends Menu implements Initializable {
@@ -35,8 +36,8 @@ public class FileManagerMenu extends Menu implements Initializable {
 
     static {
         try {
-            KEY = "secretKey".getBytes("UTF-8");
-            IV = "secretIV".getBytes("UTF-8");
+            KEY = "secretKey@1234567891012345678910".getBytes("UTF-8");
+            IV = "secretIV12345678".getBytes("UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -143,7 +144,7 @@ public class FileManagerMenu extends Menu implements Initializable {
         InputStream in = socket.getInputStream();
         while(in.read(buffer) >0){
             //decrypt buffer
-            buffer = decrypt(buffer,KEY,IV);
+            //buffer = decrypt(buffer,KEY,IV);
             fos.write(buffer);
         }
         fos.close();
@@ -182,7 +183,7 @@ public class FileManagerMenu extends Menu implements Initializable {
                 byte[] buffer = new byte[1024];
                 while ((count = in.read(buffer)) > 0) {
                     //encrypt buffer
-                    buffer = encrypt(buffer,KEY,IV);
+                    //buffer = encrypt(buffer,KEY,IV);
                     out.write(buffer, 0, count);
                     out.flush();
                 }
@@ -221,17 +222,18 @@ public class FileManagerMenu extends Menu implements Initializable {
         }else updateShownProducts(clientCustomerManager.getPayedFileProducts(person.getUsername()));
     }
     //encryption functions
+    /*
     public byte[] generateHASH(byte[] message) throws Exception {
         MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
         byte[] hash = messageDigest.digest(message);
         return hash;
     }
-    public byte[] encrypt(byte[] msg, byte[] key, byte[] iv) throws Exception {
+    public static byte[] encrypt(byte[] msg, byte[] key, byte[] iv) throws Exception {
         //prepare key
         SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
 
         //prepare cipher
-        String cipherALG = "AES/CBC/PKCS5padding"; // use your preferred algorithm
+        String cipherALG = "AES/CBC/PKCS5padding"; //preferred algorithm
         Cipher cipher = Cipher.getInstance(cipherALG);
         String string = cipher.getAlgorithm();
 
@@ -246,12 +248,12 @@ public class FileManagerMenu extends Menu implements Initializable {
         byte[] encMessage = cipher.doFinal(msg);
         return encMessage;
     }
-    public byte[] decrypt(byte[] encMsgtoDec, byte[] key, byte[] iv) throws Exception {
+    public static byte[] decrypt(byte[] encMsgtoDec, byte[] key, byte[] iv) throws Exception {
         //prepare key
         SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
 
         //prepare cipher
-        String cipherALG = "AES/CBC/PKCS5padding"; // use your preferred algorithm
+        String cipherALG = "AES/CBC/PKCS5padding"; //algorithm
         Cipher cipher = Cipher.getInstance(cipherALG);
         String string = cipher.getAlgorithm();
 
@@ -265,5 +267,10 @@ public class FileManagerMenu extends Menu implements Initializable {
 
         byte[] decMsg = cipher.doFinal(encMsgtoDec);
         return decMsg;
+    }*/
+
+
+    public static void main(String [] args){
+
     }
 }
