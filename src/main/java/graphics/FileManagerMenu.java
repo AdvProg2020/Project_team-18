@@ -2,6 +2,7 @@ package graphics;
 
 import Client.ClientCustomerManager;
 import Client.ClientSellerManager;
+import Server.DateEnDecrypt;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -139,19 +140,16 @@ public class FileManagerMenu extends Menu implements Initializable {
         clientCustomerManager.setFileDownloading(fileProduct.getProductId(),person.getUsername());
         updateShownProducts(clientCustomerManager.getPayedFileProducts(person.getUsername()));
         InputStream in = socket.getInputStream();
-       /* byte[] buffer = new byte[1024];
-        ArrayList<Byte> byteArrayList = new ArrayList<>();
-        while(in.read(buffer) >0){
-            for (int i=0;i<buffer.length;i++){
-                byteArrayList.add(buffer[i]);
-            }
+
+        DataInputStream dIn = new DataInputStream(in);
+        byte[] message = new byte[1024];
+        int length = dIn.readInt();  // read length of incoming message
+        if(length>0) {
+            message = new byte[length];
+            dIn.readFully(message, 0, message.length); // read the message
         }
-        byte[] message = new byte[byteArrayList.size()];
-        for (int i=0;i<message.length;i++){
-            message[i]=byteArrayList.get(i);
-        }
-        DateEnDecrypt.decryptBytesToFile(KEY,myFile,message);*/
-        FileOutputStream fos = new FileOutputStream(filePath);
+        DateEnDecrypt.decryptBytesToFile(KEY,myFile,message);
+      /*  FileOutputStream fos = new FileOutputStream(filePath);
         BufferedOutputStream out = new BufferedOutputStream(fos);
         byte[] buffer = new byte[1024];
         while(in.read(buffer) >0){
@@ -159,7 +157,7 @@ public class FileManagerMenu extends Menu implements Initializable {
             //buffer = decrypt(buffer,KEY);
             fos.write(buffer);
         }
-        fos.close();
+        fos.close();*/
         socket.close();
         clientCustomerManager.setFileDownloaded(fileProduct.getProductId(),person.getUsername());
         updateShownProducts(clientCustomerManager.getPayedFileProducts(person.getUsername()));
@@ -191,10 +189,11 @@ public class FileManagerMenu extends Menu implements Initializable {
                 updateShownProducts(clientSellerManager.getSoldFileProducts(person.getUsername()));
                 OutputStream out = socket.getOutputStream();
 
-               /* byte[] encryptedFileBytes = DateEnDecrypt.encryptFileToBytes(KEY,myFile);
-                out.write(encryptedFileBytes, 0, (int)myFile.length());
-                out.flush();*/
-                BufferedInputStream in = new BufferedInputStream(new FileInputStream(myFile));
+                DataOutputStream dOut = new DataOutputStream(out);
+                byte[] encryptedFileBytes = DateEnDecrypt.encryptFileToBytes(KEY,myFile);
+                dOut.writeInt(encryptedFileBytes.length); // write length of the message
+                dOut.write(encryptedFileBytes);
+             /*   BufferedInputStream in = new BufferedInputStream(new FileInputStream(myFile));
 
                 int count;
                 byte[] buffer = new byte[1024];
@@ -203,7 +202,7 @@ public class FileManagerMenu extends Menu implements Initializable {
                     //buffer = encrypt(buffer,KEY);
                     out.write(buffer, 0, count);
                     out.flush();
-                }
+                }*/
                 socket.close();
                 setPerson(clientSellerManager.setIPPortNull(person.getUsername()));
                 updateShownProducts(clientSellerManager.getSoldFileProducts(person.getUsername()));
