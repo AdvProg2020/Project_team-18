@@ -94,14 +94,16 @@ public class PurchasingManager extends Manager {
         BuyLog buyLog = new BuyLog(LocalDateTime.now(), totalPrice, saleAmount, findDistinctSellers(super.cart),
                 receiverInformation, cart.getProductsInCart(), discountUsed);
         storage.addBuyLog(buyLog);
-        ((Customer) person).addToBuyLogs(buyLog);
+        Customer toBeUpdated = (Customer) storage.getUserByUsername(person.getUsername());
+        toBeUpdated.addToBuyLogs(buyLog);
         this.buyLogCode = buyLog.getBuyCode();
     }
 
     public void createSellLog(Seller seller, double totalPrice, double saleAmount) {
         SellLog sellLog = new SellLog(LocalDateTime.now(), totalPrice, saleAmount, (Customer) person, sellerProductsInCart(super.cart, seller));
         storage.addSellLog(sellLog);
-        seller.addToSellLogs(sellLog);
+        Seller toBeUpdated = (Seller) storage.getUserByUsername(seller.getUsername());
+        toBeUpdated.addToSellLogs(sellLog);
     }
 
     public HashMap<Product, Integer> sellerProductsInCart(Cart cart, Seller seller) {

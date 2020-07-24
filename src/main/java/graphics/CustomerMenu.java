@@ -49,6 +49,7 @@ public class CustomerMenu extends Menu implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        setPerson(customerManager.getPersonByUsername(person.getUsername()));
         viewPersonalInfo();
     }
 

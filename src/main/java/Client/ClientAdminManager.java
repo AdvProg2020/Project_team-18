@@ -27,7 +27,7 @@ public class ClientAdminManager extends ClientManager {
     }
 
     public ArrayList<BuyLog> viewAllBuyLogs() {
-        ClientMessage clientMessage = new ClientMessage(MessageType.GET_ALL_BUY_LOGS, null);
+        ClientMessage clientMessage = new ClientMessage(MessageType.GET_ALL_BUY_LOGS_FOR_ADMIN, null);
         ServerMessage serverMessage = clientMessage.sendAndReceive();
         return (ArrayList<BuyLog>) serverMessage.getResult();
     }

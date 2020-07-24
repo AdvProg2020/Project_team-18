@@ -143,9 +143,8 @@ public class Auction extends TimerTask implements Idable<Auction> {
     }
 
     public void finishAuction() {
-        System.out.println("hellooooo");
         Timer timer = new Timer();
-        TimerTask task = new Auction();
+        TimerTask task = this;
         Date date = Date.from(this.getEndDate().atZone(ZoneId.systemDefault()).toInstant());
         try {
             timer.schedule(task, date);
@@ -161,7 +160,7 @@ public class Auction extends TimerTask implements Idable<Auction> {
             System.out.println("error");
             return;
         } else {
-            this.getCustomer().setBalance(this.getCustomer().getBalance() - this.getPrice());
+            //this.getCustomer().setBalance(this.getCustomer().getBalance() - this.getPrice());
             this.getSeller().addBalance(this.getPrice() * 0.9);
             ArrayList<Seller> sellers = new ArrayList<>();
             sellers.add(this.getSeller());
