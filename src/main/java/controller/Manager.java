@@ -14,6 +14,7 @@ public class Manager {
     protected Storage storage;
     protected static Person person;
     protected Cart cart;
+    private int failedLoginAttempts;
     protected static ArrayList<Filter> currentFilters = new ArrayList<>();
     protected static ArrayList<Sort> currentSorts = new ArrayList<>();
 
@@ -22,6 +23,7 @@ public class Manager {
         storage = Storage.getStorage();
         cart = Cart.getCart();
         storage.addCart(cart);
+        failedLoginAttempts = 0;
 
     }
 
@@ -40,6 +42,8 @@ public class Manager {
             throw new Exception("Username is not valid");
         else if (!checkValidity(information.get("password")))
             throw new Exception("Password is not valid");
+        else if (!checkPassWordComplexity(information.get("password")))
+            throw new Exception("Password should at least be 8 characters containing digit \nand 1 upper case letter and 1 lower case letter");
         else if (!checkEmailValidity(information.get("email")))
             throw new Exception("Email is not valid");
         else if (!checkPhoneNumberValidity(information.get("number")))
@@ -55,12 +59,28 @@ public class Manager {
     }
 
     public Person login(String username, String password) throws Exception {
-        if (!checkValidity(username))
+        System.out.println(failedLoginAttempts);
+        if (!checkValidity(username)) {
+            failedLoginAttempts ++;
+            if (failedLoginAttempts > 5) {
+                throw new Exception("You exceed the Limit of Failed Login Attempts.");
+            }
             throw new Exception("Username is not valid");
-        else if (!checkValidity(password))
+        }
+        else if (!checkValidity(password)) {
+            failedLoginAttempts ++;
+            if (failedLoginAttempts > 5) {
+                throw new Exception("You exceed the Limit of Failed Login Attempts.");
+            }
             throw new Exception("Password is not valid");
-        else if (!storage.getUserByUsername(username).getPassword().equals(password))
+        }
+        else if (!storage.getUserByUsername(username).getPassword().equals(password)) {
+            failedLoginAttempts ++;
+            if (failedLoginAttempts > 5) {
+                throw new Exception("You exceed the Limit of Failed Login Attempts.");
+            }
             throw new Exception("Your password is wrong");
+        }
         else {
             if (person != null){
                 person = storage.getUserByUsername(username);
@@ -108,6 +128,40 @@ public class Manager {
         return matcher.find();
     }
 
+    public boolean checkPassWordComplexity (String password) {
+        boolean hasUpperCase = false;
+        boolean hasLowerCase = false;
+        boolean hasDigit = false;
+
+        if (password.length() >= 8) {
+            for (int i = 0; i < password.length(); i++) {
+                char x = password.charAt(i);
+                if (Character.isUpperCase(x)) {
+                    hasUpperCase = true;
+                }
+
+                else if (Character.isLowerCase(x)){
+                    hasLowerCase = true;
+                }
+
+                else if (Character.isDigit(x)) {
+                    hasDigit = true;
+                }
+
+                if(hasLowerCase && hasUpperCase && hasDigit){
+                    break;
+                }
+            }
+            if (hasLowerCase && hasUpperCase && hasDigit) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
     public boolean checkEmailValidity(String input) {
         Pattern pattern = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
         Matcher matcher = pattern.matcher(input);
@@ -126,7 +180,7 @@ public class Manager {
         else return true;
     }
 
-    public boolean doesDiscountExist(String code) {
+    private boolean doesDiscountExist(String code) {
         if (storage.getDiscountByCode(code) == null)
             return false;
         else return true;
