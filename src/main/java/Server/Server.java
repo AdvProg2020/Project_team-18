@@ -24,7 +24,7 @@ public class Server {
 
         private void run() {
             try {
-                Socket bankSocket = new Socket("127.0.0.1", 8787);
+                Socket bankSocket = new Socket("localhost", 8787);
                 bankDataInputStream = new DataInputStream(bankSocket.getInputStream());
                 bankDataOutputStream = new DataOutputStream(bankSocket.getOutputStream());
                 bankDataOutputStream.writeUTF("connected");
