@@ -82,7 +82,34 @@ public class FileManagerMenu extends Menu implements Initializable {
     }
 
     private void download(FileProduct fileProduct) {
-        openDownloadDialog(fileProduct);
+        if (person instanceof Seller){
+            openCustomerDownloadDialog(fileProduct);
+        }else {
+            openSellerDownloadDialog(fileProduct);
+        }
+    }
+
+    private void openSellerDownloadDialog(FileProduct fileProduct) {
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Seller Download Manager");
+        dialog.setHeaderText("File "+fileProduct.getName()+" Download");
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        VBox content = new VBox();
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setSpacing(10);
+        TextField ipField = new TextField();
+        content.getChildren().addAll(new Label("Enter your ip : ") , ipField);
+        TextField portField = new TextField();
+        content.getChildren().addAll(new Label("Enter your port : ") , portField);
+        TextField filePathField = new TextField();
+        content.getChildren().addAll(new Label("Enter file path :"), filePathField);
+        dialog.getDialogPane().setContent(content);
+        dialog.showAndWait();
+        try {
+                sellerDownload(filePathField.getText(),ipField.getText(),Integer.parseInt(portField.getText()),fileProduct);
+        } catch (Exception e) {
+            showError(e.getMessage(),20);
+        }
     }
 
     private void customerDownload(String filePath,String sellerUsername,FileProduct fileProduct) throws Exception {
@@ -145,10 +172,10 @@ public class FileManagerMenu extends Menu implements Initializable {
             }
         }
     }
-    private void openDownloadDialog(FileProduct fileProduct){
+    private void openCustomerDownloadDialog(FileProduct fileProduct){
         Dialog<String> dialog = new Dialog<>();
-        dialog.setTitle("Download Manager");
-        dialog.setHeaderText("File "+fileProduct.getName()+" Download");
+        dialog.setTitle("Customer Download Manager");
+        dialog.setHeaderText("File \""+fileProduct.getName()+"\" Download");
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
         TextField filePathField = new TextField();
         VBox content = new VBox();
@@ -158,11 +185,7 @@ public class FileManagerMenu extends Menu implements Initializable {
         dialog.getDialogPane().setContent(content);
         dialog.showAndWait();
         try {
-            if (person instanceof Seller){
-                sellerDownload(filePathField.getText(),"localhost",9000,fileProduct);
-            }else {
                 customerDownload(filePathField.getText(),fileProduct.getSellerName(),fileProduct);
-            }
         } catch (Exception e) {
             showError(e.getMessage(),20);
         }

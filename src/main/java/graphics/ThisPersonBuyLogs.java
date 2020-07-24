@@ -53,7 +53,7 @@ public class ThisPersonBuyLogs extends Menu implements Initializable {
     }
 
     public ArrayList<BuyLog> returnThisPersonBuyLogs() {
-        return ((Customer) person).getBuyHistory();
+        return customerManager.getCustomerBuyLogs(person.getUsername());
     }
 
     public void showBuyLog() throws IOException {

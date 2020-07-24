@@ -146,7 +146,7 @@ public class ClientSellerManager extends ClientManager {
         if (serverMessage.getMessageType() == MessageType.ERROR) {
             throw (Exception) serverMessage.getResult();
         }
-        return (ArrayList) serverMessage.getResult();
+        return (ArrayList<SellLog>) serverMessage.getResult();
     }
 
     public void addBalance(double amount, String username) throws Exception {
