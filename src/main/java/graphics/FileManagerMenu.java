@@ -16,16 +16,33 @@ import model.FileProduct;
 import model.Person;
 import model.Seller;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class FileManagerMenu extends Menu implements Initializable {
     private ClientSellerManager clientSellerManager = new ClientSellerManager();
     private ClientCustomerManager clientCustomerManager = new ClientCustomerManager();
+    private static byte[] KEY;
+    private static byte[] IV ;
+
+    static {
+        try {
+            KEY = "secretKey".getBytes("UTF-8");
+            IV = "secretIV".getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public FileManagerMenu(Menu previousMenu) {
         super(previousMenu, "src/main/java/graphics/fxml/FileManagerMenu.fxml");
     }
@@ -83,9 +100,10 @@ public class FileManagerMenu extends Menu implements Initializable {
 
     private void download(FileProduct fileProduct) {
         if (person instanceof Seller){
-            openCustomerDownloadDialog(fileProduct);
-        }else {
             openSellerDownloadDialog(fileProduct);
+
+        }else {
+            openCustomerDownloadDialog(fileProduct);
         }
     }
 
@@ -124,6 +142,8 @@ public class FileManagerMenu extends Menu implements Initializable {
         byte[] buffer = new byte[1024];
         InputStream in = socket.getInputStream();
         while(in.read(buffer) >0){
+            //decrypt buffer
+            buffer = decrypt(buffer,KEY,IV);
             fos.write(buffer);
         }
         fos.close();
@@ -161,6 +181,8 @@ public class FileManagerMenu extends Menu implements Initializable {
                 int count;
                 byte[] buffer = new byte[1024];
                 while ((count = in.read(buffer)) > 0) {
+                    //encrypt buffer
+                    buffer = encrypt(buffer,KEY,IV);
                     out.write(buffer, 0, count);
                     out.flush();
                 }
@@ -197,5 +219,51 @@ public class FileManagerMenu extends Menu implements Initializable {
         if (person instanceof Seller){
             updateShownProducts(clientSellerManager.getSoldFileProducts(person.getUsername()));
         }else updateShownProducts(clientCustomerManager.getPayedFileProducts(person.getUsername()));
+    }
+    //encryption functions
+    public byte[] generateHASH(byte[] message) throws Exception {
+        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+        byte[] hash = messageDigest.digest(message);
+        return hash;
+    }
+    public byte[] encrypt(byte[] msg, byte[] key, byte[] iv) throws Exception {
+        //prepare key
+        SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
+
+        //prepare cipher
+        String cipherALG = "AES/CBC/PKCS5padding"; // use your preferred algorithm
+        Cipher cipher = Cipher.getInstance(cipherALG);
+        String string = cipher.getAlgorithm();
+
+        //as iv (Initial Vector) is only required for CBC mode
+        if (string.contains("CBC")) {
+            IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
+            cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec);
+        } else {
+            cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
+        }
+
+        byte[] encMessage = cipher.doFinal(msg);
+        return encMessage;
+    }
+    public byte[] decrypt(byte[] encMsgtoDec, byte[] key, byte[] iv) throws Exception {
+        //prepare key
+        SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
+
+        //prepare cipher
+        String cipherALG = "AES/CBC/PKCS5padding"; // use your preferred algorithm
+        Cipher cipher = Cipher.getInstance(cipherALG);
+        String string = cipher.getAlgorithm();
+
+        //as iv (Initial Vector) is only required for CBC mode
+        if (string.contains("CBC")) {
+            IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
+            cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec);
+        } else {
+            cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
+        }
+
+        byte[] decMsg = cipher.doFinal(encMsgtoDec);
+        return decMsg;
     }
 }
