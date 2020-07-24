@@ -50,6 +50,7 @@ public class PerBuyLog extends Menu implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        int sumOfProducPrice = 0;
         final ObservableList<Product> productsInBuyLog = FXCollections.observableArrayList(
                 buyLog.getProducts().keySet()
         );
@@ -70,6 +71,12 @@ public class PerBuyLog extends Menu implements Initializable {
         date.setText(buyLog.getDate().toString());
         logCode.setText(Integer.toString(buyLog.getBuyCode()));
         buyLogStatus.setText(buyLog.getStatus().toString());
+        for (Product product : buyLog.getProducts().keySet()) {
+            sumOfProducPrice += product.getPrice();
+        }
+        if (buyLog.getPaidMoney() != sumOfProducPrice) {
+            System.out.println("in Auction");
+        }
     }
 
 }
