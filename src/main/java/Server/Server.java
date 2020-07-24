@@ -849,6 +849,10 @@ public class Server {
                     seller.setIp(null);
                     seller.setPort(0);
                     return new ServerMessage(MessageType.SET_IP_PORT_NULL, seller);
+                case SELLER_PRODUCTS:
+                    Person aimed = storage.getUserByUsername((String) clientMessage.getParameters().get(0));
+                    Seller sellerAimed = (Seller) aimed;
+                    return new ServerMessage(MessageType.SELLER_PRODUCTS, sellerManager.getSellerProducts(sellerAimed));
             }
             return null;
         }

@@ -6,6 +6,7 @@ import Server.ServerMessage;
 import graphics.Menu;
 import model.*;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -29,6 +30,17 @@ public class ClientSellerManager extends ClientManager {
         if (serverMessage != null && serverMessage.getMessageType() == MessageType.ERROR) {
             throw (Exception) serverMessage.getResult();
         }
+    }
+
+    public ArrayList<Product> getSellerProducts (String username) throws Exception{
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(username);
+        ClientMessage clientMessage = new ClientMessage(MessageType.SELLER_PRODUCTS, params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        if (serverMessage != null && serverMessage.getMessageType() == MessageType.ERROR) {
+            throw (Exception) serverMessage.getResult();
+        }
+        return (ArrayList<Product>) serverMessage.getResult();
     }
 
     public void addAuction(HashMap<String, String> info) throws Exception {
