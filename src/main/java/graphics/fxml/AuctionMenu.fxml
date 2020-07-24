@@ -14,7 +14,7 @@
     </stylesheets>
    <children>
       <Button layoutX="134.0" layoutY="322.0" mnemonicParsing="false" onAction="#makeAnOffer" prefHeight="35.0" prefWidth="98.0" text="Bidding" />
-      <Button layoutX="389.0" layoutY="319.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="97.0" text="Enter Chat" />
+      <Button layoutX="389.0" layoutY="319.0" mnemonicParsing="false" onAction="#goToThisAuctionChatRoom" prefHeight="35.0" prefWidth="97.0" text="Enter Chat" />
       <GridPane layoutX="117.0" layoutY="50.0" prefHeight="260.0" prefWidth="366.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
