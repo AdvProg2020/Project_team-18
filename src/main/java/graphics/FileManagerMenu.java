@@ -2,6 +2,8 @@ package graphics;
 
 import Client.ClientCustomerManager;
 import Client.ClientSellerManager;
+import Server.DateEnDecrypt;
+import com.sun.deploy.util.ArrayUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,30 +15,29 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import model.FileProduct;
-import model.Person;
 import model.Seller;
 
 import javax.crypto.Cipher;
-import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
+import java.security.Key;
 import java.security.MessageDigest;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class FileManagerMenu extends Menu implements Initializable {
     private ClientSellerManager clientSellerManager = new ClientSellerManager();
     private ClientCustomerManager clientCustomerManager = new ClientCustomerManager();
-    private static byte[] KEY;
+    private static String KEY = "secretKey@123456";
     private static byte[] IV ;
+    private static final String ALGORITHM = "AES";
+    private static final String TRANSFORMATION = "AES";
 
     static {
         try {
-            KEY = "secretKey@1234567891012345678910".getBytes("UTF-8");
             IV = "secretIV12345678".getBytes("UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -125,26 +126,39 @@ public class FileManagerMenu extends Menu implements Initializable {
         dialog.getDialogPane().setContent(content);
         dialog.showAndWait();
         try {
-                sellerDownload(filePathField.getText(),ipField.getText(),Integer.parseInt(portField.getText()),fileProduct);
+                sellerDownload(filePathField.getText(),ipField.getText(),Integer.parseInt(portField.getText()));
         } catch (Exception e) {
             showError(e.getMessage(),20);
         }
     }
 
     private void customerDownload(String filePath,String sellerUsername,FileProduct fileProduct) throws Exception {
+        File myFile = new File(filePath);
         String ip = clientCustomerManager.getSellerIP(sellerUsername);
         int port = clientCustomerManager.getSellerPort(sellerUsername);
         Socket socket = new Socket(ip,port);
         System.out.println("customer socket created");
         clientCustomerManager.setFileDownloading(fileProduct.getProductId(),person.getUsername());
         updateShownProducts(clientCustomerManager.getPayedFileProducts(person.getUsername()));
+        InputStream in = socket.getInputStream();
+       /* byte[] buffer = new byte[1024];
+        ArrayList<Byte> byteArrayList = new ArrayList<>();
+        while(in.read(buffer) >0){
+            for (int i=0;i<buffer.length;i++){
+                byteArrayList.add(buffer[i]);
+            }
+        }
+        byte[] message = new byte[byteArrayList.size()];
+        for (int i=0;i<message.length;i++){
+            message[i]=byteArrayList.get(i);
+        }
+        DateEnDecrypt.decryptBytesToFile(KEY,myFile,message);*/
         FileOutputStream fos = new FileOutputStream(filePath);
         BufferedOutputStream out = new BufferedOutputStream(fos);
         byte[] buffer = new byte[1024];
-        InputStream in = socket.getInputStream();
         while(in.read(buffer) >0){
             //decrypt buffer
-            //buffer = decrypt(buffer,KEY,IV);
+            buffer = decrypt(buffer,KEY);
             fos.write(buffer);
         }
         fos.close();
@@ -154,7 +168,7 @@ public class FileManagerMenu extends Menu implements Initializable {
 
     }
 
-    private void sellerDownload(String filePath,String ip,int port,FileProduct fileProduct) throws Exception {
+    private void sellerDownload(String filePath,String ip,int port) throws Exception {
         File myFile = new File(filePath);
        if (!clientSellerManager.sendIPPort(ip, port, person.getUsername())){
            throw new Exception("unsuccessful operation!");
@@ -178,12 +192,17 @@ public class FileManagerMenu extends Menu implements Initializable {
                 Thread.sleep(500);
                 updateShownProducts(clientSellerManager.getSoldFileProducts(person.getUsername()));
                 OutputStream out = socket.getOutputStream();
+
+               /* byte[] encryptedFileBytes = DateEnDecrypt.encryptFileToBytes(KEY,myFile);
+                out.write(encryptedFileBytes, 0, (int)myFile.length());
+                out.flush();*/
                 BufferedInputStream in = new BufferedInputStream(new FileInputStream(myFile));
+
                 int count;
                 byte[] buffer = new byte[1024];
                 while ((count = in.read(buffer)) > 0) {
                     //encrypt buffer
-                    //buffer = encrypt(buffer,KEY,IV);
+                    buffer = encrypt(buffer,KEY);
                     out.write(buffer, 0, count);
                     out.flush();
                 }
@@ -222,55 +241,25 @@ public class FileManagerMenu extends Menu implements Initializable {
         }else updateShownProducts(clientCustomerManager.getPayedFileProducts(person.getUsername()));
     }
     //encryption functions
-    /*
+
     public byte[] generateHASH(byte[] message) throws Exception {
         MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
         byte[] hash = messageDigest.digest(message);
         return hash;
     }
-    public static byte[] encrypt(byte[] msg, byte[] key, byte[] iv) throws Exception {
-        //prepare key
-        SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
-
-        //prepare cipher
-        String cipherALG = "AES/CBC/PKCS5padding"; //preferred algorithm
-        Cipher cipher = Cipher.getInstance(cipherALG);
-        String string = cipher.getAlgorithm();
-
-        //as iv (Initial Vector) is only required for CBC mode
-        if (string.contains("CBC")) {
-            IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
-            cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec);
-        } else {
-            cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
-        }
-
-        byte[] encMessage = cipher.doFinal(msg);
-        return encMessage;
+    public static byte[] encrypt(byte[] inputBytes, String key) throws Exception {
+        Key secretKey = new SecretKeySpec(key.getBytes(), ALGORITHM);
+        Cipher cipher = Cipher.getInstance(TRANSFORMATION);
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+        byte[] outputBytes = cipher.doFinal(inputBytes);
+        return outputBytes;
     }
-    public static byte[] decrypt(byte[] encMsgtoDec, byte[] key, byte[] iv) throws Exception {
-        //prepare key
-        SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
-
-        //prepare cipher
-        String cipherALG = "AES/CBC/PKCS5padding"; //algorithm
-        Cipher cipher = Cipher.getInstance(cipherALG);
-        String string = cipher.getAlgorithm();
-
-        //as iv (Initial Vector) is only required for CBC mode
-        if (string.contains("CBC")) {
-            IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
-            cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec);
-        } else {
-            cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
-        }
-
-        byte[] decMsg = cipher.doFinal(encMsgtoDec);
-        return decMsg;
-    }*/
-
-
-    public static void main(String [] args){
-
+    public static byte[] decrypt(byte[] inputBytes, String key) throws Exception {
+        Key secretKey = new SecretKeySpec(key.getBytes(), ALGORITHM);
+        Cipher cipher = Cipher.getInstance(TRANSFORMATION);
+        cipher.init(Cipher.DECRYPT_MODE, secretKey);
+        byte[] outputBytes = cipher.doFinal(inputBytes);
+        return outputBytes;
     }
+
 }
