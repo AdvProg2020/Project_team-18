@@ -1,5 +1,7 @@
 package bank;
 
+import Server.Token;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -57,6 +59,7 @@ public class BankServer {
         DataInputStream inputStream;
         BankAccount shoppingCenter;
         Socket clientSocket;
+        Token token;
         HashMap<String, String> allAccounts;
         HashMap<String, LocalDateTime> validTokens;
         HashMap<String,String> tokenPerAccount;
@@ -181,13 +184,10 @@ public class BankServer {
                     outputStream.flush();
                 }
                 else {
-                    String token = "";
-                    byte[] randomBytes = new byte[24];
-                    secureRandom.nextBytes(randomBytes);
-                    token = base64Encoder.encodeToString(randomBytes);
-                    validTokens.put(token,LocalDateTime.now());
-                    tokenPerAccount.put(token,username);
-                    outputStream.writeUTF(token);
+                    token = new Token(1800000);
+                    validTokens.put(token.getJWS(),LocalDateTime.now());
+                    tokenPerAccount.put(token.getJWS(),username);
+                    outputStream.writeUTF(token.getJWS());
                     outputStream.flush();
                 }
             } catch (Exception e) {
