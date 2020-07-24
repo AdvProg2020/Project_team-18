@@ -1,0 +1,320 @@
+[
+  {
+    "@type": "model.Admin",
+    "@val": {
+      "allRequests": [],
+      "id": 1,
+      "username": "a1",
+      "password": "123456Aa",
+      "name": "a1",
+      "familyName": "a1",
+      "email": "a1@a1",
+      "number": "22",
+      "balance": 0.0,
+      "role": "ADMIN",
+      "availability": "OFFLINE"
+    }
+  },
+  {
+    "@type": "model.Customer",
+    "@val": {
+      "buyHistory": [
+        {
+          "buyCode": 1,
+          "paidMoney": 20.0,
+          "discountAmount": 0.0,
+          "seller": [
+            {
+              "company": "s1",
+              "sellHistory": [
+                {
+                  "sellCode": 1,
+                  "receivedMoney": 20.0,
+                  "saleAmount": 0.0,
+                  "customer": "@root.1",
+                  "sellerProductsInCart": [
+                    [
+                      {
+                        "@type": "model.FileProduct",
+                        "@val": {
+                          "fileState": "DOWNLOADING",
+                          "imagePath": "file:src/main/java/graphics/fxml/images/FileIcon.png",
+                          "productId": 3,
+                          "name": "file",
+                          "brand": "file",
+                          "price": 20.0,
+                          "numberInCart": 1,
+                          "seller": {
+                            "company": "s1",
+                            "sellHistory": "@root.1.buyHistory.0.seller.0.sellHistory",
+                            "productsToSell": [
+                              {
+                                "imagePath": "file:src/main/java/graphics/fxml/images/clothing.jpg",
+                                "productId": 1,
+                                "name": "cloth",
+                                "brand": "H&M",
+                                "price": 10.0,
+                                "numberInCart": 0,
+                                "seller": "@root.1.buyHistory.0.seller.0.sellHistory.0.sellerProductsInCart.0-key.seller",
+                                "supply": 2,
+                                "category": {
+                                  "id": 1,
+                                  "categoryName": "clothing",
+                                  "imagePath": "file:src/main/java/graphics/fxml/images/clothing.jpg",
+                                  "thisCategoryProducts": [
+                                    "@root.1.buyHistory.0.seller.0.sellHistory.0.sellerProductsInCart.0-key.seller.productsToSell.0"
+                                  ],
+                                  "properties": {}
+                                },
+                                "categoryName": "clothing",
+                                "sellerName": "s1",
+                                "explanation": "hot",
+                                "averageRate": 0.0,
+                                "comments": [],
+                                "rates": [],
+                                "thisProductsBuyers": [],
+                                "salePercent": 0.0,
+                                "numberOfSeen": 0
+                              },
+                              {
+                                "imagePath": "file:src/main/java/graphics/fxml/images/electronics.jpg",
+                                "productId": 2,
+                                "name": "elec",
+                                "brand": "apple",
+                                "price": 30.0,
+                                "numberInCart": 0,
+                                "seller": "@root.1.buyHistory.0.seller.0.sellHistory.0.sellerProductsInCart.0-key.seller",
+                                "supply": 2,
+                                "category": {
+                                  "id": 2,
+                                  "categoryName": "electronics",
+                                  "imagePath": "file:src/main/java/graphics/fxml/images/electronics.jpg",
+                                  "thisCategoryProducts": [
+                                    "@root.1.buyHistory.0.seller.0.sellHistory.0.sellerProductsInCart.0-key.seller.productsToSell.1"
+                                  ],
+                                  "properties": {}
+                                },
+                                "categoryName": "electronics",
+                                "sellerName": "s1",
+                                "explanation": "mac",
+                                "averageRate": 0.0,
+                                "comments": [],
+                                "rates": [],
+                                "thisProductsBuyers": [],
+                                "salePercent": 0.0,
+                                "numberOfSeen": 0
+                              },
+                              "@root.1.buyHistory.0.seller.0.sellHistory.0.sellerProductsInCart.0-key"
+                            ],
+                            "saleList": [],
+                            "wallet": {
+                              "money": 50.0,
+                              "bankAccountUsername": "s1seller",
+                              "bankAccountPassword": "ims1",
+                              "currentBankToken": "",
+                              "accountId": 3
+                            },
+                            "thisSellerAuctions": [],
+                            "soldFileProducts": [],
+                            "port": 0,
+                            "id": 3,
+                            "username": "s1",
+                            "password": "123456Ss",
+                            "name": "s1",
+                            "familyName": "s1",
+                            "email": "s1@s1",
+                            "number": "22",
+                            "balance": 50.0,
+                            "role": "SELLER",
+                            "availability": "OFFLINE"
+                          },
+                          "supply": 2,
+                          "category": {
+                            "id": 3,
+                            "categoryName": "file",
+                            "imagePath": "file:src/main/java/graphics/fxml/images/FileIcon.png",
+                            "thisCategoryProducts": [
+                              "@root.1.buyHistory.0.seller.0.sellHistory.0.sellerProductsInCart.0-key"
+                            ],
+                            "properties": {}
+                          },
+                          "categoryName": "file",
+                          "sellerName": "s1",
+                          "explanation": "file",
+                          "averageRate": 0.0,
+                          "comments": [],
+                          "rates": [],
+                          "thisProductsBuyers": [
+                            "@root.1"
+                          ],
+                          "salePercent": 0.0,
+                          "numberOfSeen": 0
+                        }
+                      },
+                      1
+                    ]
+                  ],
+                  "date": "2020,07,24,22,17",
+                  "products": {},
+                  "id": 0
+                }
+              ],
+              "productsToSell": [
+                {
+                  "imagePath": "file:src/main/java/graphics/fxml/images/clothing.jpg",
+                  "productId": 1,
+                  "name": "cloth",
+                  "brand": "H&M",
+                  "price": 10.0,
+                  "numberInCart": 0,
+                  "seller": "@root.1.buyHistory.0.seller.0",
+                  "supply": 2,
+                  "category": {
+                    "id": 1,
+                    "categoryName": "clothing",
+                    "imagePath": "file:src/main/java/graphics/fxml/images/clothing.jpg",
+                    "thisCategoryProducts": [
+                      "@root.1.buyHistory.0.seller.0.productsToSell.0"
+                    ],
+                    "properties": {}
+                  },
+                  "categoryName": "clothing",
+                  "sellerName": "s1",
+                  "explanation": "hot",
+                  "averageRate": 0.0,
+                  "comments": [],
+                  "rates": [],
+                  "thisProductsBuyers": [],
+                  "salePercent": 0.0,
+                  "numberOfSeen": 0
+                },
+                {
+                  "imagePath": "file:src/main/java/graphics/fxml/images/electronics.jpg",
+                  "productId": 2,
+                  "name": "elec",
+                  "brand": "apple",
+                  "price": 30.0,
+                  "numberInCart": 0,
+                  "seller": "@root.1.buyHistory.0.seller.0",
+                  "supply": 2,
+                  "category": {
+                    "id": 2,
+                    "categoryName": "electronics",
+                    "imagePath": "file:src/main/java/graphics/fxml/images/electronics.jpg",
+                    "thisCategoryProducts": [
+                      "@root.1.buyHistory.0.seller.0.productsToSell.1"
+                    ],
+                    "properties": {}
+                  },
+                  "categoryName": "electronics",
+                  "sellerName": "s1",
+                  "explanation": "mac",
+                  "averageRate": 0.0,
+                  "comments": [],
+                  "rates": [],
+                  "thisProductsBuyers": [],
+                  "salePercent": 0.0,
+                  "numberOfSeen": 0
+                },
+                {
+                  "@type": "model.FileProduct",
+                  "@val": {
+                    "fileState": "DOWNLOADING",
+                    "imagePath": "file:src/main/java/graphics/fxml/images/FileIcon.png",
+                    "productId": 3,
+                    "name": "file",
+                    "brand": "file",
+                    "price": 20.0,
+                    "numberInCart": 1,
+                    "seller": "@root.1.buyHistory.0.seller.0",
+                    "supply": 1,
+                    "category": {
+                      "id": 3,
+                      "categoryName": "file",
+                      "imagePath": "file:src/main/java/graphics/fxml/images/FileIcon.png",
+                      "thisCategoryProducts": [
+                        "@root.1.buyHistory.0.seller.0.productsToSell.2"
+                      ],
+                      "properties": {}
+                    },
+                    "categoryName": "file",
+                    "sellerName": "s1",
+                    "explanation": "file",
+                    "averageRate": 0.0,
+                    "comments": [],
+                    "rates": [],
+                    "thisProductsBuyers": [],
+                    "salePercent": 0.0,
+                    "numberOfSeen": 0
+                  }
+                }
+              ],
+              "saleList": [],
+              "wallet": {
+                "money": 50.0,
+                "bankAccountUsername": "s1seller",
+                "bankAccountPassword": "ims1",
+                "currentBankToken": "",
+                "accountId": 3
+              },
+              "thisSellerAuctions": [],
+              "soldFileProducts": [
+                "@root.1.buyHistory.0.seller.0.sellHistory.0.sellerProductsInCart.0-key"
+              ],
+              "port": 0,
+              "id": 3,
+              "username": "s1",
+              "password": "123456Ss",
+              "name": "s1",
+              "familyName": "s1",
+              "email": "s1@s1",
+              "number": "22",
+              "balance": 70.0,
+              "role": "SELLER",
+              "availability": "OFFLINE"
+            }
+          ],
+          "customerInfo": {
+            "address": "x",
+            "phoneNumber": "x",
+            "receiverName": "x"
+          },
+          "discountUsed": "",
+          "status": "WAITING",
+          "date": "2020,07,24,22,17",
+          "products": {
+            "@root.1.buyHistory.0.seller.0.sellHistory.0.sellerProductsInCart.0-key": 1
+          },
+          "id": 0
+        }
+      ],
+      "allDiscounts": [],
+      "amountOfAllPurchasing": 20.0,
+      "wallet": {
+        "money": 50.0,
+        "bankAccountUsername": "c1customer",
+        "bankAccountPassword": "imc1",
+        "currentBankToken": "",
+        "accountId": 2
+      },
+      "payedFileProducts": [
+        "@root.1.buyHistory.0.seller.0.sellHistory.0.sellerProductsInCart.0-key"
+      ],
+      "supportersSender": [],
+      "inbox": [],
+      "sentMessages": [],
+      "combinedMessages": [],
+      "id": 2,
+      "username": "c1",
+      "password": "123456Cc",
+      "name": "c1",
+      "familyName": "c1",
+      "email": "c1@c1",
+      "number": "22",
+      "balance": 30.0,
+      "role": "CUSTOMER",
+      "availability": "OFFLINE"
+    }
+  },
+  "@root.1.buyHistory.0.seller.0"
+]

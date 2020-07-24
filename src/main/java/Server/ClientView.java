@@ -65,7 +65,7 @@ public class ClientView extends Application {
         mainMenu.run();
         stage.show();
         //commented temporarily!
-       /*stage.setOnCloseRequest(event -> {
+      /* stage.setOnCloseRequest(event -> {
             ClientManager clientManager = new ClientManager();
             if (Menu.getPerson() != null) {
                 System.out.println(Menu.getPerson().getUsername());
