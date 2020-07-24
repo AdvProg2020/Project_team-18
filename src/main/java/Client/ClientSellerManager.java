@@ -233,4 +233,12 @@ public class ClientSellerManager extends ClientManager {
         ServerMessage serverMessage = clientMessage.sendAndReceive();
         return (boolean) serverMessage.getResult();
     }
+
+    public Seller setIPPortNull(String username) {
+        ArrayList <Object> params = new ArrayList<>();
+        params.add(username);
+        ClientMessage clientMessage = new ClientMessage(MessageType.SET_IP_PORT_NULL,params);
+        ServerMessage serverMessage = clientMessage.sendAndReceive();
+        return (Seller)serverMessage.getResult();
+    }
 }

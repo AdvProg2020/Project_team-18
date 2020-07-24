@@ -34,6 +34,13 @@ public class Customer extends Person {
     public void addToFileProducts(FileProduct fileProduct) {
         payedFileProducts.add(fileProduct);
     }
+    public FileProduct findInFileProductsById(int id){
+        for (FileProduct fileProduct : payedFileProducts){
+            if (fileProduct.getProductId() == id)
+                return fileProduct;
+        }
+        return null;
+    }
 
     public ArrayList<FileProduct> getPayedFileProducts() {
         return payedFileProducts;
@@ -104,7 +111,6 @@ public class Customer extends Person {
         if (!previous.startsWith("Sent -> ")){
             previous = "Sent -> " + previous + " Received : ";
         }
-        System.out.println("hereeeee");
         this.combinedMessages.remove(supporterIndex);
         this.combinedMessages.add(previous + message);
         System.out.println(combinedMessages.get(combinedMessages.size() - 1));
