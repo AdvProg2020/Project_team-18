@@ -347,13 +347,13 @@ public class AdminManager extends Manager {
         double initialPrice = Integer.parseInt(request.getInformation().get("price"));
         System.out.println(initialPrice);
         Product product1 = storage.getProductById(Integer.parseInt(request.getInformation().get("productId")));
+        product1.setNumberInCart(1);
         System.out.println(product1.getName() + " " + product1.getProductId());
         Seller seller = (Seller) storage.getUserByUsername(request.getInformation().get("seller"));
         System.out.println(seller.getUsername());
         Auction auction = new Auction(beginDate, endDate, product1, initialPrice, seller);
         storage.addAuction(auction);
         seller.addAuction(auction);
-        //auction.finishAuction();
     }
 
     public ArrayList<Supporter> viewOnlineSupporters(){
