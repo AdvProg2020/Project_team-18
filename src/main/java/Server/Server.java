@@ -739,7 +739,6 @@ public class Server {
                             boolean wasPaid = pay(receipt);
                             if (wasPaid) {
                                 seller.setBalance(seller.getBalance() - (double) clientMessage.getParameters().get(0));
-                                System.out.println(server.bankDataInputStream.readUTF());
                             }
                         } catch (Exception e) {
                             updateFailedAttemptsHashMap(ipAddress);
