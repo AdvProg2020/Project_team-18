@@ -43,7 +43,7 @@ public class AdminManageBuyLogs extends Menu implements Initializable {
                 shownBuyLogs
         );
         idColumn.setCellValueFactory(new PropertyValueFactory<>("buyCode"));
-        statusColumn.setCellValueFactory(new PropertyValueFactory<>("buyLogStatus"));
+        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         addRespondButtonToTable(this);
         addViewMoreButtonToTable(this);
         buyLogsTable.setItems(data);

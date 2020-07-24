@@ -280,6 +280,9 @@ public class Server {
                 case GET_ALL_BUY_LOGS:
                     ArrayList<BuyLog> buyLogs = customerManager.getCustomerBuyLogs((String) clientMessage.getParameters().get(0));
                     return new ServerMessage(MessageType.GET_ALL_BUY_LOGS, buyLogs);
+                case GET_ALL_BUY_LOGS_FOR_ADMIN:
+                    ArrayList<BuyLog> allBuyLogs = adminManager.viewAllBuyLogs();
+                    return new ServerMessage(MessageType.GET_ALL_BUY_LOGS_FOR_ADMIN, allBuyLogs);
                 case DOES_CUSTOMER_HAVE_BUY_LOG:
                     return new ServerMessage(MessageType.DOES_CUSTOMER_HAVE_BUY_LOG,
                             customerManager.doesCustomerHasThisBuyLog((String) clientMessage.getParameters().get(1),
