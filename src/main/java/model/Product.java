@@ -13,8 +13,8 @@ import javafx.scene.image.*;
 public class Product implements Comparable<Product>, Idable<Product> {
     private transient Storage storage = new Storage();
     private transient Image image;
-    private  String imagePath;
-    private  String statusImagePath;
+    private String imagePath;
+    private String statusImagePath;
     private int productId;
     private String name;
     private String brand;
@@ -36,6 +36,7 @@ public class Product implements Comparable<Product>, Idable<Product> {
     private double salePercent;
     private String saleTimeLeft;
     private int numberOfSeen;
+
     private transient static ArrayList<Product> allProducts = new ArrayList<>();
 
     public static ArrayList<Product> getAllProducts() {
