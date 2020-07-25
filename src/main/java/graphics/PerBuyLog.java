@@ -42,6 +42,8 @@ public class PerBuyLog extends Menu implements Initializable {
     Label logCode;
     @FXML
     Label buyLogStatus;
+    @FXML
+    Label auctionStatus;
 
     public PerBuyLog(BuyLog buyLog, Menu previousMenu) {
         super(previousMenu, "src/main/java/graphics/fxml/PerBuyLog.fxml");
@@ -70,6 +72,9 @@ public class PerBuyLog extends Menu implements Initializable {
         date.setText(buyLog.getDate().toString());
         logCode.setText(Integer.toString(buyLog.getBuyCode()));
         buyLogStatus.setText(buyLog.getStatus().toString());
+        if (!paidMoney.getText().equals(tableView.getColumns().get(0).getCellObservableValue(0).getValue())){
+            auctionStatus.setText("This buy log is for an auction!");
+        }
     }
 
 }

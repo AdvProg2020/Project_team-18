@@ -52,7 +52,7 @@ public class ClientView extends Application {
     public void start(Stage stage) {
         mainStage = stage;
         try {
-            socket = new Socket("2.tcp.ngrok.io", 14724);
+            socket = new Socket("localhost", 9090);
             inputStream = socket.getInputStream();
             outputStream = socket.getOutputStream();
             ClientMessage.scanner = new Scanner(inputStream);
