@@ -60,6 +60,7 @@
             <Font name="Book Antiqua" size="15.0" />
          </font></Label>
       <Label fx:id="buyLogStatus" layoutX="406.0" layoutY="502.0" prefHeight="26.0" prefWidth="80.0" />
-      <Label fx:id="auctionStatus" layoutX="334.0" layoutY="555.0" />
+      <Label fx:id="auctionStatus" layoutX="327.0" layoutY="541.0" prefHeight="16.0" prefWidth="47.0" />
+      <Label fx:id="inAuctionLabel" layoutX="330.0" layoutY="549.0" />
     </children>
 </AnchorPane>

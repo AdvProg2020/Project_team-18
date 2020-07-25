@@ -36,6 +36,8 @@ public class PerSellLog extends Menu implements Initializable {
     Label date;
     @FXML
     Label logCode;
+    @FXML
+    Label inAuctionLabel;
 
     public PerSellLog(SellLog sellLog, Menu previousMenu) {
         super(previousMenu, "src/main/java/graphics/fxml/PerSellLog.fxml");
@@ -44,6 +46,7 @@ public class PerSellLog extends Menu implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        int sumOfProductPrice = 0;
         final ObservableList<Product> productsInSellLog = FXCollections.observableArrayList(
                sellLog.getSellerProductsInCart().keySet()
         );
@@ -57,5 +60,11 @@ public class PerSellLog extends Menu implements Initializable {
         amountOfSale.setText(Double.toString(sellLog.getSaleAmount()));
         date.setText(sellLog.getDate().toString());
         logCode.setText(Integer.toString(sellLog.getSellCode()));
+        for (Product product : sellLog.getProducts().keySet()) {
+            sumOfProductPrice += product.getPrice();
+        }
+        if (sellLog.getReceivedMoney() != sumOfProductPrice) {
+            inAuctionLabel.setText("This sell log is for an auction purchase.");
+        }
     }
 }
