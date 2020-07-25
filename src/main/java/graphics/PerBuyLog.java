@@ -42,8 +42,6 @@ public class PerBuyLog extends Menu implements Initializable {
     Label logCode;
     @FXML
     Label buyLogStatus;
-    @FXML
-    Label auctionStatus;
 
     public PerBuyLog(BuyLog buyLog, Menu previousMenu) {
         super(previousMenu, "src/main/java/graphics/fxml/PerBuyLog.fxml");
@@ -52,6 +50,7 @@ public class PerBuyLog extends Menu implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        int sumOfProducPrice = 0;
         final ObservableList<Product> productsInBuyLog = FXCollections.observableArrayList(
                 buyLog.getProducts().keySet()
         );
@@ -72,8 +71,11 @@ public class PerBuyLog extends Menu implements Initializable {
         date.setText(buyLog.getDate().toString());
         logCode.setText(Integer.toString(buyLog.getBuyCode()));
         buyLogStatus.setText(buyLog.getStatus().toString());
-        if (!paidMoney.getText().equals(tableView.getColumns().get(0).getCellObservableValue(0).getValue())){
-            auctionStatus.setText("This buy log is for an auction!");
+        for (Product product : buyLog.getProducts().keySet()) {
+            sumOfProducPrice += product.getPrice();
+        }
+        if (buyLog.getPaidMoney() != sumOfProducPrice) {
+            System.out.println("in Auction");
         }
     }
 
