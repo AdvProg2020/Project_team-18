@@ -172,7 +172,7 @@ public class BankServer {
                     outputStream.writeUTF("Database Error");
                     outputStream.flush();
                 } catch (IOException ex) {
-                    ex.printStackTrace();
+                    System.out.println(ex.getMessage());
                 }
             }
         }

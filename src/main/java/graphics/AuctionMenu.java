@@ -80,7 +80,7 @@ public class AuctionMenu extends Menu implements Initializable {
                 } else {
                     if (Double.parseDouble(updatedVersion) < auction.getPrice()) {
                         showError("If you want to offer, you should offer more money than the price shown in the table", 30);
-                    } else if (Double.parseDouble(updatedVersion) < ((Customer) person).getWallet().getMoney()) {
+                    } else if (Double.parseDouble(updatedVersion) > ((Customer) person).getWallet().getMoney()) {
                         showError("Oops!You don't have enough money in your wallet!!", 30);
                     } else {
                         try {
